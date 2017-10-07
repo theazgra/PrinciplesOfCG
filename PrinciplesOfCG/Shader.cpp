@@ -7,7 +7,7 @@
 Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
 {
     shaderProgram = loadShader(vertex_shader_file, fragment_shader_file);
-    modelTransform = glGetUniformLocation(shaderProgram, "ModelMatrix");
+    modelTransformMatrix = glGetUniformLocation(shaderProgram, "ModelMatrix");
 }
 
 void Shader::useProgram() const 
@@ -16,9 +16,9 @@ void Shader::useProgram() const
 }
 
 //void Shader::getModelTransform(DrawableObject & object) const
-void Shader::getModelTransform(Object & object) const
+void Shader::modelTransform(Object & object) const
 {
-    glUniformMatrix4fv(modelTransform, 1, GL_FALSE, &object.getObjectMatrix()[0][0]);
+    glUniformMatrix4fv(modelTransformMatrix, 1, GL_FALSE, &object.getObjectMatrix()[0][0]);
 }
 
 Shader::~Shader()

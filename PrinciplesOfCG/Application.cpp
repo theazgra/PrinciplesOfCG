@@ -87,3 +87,21 @@ Scene & Application::getCurrentScene()
 {
     return *currentScene;
 }
+
+void Application::setCurrentScene(char * sceneName)
+{
+    bool found = false;
+    for (int i = 0; i < scenes->size(); i++)
+    {
+        if (scenes->at(i)->getSceneName() == sceneName)
+        {
+            found = true;
+            currentScene = scenes->at(i);
+            break;
+        }
+    }
+    if (!found)
+    {
+        printf("Scene with name: %s, was not found.\n", sceneName);
+    }
+}

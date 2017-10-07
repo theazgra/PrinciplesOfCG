@@ -12,16 +12,11 @@ public:
     Shader(const char* vertex_shader_file, const char* fragment_shader_file);
     ~Shader();
 
-    
     void useProgram() const;
-    //void getModelTransform(DrawableObject& object) const;
-    void getModelTransform(Object& object) const;
-    /*void setShader();
-    void setModelMatrix(glm::mat4);*/
+    void modelTransform(Object& object) const;
 
 private:
     GLuint shaderProgram;
-    GLint modelTransform;
-    
+    GLuint modelTransformMatrix;
 };
 

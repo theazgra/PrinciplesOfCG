@@ -13,10 +13,10 @@ class Renderer
 private:
     GLFWwindow* window;
     void renderDrawableObjects(Scene const&);
-    void reportFPS();
+    void reportRenderTime();
 
     double lastRenderTime;
-    int frames;
+    int frameCount;
     RenderType renderType;
 public:
     Renderer(GLFWwindow&, RenderType);

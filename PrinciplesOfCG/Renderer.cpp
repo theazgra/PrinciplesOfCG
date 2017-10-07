@@ -12,14 +12,14 @@ Renderer::~Renderer()
 {
 }
 
-void Renderer::reportFPS() 
+void Renderer::reportRenderTime() 
 {
-    frames++;
+    frameCount++;
     double currentTime = glfwGetTime();
     if (currentTime - lastRenderTime >= 1.0)
     {
-        printf("%f ms/frame\n", 1000.0 / double(frames));
-        frames = 0;
+        printf("%f ms/frame\n", 1000.0 / double(frameCount));
+        frameCount = 0;
         lastRenderTime += 1;
     }
 }
@@ -27,7 +27,7 @@ void Renderer::reportFPS()
 void Renderer::renderScene(Scene const& scene)
 {
     lastRenderTime = glfwGetTime();
-    frames = 0;
+    frameCount = 0;
 
     scene.getDrawableObjects().at(1)->translate(glm::vec3(-0.5f, 0.0f, 0.0f));
     scene.getDrawableObjects().at(2)->translate(glm::vec3(-0.5f, -0.5f, 0.0f));
@@ -35,7 +35,7 @@ void Renderer::renderScene(Scene const& scene)
 
     while (!glfwWindowShouldClose(this->window))
     {
-        reportFPS();
+        reportRenderTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderDrawableObjects(scene);
@@ -60,12 +60,12 @@ void Renderer::renderDrawableObjects(Scene const& scene)
         if (scene.getDrawableObjects().at(i)->hasOwnShader())
         {
             scene.getDrawableObjects().at(i)->getShader().useProgram();
-            scene.getDrawableObjects().at(i)->getShader().getModelTransform(*(scene.getDrawableObjects().at(i)));
+            scene.getDrawableObjects().at(i)->getShader().modelTransform(*(scene.getDrawableObjects().at(i)));
         }
         else
         {
             scene.getBasicShader().useProgram();
-            scene.getBasicShader().getModelTransform(*(scene.getDrawableObjects().at(i)));
+            scene.getBasicShader().modelTransform(*(scene.getDrawableObjects().at(i)));
         }
 
         glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());

@@ -24,13 +24,15 @@ int main()
     };*/
 
     Application* app = Application::getInstance();
+    
     app->setRenderType(Quads);
 
     app->createScene("Basic scene", new Shader("VertexShader.glsl", "FragmentShader.glsl"));
-    app->getCurrentScene().addObject(vertices);
-    app->getCurrentScene().addObject(vertices);
-    app->getCurrentScene().addObject(vertices);
-    app->getCurrentScene().addObject(vertices);
+    app->setCurrentScene("ahaha");
+    app->getCurrentScene().addDrawableObject(vertices);
+    app->getCurrentScene().addDrawableObject(vertices);
+    app->getCurrentScene().addDrawableObject(vertices);
+    app->getCurrentScene().addDrawableObject(vertices);
 
 
     app->renderCurrentScene();
