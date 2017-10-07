@@ -5,15 +5,15 @@
 DrawableObject::DrawableObject(int objectId, std::vector<float> vector) : Object(objectId)
 {
     internalConstructor(vector);
-    shader = NULL;
+    //shader = NULL;
 }
 
 
 
-DrawableObject::DrawableObject(int objectId, std::vector<float> vector, Shader shader) : Object(objectId)
+DrawableObject::DrawableObject(int objectId, std::vector<float> vector, Shader* shader) : Object(objectId)
 {
     internalConstructor(vector);
-    shader = shader;
+    this->shader = shader;
 }
 
 void DrawableObject::internalConstructor(std::vector<float> vector)

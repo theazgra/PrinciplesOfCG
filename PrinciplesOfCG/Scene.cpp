@@ -31,7 +31,7 @@ void Scene::addDrawableObject(std::vector<float> vec)
     drawableObjects->push_back(new DrawableObject(drawableObjects->size(), vec));
 }
 
-void Scene::addDrawableObject(std::vector<float> vec, Shader shader)
+void Scene::addDrawableObject(std::vector<float> vec, Shader * shader)
 {
     drawableObjects->push_back(new DrawableObject(drawableObjects->size(), vec, shader));
 }

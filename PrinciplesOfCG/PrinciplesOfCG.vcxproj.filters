@@ -104,5 +104,8 @@
     <None Include="VertexShader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="FragmentShader2.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

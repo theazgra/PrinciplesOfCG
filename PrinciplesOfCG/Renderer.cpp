@@ -69,6 +69,7 @@ void Renderer::renderDrawableObjects(Scene const& scene)
         }
 
         glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
+
         switch (renderType)
         {
             case Quads:

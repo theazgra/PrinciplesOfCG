@@ -16,7 +16,7 @@ private:
 
 public:
     DrawableObject(int, std::vector<float>);
-    DrawableObject(int, std::vector<float>, Shader);
+    DrawableObject(int, std::vector<float>, Shader*);
     ~DrawableObject();
 
     GLuint getVAO() const;

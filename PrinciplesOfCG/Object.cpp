@@ -20,14 +20,14 @@ Object::~Object()
 
 void Object::rotate(float angle, glm::vec3 axis)
 {
-    glm::mat4 rotateMatrix = glm::rotate(angle, axis);
-    objectMatrix = objectMatrix * rotateMatrix;
+    objectMatrix = glm::rotate(objectMatrix, angle, axis);
 }
 
 void Object::translate(glm::vec3 translateVector)
 {
-    glm::mat4 translateMatrix = glm::translate(glm::mat4(), translateVector);
-    objectMatrix = objectMatrix * translateMatrix;
+    objectMatrix = glm::translate(objectMatrix, translateVector);
+    //glm::mat4 translateMatrix = glm::translate(glm::mat4(), translateVector);
+    //objectMatrix = objectMatrix * translateMatrix;
 }
 
 int Object::getObjectId() const

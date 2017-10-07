@@ -28,7 +28,7 @@ public:
     
     char* getSceneName() const;
     void addDrawableObject(std::vector<float>);
-    void addDrawableObject(std::vector<float>, Shader shader);
+    void addDrawableObject(std::vector<float>, Shader* shader);
 
     std::vector<DrawableObject*> const& getDrawableObjects() const;
     Shader const& getBasicShader() const;

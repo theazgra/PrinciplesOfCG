@@ -29,9 +29,9 @@ int main()
 
     app->createScene("Basic scene", new Shader("VertexShader.glsl", "FragmentShader.glsl"));
     app->setCurrentScene("ahaha");
+    app->getCurrentScene().addDrawableObject(vertices, new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
     app->getCurrentScene().addDrawableObject(vertices);
-    app->getCurrentScene().addDrawableObject(vertices);
-    app->getCurrentScene().addDrawableObject(vertices);
+    app->getCurrentScene().addDrawableObject(vertices, new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
     app->getCurrentScene().addDrawableObject(vertices);
 
 
