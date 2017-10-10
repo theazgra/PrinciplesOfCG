@@ -16,7 +16,8 @@ private:
     void reportRenderTime();
 
     double lastRenderTime;
-    int frameCount;
+    unsigned int frameCount;
+    unsigned int lastShaderId = -1;
     RenderType renderType;
 public:
     Renderer(GLFWwindow&, RenderType);

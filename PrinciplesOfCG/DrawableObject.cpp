@@ -2,19 +2,12 @@
 #include "DrawableObject.h"
 
 
-DrawableObject::DrawableObject(int objectId, std::vector<float> vector) : Object(objectId)
+DrawableObject::DrawableObject(int objectId, std::vector<float> vector, int shaderId) : Object(objectId)
 {
     internalConstructor(vector);
-    //shader = NULL;
+    this->shaderId = shaderId;
 }
 
-
-
-DrawableObject::DrawableObject(int objectId, std::vector<float> vector, Shader* shader) : Object(objectId)
-{
-    internalConstructor(vector);
-    this->shader = shader;
-}
 
 void DrawableObject::internalConstructor(std::vector<float> vector)
 {
@@ -42,12 +35,6 @@ GLuint DrawableObject::getVerticesCount()
 
 DrawableObject::~DrawableObject()
 {
-    if (shader != NULL)
-    {
-        delete shader;
-    }
-    shader = NULL;
-
     this->VAO = 0;
     this->VBO = 0;
 }
@@ -63,12 +50,7 @@ void DrawableObject::resize(glm::vec3 resizeVector)
     setModelMatrix(getObjectMatrix() * resizeMatrix);
 }
 
-Shader & DrawableObject::getShader()
+unsigned int DrawableObject::getShaderId() const
 {
-    return *shader;
-}
-
-bool DrawableObject::hasOwnShader()
-{
-    return shader != NULL;
+    return this->shaderId;
 }

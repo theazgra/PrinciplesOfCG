@@ -7,7 +7,6 @@
 #include "Renderer.h"
 #include "Controller.h"
 
-
 class Application
 {
 private:
@@ -20,7 +19,6 @@ private:
     Controller controller;
 
     void bindCallbacks();
-
 public:
     static Application* getInstance();
     ~Application();
@@ -34,5 +32,8 @@ public:
     GLFWwindow& getWindow();
 
     void setRenderType(RenderType renderType);    
+
+    void moveCamera(Direction) const;
+    void swapCamera();
 };
 

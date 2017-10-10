@@ -1,5 +1,8 @@
 #include "stdafx.h"
+#include "Application.h"
 #include "Controller.h"
+
+
 
 
 Controller::Controller()
@@ -22,25 +25,42 @@ void Controller::key_callback(GLFWwindow* window, int key, int scancode, int act
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
 
-    if (action == GLFW_RELEASE)
+
+
+    Direction d = None;
+    switch (key)
     {
-        switch (key)
-        {
-        case GLFW_KEY_UP:
-            printf("up\n");
-            
-            break;
-        case GLFW_KEY_DOWN:
-            printf("down\n");
-            break;
-        case GLFW_KEY_LEFT:
-            printf("left\n");
-            break;
-        case GLFW_KEY_RIGHT:
-            printf("right\n");
-            break;
-        }
+    case GLFW_KEY_UP:
+        d = Forward;
+        printf("up\n");
+        break;
+    case GLFW_KEY_DOWN:
+        d = Backward;
+        printf("down\n");
+        break;
+    case GLFW_KEY_LEFT:
+        d = Left;
+        printf("left\n");
+        break;
+    case GLFW_KEY_RIGHT:
+        d = Right;
+        printf("right\n");
+        break;
+    case GLFW_KEY_SPACE:
+        d = Up;
+        printf("space\n");
+        break;
+    case GLFW_KEY_LEFT_SHIFT:
+        d = Down;
+        printf("l shift\n");
+        break;
     }
+    if (d != None)
+    {
+        Application::getInstance()->moveCamera(d);
+    }
+    
+
 }
 
 void Controller::window_size_callback(GLFWwindow* window, int width, int height) {
@@ -54,4 +74,8 @@ void Controller::cursor_pos_callback(GLFWwindow* window, double mouseX, double m
 
 void Controller::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     //printf("mouse_button_callback %d, %d, %d \n", button, action, mods);
+    if (action == GLFW_RELEASE)
+    {
+        Application::getInstance()->swapCamera();
+    }
 }

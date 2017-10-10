@@ -13,6 +13,20 @@ void Application::setRenderType(RenderType renderType)
     renderer->setRenderType(renderType);
 }
 
+void Application::moveCamera(Direction direction) const
+{
+    this->currentScene->getActiveCameraRef().moveCamera(direction);
+}
+
+void Application::swapCamera()
+{
+    unsigned int camCount = currentScene->getCameras().size();
+    unsigned int activeCamId = currentScene->getActiveCamera().getObjectId();
+
+    currentScene->setActiveCamera((activeCamId + 1) % camCount);
+
+}
+
 Application::Application()
 {
    
@@ -43,7 +57,7 @@ Application::Application()
     
     renderer = new Renderer(*window, Triangles);
 
-    bindCallbacks();
+    bindCallbacks();    
 }
 
 void Application::bindCallbacks()

@@ -4,12 +4,14 @@
 class Subject
 {
 private:
-    std::vector<Observer*> observers;
+    std::vector<std::reference_wrapper<Observer>> observers;
 public:
     Subject();
     ~Subject();
 
-    void registerObserver(Observer*);
+    void registerObserver(Observer&);
+    void clearObservers();
+protected:
     void notifyObservers();
     
 };

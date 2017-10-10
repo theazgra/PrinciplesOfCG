@@ -2,8 +2,8 @@
 class Observer
 {
 public:
-    Observer();
-    ~Observer();
+    //Observer();
+    //~Observer();
 
     virtual void notify() = 0;
 };

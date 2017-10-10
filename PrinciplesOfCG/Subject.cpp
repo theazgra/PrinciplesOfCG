@@ -9,21 +9,24 @@ Subject::Subject()
 
 Subject::~Subject()
 {
-    for (int i = 0; i < observers.size(); i++)
-    {
-        delete observers.at(i);
-    }
 }
 
-void Subject::registerObserver(Observer * observer)
+void Subject::registerObserver(Observer & observer)
 {
     observers.push_back(observer);
 }
 
+void Subject::clearObservers()
+{
+    observers.clear();
+}
+
 void Subject::notifyObservers()
 {
-    for (Observer * observer : observers)
+    for (Observer & observer : observers)
     {
-        observer->notify();
+        observer.notify();
     }
 }
+
+

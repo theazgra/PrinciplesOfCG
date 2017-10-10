@@ -1,8 +1,20 @@
 #pragma once
 
 #include "ObjectWithFocus.h"
+#include "Subject.h"
 
-class Camera : public ObjectWithFocus
+enum Direction
+{
+    Up,
+    Down,
+    Left,
+    Right,
+    Forward,
+    Backward,
+    None
+};
+
+class Camera : public ObjectWithFocus, public Subject
 {
 private:
     glm::vec3 upVector;
@@ -19,5 +31,8 @@ public:
     glm::mat4 getProjectionMatrix() const;
 
     void setPerspective(float, float, float, float);
+
+    void moveCamera(Direction);
+    
 };
 

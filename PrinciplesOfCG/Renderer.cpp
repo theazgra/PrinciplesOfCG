@@ -53,25 +53,22 @@ void Renderer::setRenderType(RenderType renderType)
 
 void Renderer::renderDrawableObjects(Scene const& scene)
 {
-    glm::mat4 projection = scene.getActiveCamera().getProjectionMatrix();
-    glm::mat4 view = scene.getActiveCamera().getViewMatrix();
-
     for (int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
+        //funky rotation
         scene.getDrawableObjects().at(i)->rotate(0.05f, glm::vec3(1.0f, 1.0f, 0.0f));
 
-        if (scene.getDrawableObjects().at(i)->hasOwnShader())
+        unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
+        
+        if (objectShaderId != lastShaderId)
         {
-            scene.getDrawableObjects().at(i)->getShader().useProgram();
-            scene.getDrawableObjects().at(i)->getShader().modelTransform(*(scene.getDrawableObjects().at(i)));
-            scene.getDrawableObjects().at(i)->getShader().applyCamera(view, projection);
+            scene.getShader(objectShaderId).useProgram();
+            scene.getShader(objectShaderId).applyCamera();
         }
-        else
-        {
-            scene.getBasicShader().useProgram();
-            scene.getBasicShader().modelTransform(*(scene.getDrawableObjects().at(i)));
-            scene.getBasicShader().applyCamera(view, projection);
-        }
+
+        scene.getShader(objectShaderId).modelTransform(*(scene.getDrawableObjects().at(i)));
+        
+        this->lastShaderId = objectShaderId;
 
         glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
 

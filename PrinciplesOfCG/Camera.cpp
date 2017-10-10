@@ -2,6 +2,8 @@
 #include "Camera.h"
 
 
+
+
 Camera::Camera(int id, glm::vec3 worldPosition, glm::vec3 poi) : ObjectWithFocus(id, worldPosition, poi)
 {
     this->upVector = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -32,4 +34,34 @@ void Camera::setPerspective(float degrees, float aspectRatio, float zNear, float
     this->aspectRatio = aspectRatio;
     this->zNear = zNear;
     this->zFar = zFar;
+}
+
+void Camera::moveCamera(Direction direction)
+{
+    switch (direction)
+    {
+    case Up:
+        this->worldPosition += glm::vec3(0.0f, 1.0f, 0.0f);
+        break;
+    case Down:
+        this->worldPosition += glm::vec3(0.0f, -1.0f, 0.0f);;
+        break;
+    case Left:
+        this->worldPosition += glm::vec3(-1.0f, 0.0f, 0.0f);
+        break;
+    case Right:
+        this->worldPosition += glm::vec3(1.0f, 0.0f, 0.0f);
+        break;
+    case Forward:
+        this->worldPosition += glm::vec3(0.0f, 0.0f, -1.0f);
+        break;
+    case Backward:
+        this->worldPosition += glm::vec3(0.0f, 0.0f, 1.0f);
+        break;
+    }
+
+    if (direction != None)
+    {
+        notifyObservers();
+    }
 }

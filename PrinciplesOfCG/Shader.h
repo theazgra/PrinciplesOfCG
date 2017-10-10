@@ -6,8 +6,9 @@
 #include "ShaderLoader.h"
 #include "Object.h"
 #include "Camera.h"
+#include "Observer.h"
 
-class Shader : ShaderLoader
+class Shader : ShaderLoader, public Observer
 {
 private:
     GLuint shaderProgram;
@@ -16,15 +17,22 @@ private:
     GLuint viewMatrix;
     GLuint projectionMatrix;
 
-    Camera* cam;
+    glm::mat4 cameraViewMatrix;
+    glm::mat4 cameraProjectionMatrix;
+
+    Camera* camera;
 
 public:
+    Shader();
     Shader(const char* vertex_shader_file, const char* fragment_shader_file);
     ~Shader();
 
     void useProgram() const;
     void modelTransform(Object& object) const;
-    void applyCamera(glm::mat4, glm::mat4) const;
+    void applyCamera() const;
+
+    void setCamera(Camera*);
+    void notify() override;
 
 
 };

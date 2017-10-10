@@ -1,5 +1,6 @@
 #pragma once
 #include "GLFW\glfw3.h"
+
 class Controller
 {
 public:
@@ -11,5 +12,6 @@ public:
     static void window_size_callback(GLFWwindow* window, int width, int height);
     static void cursor_pos_callback(GLFWwindow* window, double mouseX, double mouseY);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
 };
 
