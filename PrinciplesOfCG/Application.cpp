@@ -15,8 +15,7 @@ void Application::setRenderType(RenderType renderType)
 
 Application::Application()
 {
-    //currentScene = nullptr;
-
+   
     if (!glfwInit())
     {
         fprintf(stderr, "Could not init GLFW");
@@ -43,6 +42,17 @@ Application::Application()
     scenes = new std::vector<Scene*>();
     
     renderer = new Renderer(*window, Triangles);
+
+    bindCallbacks();
+}
+
+void Application::bindCallbacks()
+{
+    glfwSetKeyCallback(this->window, this->controller.key_callback);
+    glfwSetErrorCallback(this->controller.error_callback);
+    glfwSetCursorPosCallback(this->window, this->controller.cursor_pos_callback);
+    glfwSetMouseButtonCallback(this->window, this->controller.mouse_button_callback);
+    glfwSetWindowSizeCallback(this->window, this->controller.window_size_callback);
 }
 
 Application* Application::getInstance()
@@ -70,9 +80,9 @@ Application::~Application()
     delete renderer;
 }
 
-void Application::createScene(char* sceneName, Shader* shader)
+void Application::createScene(char* sceneName, Shader* shader, Camera * cam)
 {
-    Scene* newScene = new Scene(sceneName, shader);
+    Scene* newScene = new Scene(sceneName, shader, cam);
     scenes->push_back(newScene);
     
     currentScene = newScene;

@@ -2,9 +2,10 @@
 #include "ObjectWithFocus.h"
 
 
-ObjectWithFocus::ObjectWithFocus(int objectId, glm::mat4 PoI) : Object(objectId)
+ObjectWithFocus::ObjectWithFocus(int objectId, glm::vec3 worldPosition, glm::vec3 PoI) : Object(objectId)
 {
-    this->PoI = PoI;
+    this->target = PoI;
+    this->worldPosition = worldPosition;
 }
 
 
@@ -12,12 +13,12 @@ ObjectWithFocus::~ObjectWithFocus()
 {
 }
 
-void ObjectWithFocus::lookAt(glm::mat4 position)
+void ObjectWithFocus::lookAt(glm::vec3 position)
 {
-    this->PoI = position;
+    this->target = position;
 }
 
 void ObjectWithFocus::lookAtObject(Object const& object)
 {
-    this->PoI = object.getObjectMatrix();
+    //this->PoI = object.getObjectMatrix();
 }

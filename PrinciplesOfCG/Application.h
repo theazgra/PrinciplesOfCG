@@ -5,6 +5,7 @@
 
 #include "Scene.h"
 #include "Renderer.h"
+#include "Controller.h"
 
 
 class Application
@@ -16,12 +17,15 @@ private:
     std::vector<Scene*>* scenes;
     Renderer * renderer;
     Scene * currentScene;
+    Controller controller;
+
+    void bindCallbacks();
 
 public:
     static Application* getInstance();
     ~Application();
 
-    void createScene(char*, Shader*);
+    void createScene(char*, Shader*, Camera*);
     void renderCurrentScene();
     
     Scene & getCurrentScene();

@@ -27,8 +27,10 @@ int main()
     
     app->setRenderType(Quads);
 
-    app->createScene("Basic scene", new Shader("VertexShader.glsl", "FragmentShader.glsl"));
-    app->setCurrentScene("ahaha");
+    app->createScene("Basic scene", 
+        new Shader("VertexShader.glsl", "FragmentShader.glsl"), 
+        new Camera(0, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
+    
     app->getCurrentScene().addDrawableObject(vertices, new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
     app->getCurrentScene().addDrawableObject(vertices);
     app->getCurrentScene().addDrawableObject(vertices, new Shader("VertexShader.glsl", "FragmentShader2.glsl"));

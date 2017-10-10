@@ -3,12 +3,13 @@
 class ObjectWithFocus : public Object
 {
 protected:
-    glm::mat4 PoI;
+    glm::vec3 target;
+    glm::vec3 worldPosition;
 public:
-    ObjectWithFocus(int, glm::mat4);
+    ObjectWithFocus(int, glm::vec3, glm::vec3);
     ~ObjectWithFocus();
 
-    void lookAt(glm::mat4);
+    void lookAt(glm::vec3);
     void lookAtObject(Object const&);
 };
 
