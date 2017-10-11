@@ -56,7 +56,7 @@ void Renderer::renderDrawableObjects(Scene const& scene)
     for (int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
         //funky rotation
-        scene.getDrawableObjects().at(i)->rotate(0.05f, glm::vec3(1.0f, 1.0f, 0.0f));
+        //scene.getDrawableObjects().at(i)->rotate(0.05f, glm::vec3(1.0f, 1.0f, 0.0f));
 
         unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
         

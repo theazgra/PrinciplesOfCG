@@ -41,24 +41,28 @@ void Camera::moveCamera(Direction direction)
     switch (direction)
     {
     case Up:
-        this->worldPosition += glm::vec3(0.0f, 1.0f, 0.0f);
+        this->worldPosition += glm::vec3(0.0f, 0.5f, 0.0f);
         break;
     case Down:
-        this->worldPosition += glm::vec3(0.0f, -1.0f, 0.0f);;
+        this->worldPosition += glm::vec3(0.0f, -0.5f, 0.0f);;
         break;
     case Left:
-        this->worldPosition += glm::vec3(-1.0f, 0.0f, 0.0f);
+        this->worldPosition += glm::vec3(-0.5f, 0.0f, 0.0f);
         break;
     case Right:
-        this->worldPosition += glm::vec3(1.0f, 0.0f, 0.0f);
+        this->worldPosition += glm::vec3(0.5f, 0.0f, 0.0f);
         break;
     case Forward:
-        this->worldPosition += glm::vec3(0.0f, 0.0f, -1.0f);
+        this->worldPosition += glm::vec3(0.0f, 0.0f, -0.5f);
         break;
     case Backward:
-        this->worldPosition += glm::vec3(0.0f, 0.0f, 1.0f);
+        this->worldPosition += glm::vec3(0.0f, 0.0f, 0.5f);
         break;
     }
+
+    printf("Current camera position: [x: %f; y: %f, z: %f]\n", 
+        this->worldPosition.x, this->worldPosition.y, this->worldPosition.z);
+
 
     if (direction != None)
     {
