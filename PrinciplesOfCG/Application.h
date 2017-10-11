@@ -34,6 +34,9 @@ public:
     void setRenderType(RenderType renderType);    
 
     void moveCamera(Direction) const;
+    void moveCameraAndEye(Direction) const;
+    void lookAround(double, double) const;
     void swapCamera();
+    void resetCamera() const;
 };
 

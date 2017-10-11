@@ -1,11 +1,17 @@
 #pragma once
 #include "GLFW\glfw3.h"
 
+
 class Controller
 {
+private:
+    
+
 public:
     Controller();
     ~Controller();
+                            
+    static void init(int, int);
 
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void error_callback(int error, const char* description);

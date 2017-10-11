@@ -13,9 +13,20 @@ void Application::setRenderType(RenderType renderType)
     renderer->setRenderType(renderType);
 }
 
+
 void Application::moveCamera(Direction direction) const
 {
     this->currentScene->getActiveCameraRef().moveCamera(direction);
+}
+
+void Application::moveCameraAndEye(Direction direction) const
+{
+    this->currentScene->getActiveCameraRef().moveCameraAndEye(direction);
+}
+
+void Application::lookAround(double deltaX, double deltaY) const
+{
+    this->currentScene->getActiveCameraRef().lookAround(deltaX, deltaY);
 }
 
 void Application::swapCamera()
@@ -25,6 +36,11 @@ void Application::swapCamera()
 
     currentScene->setActiveCamera((activeCamId + 1) % camCount);
 
+}
+
+void Application::resetCamera() const
+{
+    this->currentScene->getActiveCameraRef().resetCamera();
 }
 
 Application::Application()
@@ -58,6 +74,7 @@ Application::Application()
     renderer = new Renderer(*window, Triangles);
 
     bindCallbacks();    
+    controller.init(width, height);
 }
 
 void Application::bindCallbacks()

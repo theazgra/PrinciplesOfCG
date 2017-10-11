@@ -23,6 +23,8 @@ private:
     float zNear;
     float zFar;
 
+    glm::vec3 backupWorldPosition, backupTargetPosition;
+
 public:
     Camera(int, glm::vec3, glm::vec3);
     ~Camera();
@@ -33,6 +35,9 @@ public:
     void setPerspective(float, float, float, float);
 
     void moveCamera(Direction);
+    void moveCameraAndEye(Direction);
+    void lookAround(double, double);
+    void resetCamera();
     
 };
 

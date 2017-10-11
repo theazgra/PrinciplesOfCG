@@ -11,6 +11,9 @@ Camera::Camera(int id, glm::vec3 worldPosition, glm::vec3 poi) : ObjectWithFocus
     this->aspectRatio = 4.0f / 3.0f;
     this->zNear = 0.1f;
     this->zFar = 100.0f;
+
+    this->backupWorldPosition = this->worldPosition;
+    this->backupTargetPosition = this->target;
 }
 
 
@@ -36,6 +39,8 @@ void Camera::setPerspective(float degrees, float aspectRatio, float zNear, float
     this->zFar = zFar;
 }
 
+
+
 void Camera::moveCamera(Direction direction)
 {
     switch (direction)
@@ -60,12 +65,72 @@ void Camera::moveCamera(Direction direction)
         break;
     }
 
-    printf("Current camera position: [x: %f; y: %f, z: %f]\n", 
+    printf("Current camera position: [x: %f; y: %f, z: %f]\n",
         this->worldPosition.x, this->worldPosition.y, this->worldPosition.z);
-
 
     if (direction != None)
     {
         notifyObservers();
     }
+}
+
+
+void Camera::moveCameraAndEye(Direction direction)
+{
+    switch (direction)
+    {
+    case Up:
+        this->worldPosition += glm::vec3(0.0f, 0.5f, 0.0f);
+        this->target += glm::vec3(0.0f, 0.5f, 0.0f);
+        break;
+    case Down:
+        this->worldPosition += glm::vec3(0.0f, -0.5f, 0.0f);
+        this->target += glm::vec3(0.0f, -0.5f, 0.0f);;
+        break;
+    case Left:
+        this->worldPosition += glm::vec3(-0.5f, 0.0f, 0.0f);
+        this->target += glm::vec3(-0.5f, 0.0f, 0.0f);
+        break;
+    case Right:
+        this->worldPosition += glm::vec3(0.5f, 0.0f, 0.0f);
+        this->target += glm::vec3(0.5f, 0.0f, 0.0f);
+        break;
+    case Forward:
+        this->worldPosition += glm::vec3(0.0f, 0.0f, -0.5f);
+        this->target += glm::vec3(0.0f, 0.0f, -0.5f);
+        break;
+    case Backward:
+        this->worldPosition += glm::vec3(0.0f, 0.0f, 0.5f);
+        this->target += glm::vec3(0.0f, 0.0f, 0.5f);
+        break;
+    }
+
+    printf("Current camera position: [x: %f; y: %f, z: %f]\n",
+        this->worldPosition.x, this->worldPosition.y, this->worldPosition.z);
+    printf("Current eye position: [x: %f; y: %f, z: %f]\n",
+        this->target.x, this->target.y, this->target.z);
+
+    if (direction != None)
+    {
+        notifyObservers();
+    }
+}
+
+void Camera::lookAround(double deltaX, double deltaY)
+{
+    printf("DeltaX: %f; DeltaY: %f\n", deltaX, deltaY);
+    printf("Pre change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
+    this->target.x += float(glm::cos(deltaX));
+    this->target.z += float(glm::sin(deltaX));
+    this->target.y += float(glm::sin(deltaY));
+    printf("Post change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
+
+
+    notifyObservers();
+}
+
+void Camera::resetCamera()
+{
+    this->worldPosition = this->backupWorldPosition;
+    this->target = this->backupTargetPosition;
 }
