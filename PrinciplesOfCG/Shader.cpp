@@ -34,16 +34,10 @@ void Shader::applyCamera() const
     glUniformMatrix4fv(this->projectionMatrix, 1, GL_FALSE, &cameraProjectionMatrix[0][0]);
 }
 
-void Shader::setCamera(Camera * camera)
+void Shader::notify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 {
-    this->camera = camera;
-    notify();
-}
-
-void Shader::notify()
-{
-    this->cameraViewMatrix = camera->getViewMatrix();
-    this->cameraProjectionMatrix = camera->getProjectionMatrix();
+    this->cameraViewMatrix = viewMatrix;
+    this->cameraProjectionMatrix = projectionMatrix;
 }
 
 Shader::~Shader()

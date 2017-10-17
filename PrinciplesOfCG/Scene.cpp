@@ -35,7 +35,6 @@ void Scene::registerCameraObservers()
     for (unsigned int i = 0; i < shaders.size(); i++)
     {
         activeCamera->registerObserver(*shaders.at(i));
-        shaders.at(i)->setCamera(activeCamera);
     }
 }
 
@@ -89,6 +88,11 @@ void Scene::addDrawableObject(std::vector<float> vec, Shader * shader)
 void Scene::addDrawableObject(std::vector<float> vec, unsigned int shaderId)
 {
     drawableObjects.push_back(new DrawableObject(drawableObjects.size(), vec, shaderId));
+}
+
+void Scene::addSphere()
+{
+    drawableObjects.push_back(new SphereObject(drawableObjects.size()));
 }
 
 void Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos)

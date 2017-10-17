@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 
-#include "DrawableObject.h"
+#include "SphereObject.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Shader.h"
@@ -35,6 +35,7 @@ public:
     void addDrawableObject(std::vector<float>);
     void addDrawableObject(std::vector<float>, Shader* shader);
     void addDrawableObject(std::vector<float>, unsigned int);
+    void addSphere();
     std::vector<DrawableObject*> const& getDrawableObjects() const;
 
     Shader const& getBasicShader() const;

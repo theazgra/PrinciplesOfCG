@@ -3,11 +3,14 @@
 
 #include "stdafx.h"
 #include "Application.h"
+#include "models\sphere.h"
 #include <vector>
 
 
 int main()
-{
+{   
+                          
+
     //rectangle
     std::vector<float> vertices = {
         0.0f, 0.0f, 0.0f,
@@ -15,13 +18,6 @@ int main()
         0.5f, 0.5f, 0.0f,
         0.0f, 0.5f, 0.0f
     };
-
-    //triangle
-    /* std::vector<float> vertices = {
-    0.0f, 0.0f, 0.0f,
-    0.5f, 0.0f, 0.0f,
-    0.25f, 0.5f, 0.0f
-    };*/
 
     Application* app = Application::getInstance();
     

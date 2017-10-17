@@ -21,8 +21,8 @@ Controller::~Controller()
 
 void Controller::init(int width, int height)
 {
-    lastXPosition = width / 2;
-    lastYPosition = height / 2;
+    lastXPosition = 0;
+    lastYPosition = 0;
 }
 
 void Controller::error_callback(int error, const char* description) {
@@ -100,8 +100,8 @@ void Controller::key_callback(GLFWwindow* window, int key, int scancode, int act
             Application::getInstance()->moveCameraAndEye(d);
         }
     }
-    
-    
+
+
 
 }
 
@@ -114,19 +114,32 @@ void Controller::cursor_pos_callback(GLFWwindow* window, double mouseX, double m
     //printf("cursor_pos_callback %d, %d \n", (int)mouseX, (int)mouseY);
 
     if (enableLookingAroud)
-    {   
+    {
         mouseChange++;
+
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        //mouseX = (mouseX > width / 2) ? (mouseX - width / 2) * -1 : (width / 2 - mouseX) ;
+        mouseY = (mouseY > height / 2) ? (height / 2 - mouseY)  * -1 : (mouseY - height / 2);
+
+        //printf("mouse: [x: %f; y: %f]\n", mouseX, mouseY);
+
         int deltaX = lastXPosition - mouseX;
         int deltaY = lastYPosition - mouseY;
+        printf("delta: [x: %i; y: %i]\n", deltaX, deltaY);
+
+        //int deltaX = lastXPosition - mouseX;
+        //int deltaY = lastYPosition - mouseY;
+
         lastXPosition = mouseX;
-        lastXPosition = mouseX;
+        lastYPosition = mouseY;
+
+        //return;
         if (mouseChange > 2)
         {
-            mouseChange = 0; 
+            mouseChange = 0;
             Application::getInstance()->lookAround(deltaX, deltaY);
         }
-        
-        
     }
 }
 
@@ -143,12 +156,12 @@ void Controller::mouse_button_callback(GLFWwindow* window, int button, int actio
         else if (action == GLFW_RELEASE)
         {
             enableLookingAroud = false;
-            
+
+
             int width, height;
             glfwGetFramebufferSize(window, &width, &height);
-            glfwSetCursorPos(window, width / 2, height / 2);
+            lastXPosition = width / 2;
+            lastYPosition = height / 2;
         }
-            
     }
-
 }

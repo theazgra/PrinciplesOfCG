@@ -73,6 +73,8 @@ Application::Application()
     
     renderer = new Renderer(*window, Triangles);
 
+    glEnable(GL_DEPTH_TEST);
+
     bindCallbacks();    
     controller.init(width, height);
 }

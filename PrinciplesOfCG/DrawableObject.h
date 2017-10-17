@@ -7,12 +7,14 @@ class DrawableObject : public Object
 {
 
 private:
+    void internalConstructor(std::vector<float>);
+
+protected:
     GLuint VAO, VBO, verticesCount;
     unsigned int shaderId;
 
-    void internalConstructor(std::vector<float>);
-
 public:
+    DrawableObject(int);
     DrawableObject(int, std::vector<float>, int);
     ~DrawableObject();
 

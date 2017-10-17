@@ -7,4 +7,6 @@ in vec3 vp_color;
 
 void main () {
   frag_colour = vec4 (vp_color[0], vp_color[1], vp_color[2], 1.0);
+
+
 }

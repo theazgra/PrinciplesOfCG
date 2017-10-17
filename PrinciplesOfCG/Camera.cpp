@@ -23,7 +23,7 @@ Camera::~Camera()
 
 glm::mat4 Camera::getViewMatrix() const
 {
-    return glm::lookAt(this->worldPosition, this->target, this->upVector);
+    return glm::lookAt(this->worldPosition, this->target + this->target, this->upVector);
 }
 
 glm::mat4 Camera::getProjectionMatrix() const
@@ -70,10 +70,9 @@ void Camera::moveCamera(Direction direction)
 
     if (direction != None)
     {
-        notifyObservers();
+        notifyObservers(getViewMatrix(), getProjectionMatrix());
     }
 }
-
 
 void Camera::moveCameraAndEye(Direction direction)
 {
@@ -112,25 +111,46 @@ void Camera::moveCameraAndEye(Direction direction)
 
     if (direction != None)
     {
-        notifyObservers();
+        notifyObservers(getViewMatrix(), getProjectionMatrix());
     }
 }
 
 void Camera::lookAround(double deltaX, double deltaY)
 {
-    printf("DeltaX: %f; DeltaY: %f\n", deltaX, deltaY);
-    printf("Pre change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
-    this->target.x += float(glm::cos(deltaX));
-    this->target.z += float(glm::sin(deltaX));
-    this->target.y += float(glm::sin(deltaY));
-    printf("Post change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
+    
+    //printf("DeltaX: %f; DeltaY: %f\n", deltaX, deltaY);
+    //printf("Pre change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
+    
+    //float changeX = float(glm::cos(glm::degrees(deltaX)) / 10);
+    //float changeZ = float(glm::sin(glm::degrees(deltaX)) / 10);
+    //float changeY = float(glm::sin(glm::degrees(deltaY)) / 10);
+
+    this->target.x += float(glm::cos(glm::degrees(deltaX)) / 10);
+    this->target.z += float(glm::sin(glm::degrees(deltaX)) / 10);
+    this->target.y += float(glm::sin(glm::degrees(deltaY)) / 10);
+    
+/*
+    this->target.x += deltaX > 0 ? -0.05f : 0.05f;
+    this->target.z += deltaX > 0 ? -0.05f : 0.05f;
+    this->target.y += deltaY > 0 ? -0.05f : 0.05f;
+*/
+    
+ 
+    //printf("change: [x: %.3f;z: %.3f;y: %.3f]\n", changeX, changeZ, changeY);
+    //printf("Post change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
 
 
-    notifyObservers();
+    notifyObservers(getViewMatrix(), getProjectionMatrix());
 }
 
 void Camera::resetCamera()
 {
     this->worldPosition = this->backupWorldPosition;
     this->target = this->backupTargetPosition;
+}
+
+void Camera::registerObserver(CameraObserver & observer)
+{
+    CameraSubject::registerObserver(observer);
+    notifyObservers(getViewMatrix(), getProjectionMatrix());
 }

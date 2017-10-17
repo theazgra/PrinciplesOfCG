@@ -35,7 +35,9 @@ void Renderer::renderScene(Scene const& scene)
 
     while (!glfwWindowShouldClose(this->window))
     {
+#if REPORT_FRAME_TIME   
         reportRenderTime();
+#endif
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderDrawableObjects(scene);

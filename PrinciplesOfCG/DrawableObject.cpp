@@ -8,6 +8,10 @@ DrawableObject::DrawableObject(int objectId, std::vector<float> vector, int shad
     this->shaderId = shaderId;
 }
 
+DrawableObject::DrawableObject(int objectId) : Object(objectId)
+{
+}
+
 
 void DrawableObject::internalConstructor(std::vector<float> vector)
 {
@@ -22,7 +26,8 @@ void DrawableObject::internalConstructor(std::vector<float> vector)
     this->VAO = 0;
     glGenVertexArrays(1, &this->VAO); //generate the this->VAO
     glBindVertexArray(this->VAO); //bind the this->VAO
-    glEnableVertexAttribArray(0); //enable vertex attributes
+    glEnableVertexAttribArray(0); //position
+    glEnableVertexAttribArray(1); //normal
     glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 }
