@@ -156,11 +156,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DrawableObject.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="models\bedna.h" />
-    <ClInclude Include="models\plain.h" />
     <ClInclude Include="models\sphere.h" />
-    <ClInclude Include="models\suzi_flat.h" />
-    <ClInclude Include="models\suzi_smooth.h" />
     <ClInclude Include="models\worker.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectWithFocus.h" />

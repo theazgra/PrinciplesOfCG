@@ -8,6 +8,7 @@ Scene::Scene(char* sceneName, Shader* shader, Camera* camera)
    
     int index = shaders.size();
     shaders[index] = shader;
+    BASIC_SHADER_ID = index;
     
     cameras.push_back(camera);
     internalSetActiveCamera(camera);
@@ -72,34 +73,43 @@ char * Scene::getSceneName() const
     return sceneName;
 }
 
-void Scene::addDrawableObject(std::vector<float> vec)
+DrawableObject& Scene::addDrawableObject(std::vector<float> vec)
 {
-    drawableObjects.push_back(new DrawableObject(drawableObjects.size(), vec, BASIC_SHADER_ID));
+    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, BASIC_SHADER_ID);
+    drawableObjects.push_back(drawable);
+    return *drawable;
 }
 
-void Scene::addDrawableObject(std::vector<float> vec, Shader * shader)
+DrawableObject& Scene::addDrawableObject(std::vector<float> vec, Shader * shader)
 {
     int index = shaders.size();
     shaders[index] = shader;
-    drawableObjects.push_back(new DrawableObject(drawableObjects.size(), vec, index));
+    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, index);
+    drawableObjects.push_back(drawable);
     registerCameraObservers();
+    return *drawable;
 }
 
-void Scene::addDrawableObject(std::vector<float> vec, unsigned int shaderId)
+DrawableObject& Scene::addDrawableObject(std::vector<float> vec, unsigned int shaderId)
 {
-    drawableObjects.push_back(new DrawableObject(drawableObjects.size(), vec, shaderId));
+    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, shaderId);
+    drawableObjects.push_back(drawable);
+    return *drawable;
 }
 
-void Scene::addSphere()
+SphereObject& Scene::addSphere()
 {
-    drawableObjects.push_back(new SphereObject(drawableObjects.size()));
+    SphereObject * sphere = new SphereObject(drawableObjects.size(), BASIC_SHADER_ID);
+    drawableObjects.push_back(sphere);
+    return *sphere;
 }
 
-void Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos)
+Camera& Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos)
 {
     Camera* newCam = new Camera(cameras.size(), worldPos, targetPos);
     cameras.push_back(newCam);
     internalSetActiveCamera(newCam);    
+    return *newCam;
 }
 
 void Scene::setActiveCamera(unsigned int cameraId)

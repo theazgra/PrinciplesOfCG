@@ -6,5 +6,5 @@ in vec3 vp_color;
 
 
 void main () {
-  frag_colour = vec4 (1, 0.0, 0.0, 1.0);
+  frag_colour = vec4 (0.5f, 0.0, 0.5f, 1.0);
 }

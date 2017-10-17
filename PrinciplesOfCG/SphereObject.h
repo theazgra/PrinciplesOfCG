@@ -8,7 +8,7 @@
 class SphereObject : public DrawableObject
 {
 public:
-    SphereObject(int);
+    SphereObject(int, int);
     ~SphereObject();
 };
 

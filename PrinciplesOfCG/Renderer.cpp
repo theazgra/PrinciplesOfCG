@@ -29,9 +29,9 @@ void Renderer::renderScene(Scene const& scene)
     lastRenderTime = glfwGetTime();
     frameCount = 0;
 
-    scene.getDrawableObjects().at(1)->translate(glm::vec3(-0.5f, 0.0f, 0.0f));
-    scene.getDrawableObjects().at(2)->translate(glm::vec3(-0.5f, -0.5f, 0.0f));
-    scene.getDrawableObjects().at(3)->translate(glm::vec3(0.0f, -0.5f, 0.0f));
+    //scene.getDrawableObjects().at(0)->translate(glm::vec3(-2.5f, 0.0f, 0.0f));
+    //scene.getDrawableObjects().at(2)->translate(glm::vec3(-0.5f, -0.5f, 0.0f));
+    //scene.getDrawableObjects().at(3)->translate(glm::vec3(0.0f, -0.5f, 0.0f));
 
     while (!glfwWindowShouldClose(this->window))
     {
@@ -62,11 +62,12 @@ void Renderer::renderDrawableObjects(Scene const& scene)
 
         unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
         
+        
         if (objectShaderId != lastShaderId)
         {
             scene.getShader(objectShaderId).useProgram();
-            scene.getShader(objectShaderId).applyCamera();
         }
+        scene.getShader(objectShaderId).applyCamera();
 
         scene.getShader(objectShaderId).modelTransform(*(scene.getDrawableObjects().at(i)));
         

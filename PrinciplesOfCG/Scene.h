@@ -13,7 +13,7 @@
 class Scene
 {
 private:
-    const unsigned int BASIC_SHADER_ID = 0;
+    int BASIC_SHADER_ID = 0;
 
     std::vector<DrawableObject*> drawableObjects;
     std::vector<Camera*> cameras;
@@ -32,20 +32,20 @@ public:
     char* getSceneName() const;
 
     
-    void addDrawableObject(std::vector<float>);
-    void addDrawableObject(std::vector<float>, Shader* shader);
-    void addDrawableObject(std::vector<float>, unsigned int);
-    void addSphere();
+    DrawableObject& addDrawableObject(std::vector<float>);
+    DrawableObject& addDrawableObject(std::vector<float>, Shader* shader);
+    DrawableObject& addDrawableObject(std::vector<float>, unsigned int);
+    SphereObject& addSphere();
     std::vector<DrawableObject*> const& getDrawableObjects() const;
 
     Shader const& getBasicShader() const;
     Shader const& getShader(unsigned int) const;
 
-    void addCamera(glm::vec3, glm::vec3);
+    Camera& addCamera(glm::vec3, glm::vec3);
     void setActiveCamera(unsigned int cameraId);
     std::vector<Camera*> const& getCameras() const;
     Camera const& getActiveCamera() const;
-    Camera & getActiveCameraRef();
+    Camera& getActiveCameraRef();
 
 };
 

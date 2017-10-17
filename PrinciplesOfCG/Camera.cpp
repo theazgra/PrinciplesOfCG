@@ -23,7 +23,7 @@ Camera::~Camera()
 
 glm::mat4 Camera::getViewMatrix() const
 {
-    return glm::lookAt(this->worldPosition, this->target + this->target, this->upVector);
+    return glm::lookAt(this->worldPosition, this->target, this->upVector);
 }
 
 glm::mat4 Camera::getProjectionMatrix() const
