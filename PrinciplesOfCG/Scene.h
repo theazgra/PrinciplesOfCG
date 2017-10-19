@@ -6,11 +6,12 @@
 #include <map>
 
 #include "SphereObject.h"
+#include "CameraObserver.h"
 #include "Camera.h"
-#include "Light.h"
+#include "PointLight.h"
 #include "Shader.h"
 
-class Scene
+class Scene : public CameraObserver, public LightObserver
 {
 private:
     int BASIC_SHADER_ID = 0;
@@ -19,13 +20,13 @@ private:
     std::vector<Camera*> cameras;
     std::vector<Light*> lights;
     std::map<int, Shader*> shaders;
+    PointLight pointLight;
  
     char* sceneName;
 
     Camera* activeCamera = NULL;
 
     void internalSetActiveCamera(Camera*);
-    void registerCameraObservers();
 public:
     Scene(char*, Shader*, Camera*);
     ~Scene();
@@ -46,6 +47,14 @@ public:
     std::vector<Camera*> const& getCameras() const;
     Camera const& getActiveCamera() const;
     Camera& getActiveCameraRef();
+
+    void swapCamera();
+
+
+    void cameraNotify(glm::mat4, glm::mat4) override;
+    void lightNotify(glm::vec3, glm::vec3, glm::vec3, float) override;
+
+    PointLight& getPointLight();
 
 };
 

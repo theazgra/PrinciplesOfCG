@@ -2,9 +2,7 @@
 #include "Camera.h"
 
 
-
-
-Camera::Camera(int id, glm::vec3 worldPosition, glm::vec3 poi) : ObjectWithFocus(id, worldPosition, poi)
+Camera::Camera(int id, glm::vec3 worldPosition, glm::vec3 target) : ObjectWithTarget(id, worldPosition, target)
 {
     this->upVector = glm::vec3(0.0f, 1.0f, 0.0f);
     this->fieldOfView = glm::radians(45.0f);

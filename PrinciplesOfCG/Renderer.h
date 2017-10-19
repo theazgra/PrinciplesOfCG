@@ -1,5 +1,5 @@
 #pragma once
-#define REPORT_FRAME_TIME 1
+#define REPORT_FRAME_TIME 0
 #include "Scene.h"
 
 enum RenderType

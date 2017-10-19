@@ -5,14 +5,25 @@
 Scene::Scene(char* sceneName, Shader* shader, Camera* camera)
 {
     this->sceneName = sceneName;
-   
+
     int index = shaders.size();
     shaders[index] = shader;
     BASIC_SHADER_ID = index;
-    
+
     cameras.push_back(camera);
     internalSetActiveCamera(camera);
+
+
+    //basic point light
+    pointLight = PointLight(
+        0,
+        glm::vec3(0.2f, 13.0f, -0.5f),
+        glm::vec3(1.0f, 1.0f, 1.0f),
+        glm::vec3(0.1f, 0.1f, 0.1f),
+        50);
+    pointLight.registerObserver(*this);
 }
+        
 
 void Scene::internalSetActiveCamera(Camera * camera)
 {
@@ -22,21 +33,7 @@ void Scene::internalSetActiveCamera(Camera * camera)
     }
 
     activeCamera = camera;
-    
-    registerCameraObservers();
-}
-
-void Scene::registerCameraObservers()
-{
-    if (activeCamera != NULL)
-    {
-        activeCamera->clearObservers();
-    }
-
-    for (unsigned int i = 0; i < shaders.size(); i++)
-    {
-        activeCamera->registerObserver(*shaders.at(i));
-    }
+    activeCamera->registerObserver(*this);
 }
 
 Scene::~Scene()
@@ -86,7 +83,6 @@ DrawableObject& Scene::addDrawableObject(std::vector<float> vec, Shader * shader
     shaders[index] = shader;
     DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, index);
     drawableObjects.push_back(drawable);
-    registerCameraObservers();
     return *drawable;
 }
 
@@ -101,6 +97,7 @@ SphereObject& Scene::addSphere()
 {
     SphereObject * sphere = new SphereObject(drawableObjects.size(), BASIC_SHADER_ID);
     drawableObjects.push_back(sphere);
+    this->pointLight.forceUpdate();
     return *sphere;
 }
 
@@ -166,6 +163,35 @@ Camera const & Scene::getActiveCamera() const
 Camera & Scene::getActiveCameraRef()
 {
     return *activeCamera;
+}
+
+void Scene::swapCamera()
+{
+    unsigned int camCount = cameras.size();
+    unsigned int activeCamId = activeCamera->getObjectId();
+    setActiveCamera((activeCamId + 1) % camCount);
+}
+
+void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
+{
+    for (int i = 0; i < shaders.size(); i++)
+    {
+        shaders.at(i)->setCameraMatrices(viewMatrix, projectionMatrix);
+    }
+}
+
+void Scene::lightNotify(glm::vec3 worldPosition, glm::vec3 lightIntensity, glm::vec3 ambient, float power)
+{
+    for (int i = 0; i < shaders.size(); i++)
+    {
+        shaders.at(i)->setLightParameters(worldPosition, lightIntensity, ambient, power);
+    }
+}
+
+
+PointLight & Scene::getPointLight()
+{
+    return pointLight;
 }
 
 

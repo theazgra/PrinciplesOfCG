@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ObjectWithFocus.h"
+#include "ObjectWithTarget.h"
 #include "CameraSubject.h"
 
 enum Direction
@@ -14,7 +14,7 @@ enum Direction
     None
 };
 
-class Camera : public ObjectWithFocus, public CameraSubject
+class Camera : public ObjectWithTarget, public CameraSubject
 {
 private:
     glm::vec3 upVector;
@@ -40,6 +40,5 @@ public:
     void resetCamera();
 
     void registerObserver(CameraObserver&) override;
-    
 };
 

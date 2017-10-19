@@ -4,9 +4,6 @@
 class CameraObserver
 {
 public:
-    //CameraObserver();
-    //~CameraObserver();
-
-    virtual void notify(glm::mat4, glm::mat4) = 0;
+    virtual void cameraNotify(glm::mat4, glm::mat4) = 0;
 };
 

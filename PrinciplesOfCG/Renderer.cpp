@@ -29,10 +29,6 @@ void Renderer::renderScene(Scene const& scene)
     lastRenderTime = glfwGetTime();
     frameCount = 0;
 
-    //scene.getDrawableObjects().at(0)->translate(glm::vec3(-2.5f, 0.0f, 0.0f));
-    //scene.getDrawableObjects().at(2)->translate(glm::vec3(-0.5f, -0.5f, 0.0f));
-    //scene.getDrawableObjects().at(3)->translate(glm::vec3(0.0f, -0.5f, 0.0f));
-
     while (!glfwWindowShouldClose(this->window))
     {
 #if REPORT_FRAME_TIME   
@@ -57,9 +53,6 @@ void Renderer::renderDrawableObjects(Scene const& scene)
 {
     for (int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
-        //funky rotation
-        //scene.getDrawableObjects().at(i)->rotate(0.05f, glm::vec3(1.0f, 1.0f, 0.0f));
-
         unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
         
         
@@ -68,6 +61,7 @@ void Renderer::renderDrawableObjects(Scene const& scene)
             scene.getShader(objectShaderId).useProgram();
         }
         scene.getShader(objectShaderId).applyCamera();
+        scene.getShader(objectShaderId).applyLight();
 
         scene.getShader(objectShaderId).modelTransform(*(scene.getDrawableObjects().at(i)));
         

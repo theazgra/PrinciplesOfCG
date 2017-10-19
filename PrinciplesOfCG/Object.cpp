@@ -1,16 +1,13 @@
 #include "stdafx.h"
 #include "Object.h"
 
-
-void Object::setModelMatrix(glm::mat4 newMatrix)
+Object::Object()
 {
-    this->objectMatrix = newMatrix;
 }
 
 Object::Object(int objectId)
 {
     this->objectId = objectId;
-    this->objectMatrix = glm::mat4(1.0f);
 }
 
 Object::~Object()
@@ -18,26 +15,9 @@ Object::~Object()
     objectId = -1;
 }
 
-void Object::rotate(float angle, glm::vec3 axis)
-{
-    objectMatrix = glm::rotate(objectMatrix, angle, axis);
-}
-
-void Object::translate(glm::vec3 translateVector)
-{
-    objectMatrix = glm::translate(objectMatrix, translateVector);
-    //glm::mat4 translateMatrix = glm::translate(glm::mat4(), translateVector);
-    //objectMatrix = objectMatrix * translateMatrix;
-}
-
 int Object::getObjectId() const
 {
     return objectId;
-}
-
-glm::mat4 Object::getObjectMatrix() const
-{
-    return objectMatrix;
 }
 
 

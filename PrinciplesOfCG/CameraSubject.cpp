@@ -15,7 +15,7 @@ void CameraSubject::notifyObservers(glm::mat4 viewMatrix, glm::mat4 projectionMa
 {
     for (CameraObserver & observer : cameraObservers)
     {
-        observer.notify(viewMatrix, projectionMatrix);
+        observer.cameraNotify(viewMatrix, projectionMatrix);
     }
 }
 

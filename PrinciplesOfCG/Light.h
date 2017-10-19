@@ -1,8 +1,25 @@
 #pragma once
-class Light
+#include "ControlObject.h"
+#include "LightSubject.h"
+class Light : public ControlObject, public LightSubject
 {
-public:
+
+protected:
     Light();
+
+    glm::vec3 intensity;
+    float power;
+public:
+    
+    Light(int, glm::vec3, glm::vec3, float);
     ~Light();
+    void setIntensity(glm::vec3);
+    void setPower(float);
+
+    float getPower() const;
+    glm::vec3 getIntensity() const;
+
+    void forceUpdate();
+    
 };
 
