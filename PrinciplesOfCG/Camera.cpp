@@ -21,7 +21,7 @@ Camera::~Camera()
 
 glm::mat4 Camera::getViewMatrix() const
 {
-    return glm::lookAt(this->worldPosition, this->target, this->upVector);
+    return glm::lookAt(this->worldPosition, glm::normalize(this->worldPosition + this->target), this->upVector);
 }
 
 glm::mat4 Camera::getProjectionMatrix() const
@@ -44,22 +44,28 @@ void Camera::moveCamera(Direction direction)
     switch (direction)
     {
     case Up:
-        this->worldPosition += glm::vec3(0.0f, 0.5f, 0.0f);
+        this->worldPosition += CAMERA_SPEED * this->upVector;
         break;
     case Down:
-        this->worldPosition += glm::vec3(0.0f, -0.5f, 0.0f);;
+        this->worldPosition += -CAMERA_SPEED * this->upVector;
         break;
-    case Left:
-        this->worldPosition += glm::vec3(-0.5f, 0.0f, 0.0f);
+    case Left: 
+    {
+        glm::vec3 strafeDirection = glm::cross(this->target, this->upVector);
+        this->worldPosition += -CAMERA_SPEED * strafeDirection;
         break;
+    }
     case Right:
-        this->worldPosition += glm::vec3(0.5f, 0.0f, 0.0f);
+    {
+        glm::vec3 strafeDirection = glm::cross(this->target, this->upVector);
+        this->worldPosition += CAMERA_SPEED * strafeDirection;
         break;
+    }
     case Forward:
-        this->worldPosition += glm::vec3(0.0f, 0.0f, -0.5f);
+        this->worldPosition += CAMERA_SPEED * this->target;
         break;
     case Backward:
-        this->worldPosition += glm::vec3(0.0f, 0.0f, 0.5f);
+        this->worldPosition += -CAMERA_SPEED * this->target;
         break;
     }
 
@@ -72,7 +78,7 @@ void Camera::moveCamera(Direction direction)
     }
 }
 
-void Camera::moveCameraAndEye(Direction direction)
+void Camera::moveCameraAndTarget(Direction direction)
 {
     switch (direction)
     {
@@ -113,32 +119,15 @@ void Camera::moveCameraAndEye(Direction direction)
     }
 }
 
-void Camera::lookAround(double deltaX, double deltaY)
+void Camera::mouseUpdate(const glm::vec2 & mousePosition)
 {
+    glm::vec2 mouseDelta = mousePosition - oldMousePosition;
     
-    //printf("DeltaX: %f; DeltaY: %f\n", deltaX, deltaY);
-    //printf("Pre change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
-    
-    //float changeX = float(glm::cos(glm::degrees(deltaX)) / 10);
-    //float changeZ = float(glm::sin(glm::degrees(deltaX)) / 10);
-    //float changeY = float(glm::sin(glm::degrees(deltaY)) / 10);
+    this->target = glm::mat3(glm::rotate(mouseDelta.x * 0.5f, this->upVector)) * this->target;   
+    printf("target x:%f y:%f z:%f\n", target.x, target.y, target.z);
 
-    this->target.x += float(glm::cos(glm::degrees(deltaX)) / 10);
-    this->target.z += float(glm::sin(glm::degrees(deltaX)) / 10);
-    this->target.y += float(glm::sin(glm::degrees(deltaY)) / 10);
-    
-/*
-    this->target.x += deltaX > 0 ? -0.05f : 0.05f;
-    this->target.z += deltaX > 0 ? -0.05f : 0.05f;
-    this->target.y += deltaY > 0 ? -0.05f : 0.05f;
-*/
-    
- 
-    //printf("change: [x: %.3f;z: %.3f;y: %.3f]\n", changeX, changeZ, changeY);
-    //printf("Post change eye position: [x: %f; y: %f, z: %f]\n", this->target.x, this->target.y, this->target.z);
-
-
-    notifyObservers(getViewMatrix(), getProjectionMatrix());
+    oldMousePosition = mousePosition;
+    notifyObservers(this->getViewMatrix(), this->getProjectionMatrix());
 }
 
 void Camera::resetCamera()

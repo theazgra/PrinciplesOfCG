@@ -25,10 +25,10 @@ int main()
 
     app->createScene("Basic scene", 
         new Shader("VertexShader.glsl", "FragmentShader.glsl"), 
-        new Camera(0, glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
+        new Camera(0, glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
     
-    app->getCurrentScene().addCamera(glm::vec3(-7.0f, 5.0f, 8.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    app->getCurrentScene().addCamera(glm::vec3(0.5f, 9.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));    
+    app->getCurrentScene().addCamera(glm::vec3(-7.0f, 5.0f, 8.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+    app->getCurrentScene().addCamera(glm::vec3(0.5f, 9.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
     app->getCurrentScene().addSphere().translate(glm::vec3(2.0f, 0.0f, 2.0f));
     app->getCurrentScene().addSphere().translate(glm::vec3(2.0f, 0.0f, -2.0f));

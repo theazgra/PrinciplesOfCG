@@ -12,5 +12,6 @@ public:
     ~PointLight();
 
     glm::vec3 getAmbient() const;
+    void setAmbient(glm::vec3 ambient);
 };
 

@@ -199,7 +199,7 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
         }
         if (d != None)
         {
-            this->currentScene->getActiveCameraRef().moveCameraAndEye(d);
+            this->currentScene->getActiveCameraRef().moveCameraAndTarget(d);
         }
     }
 
@@ -218,28 +218,29 @@ void Application::cursor_pos_callback(GLFWwindow* window, double mouseX, double 
     {
         mouseChange++;
 
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
+        //int width, height;
+        //glfwGetFramebufferSize(window, &width, &height);
         //mouseX = (mouseX > width / 2) ? (mouseX - width / 2) * -1 : (width / 2 - mouseX) ;
-        mouseY = (mouseY > height / 2) ? (height / 2 - mouseY)  * -1 : (mouseY - height / 2);
+        //mouseY = (mouseY > height / 2) ? (height / 2 - mouseY)  * -1 : (mouseY - height / 2);
 
         //printf("mouse: [x: %f; y: %f]\n", mouseX, mouseY);
 
-        int deltaX = lastXPosition - mouseX;
-        int deltaY = lastYPosition - mouseY;
-        printf("delta: [x: %i; y: %i]\n", deltaX, deltaY);
+        //int deltaX = lastXPosition - mouseX;
+        //int deltaY = lastYPosition - mouseY;
+        //printf("delta: [x: %i; y: %i]\n", deltaX, deltaY);
 
         //int deltaX = lastXPosition - mouseX;
         //int deltaY = lastYPosition - mouseY;
 
-        lastXPosition = mouseX;
-        lastYPosition = mouseY;
+        //lastXPosition = mouseX;
+        //lastYPosition = mouseY;
+        this->currentScene->getActiveCameraRef().mouseUpdate(glm::vec2(mouseX, mouseY));
 
         //return;
         if (mouseChange > 2)
         {
             mouseChange = 0;
-            this->currentScene->getActiveCameraRef().lookAround(deltaX, deltaY);
+            //this->currentScene->getActiveCameraRef().lookAround(deltaX, deltaY);
         }
     }
 }

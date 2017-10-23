@@ -24,6 +24,8 @@ private:
     float zFar;
 
     glm::vec3 backupWorldPosition, backupTargetPosition;
+    const float CAMERA_SPEED = 0.5f;
+    glm::vec2 oldMousePosition;
 
 public:
     Camera(int, glm::vec3, glm::vec3);
@@ -35,8 +37,8 @@ public:
     void setPerspective(float, float, float, float);
 
     void moveCamera(Direction);
-    void moveCameraAndEye(Direction);
-    void lookAround(double, double);
+    void moveCameraAndTarget(Direction);
+    void mouseUpdate(const glm::vec2& mousePosition);
     void resetCamera();
 
     void registerObserver(CameraObserver&) override;

@@ -19,3 +19,8 @@ glm::vec3 PointLight::getAmbient() const
 {
     return this->ambient;
 }
+
+void PointLight::setAmbient(glm::vec3 ambient)
+{
+    this->ambient = ambient;
+}

@@ -22,6 +22,7 @@ void main () {
     gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(localPosition, 1.0);
 
     vec3 localPosition_cameraspace = ( viewMatrix * modelMatrix * vec4(localPosition,1)).xyz;
+
 	EyeDirection_cameraspace = vec3(0,0,0) - localPosition_cameraspace;
 
     vec3 LightPosition_cameraspace = ( viewMatrix * vec4(lightPosition,1)).xyz;
