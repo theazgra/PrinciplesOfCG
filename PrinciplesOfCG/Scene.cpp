@@ -17,10 +17,10 @@ Scene::Scene(char* sceneName, Shader* shader, Camera* camera)
     //basic point light
     pointLight = PointLight(
         0,
-        glm::vec3(0.2f, 13.0f, -0.5f),
+        glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(1.0f, 1.0f, 1.0f),
         glm::vec3(0.1f, 0.1f, 0.1f),
-        50);
+        20);
     pointLight.registerObserver(*this);
 }
         
@@ -170,6 +170,7 @@ void Scene::swapCamera()
     unsigned int camCount = cameras.size();
     unsigned int activeCamId = activeCamera->getObjectId();
     setActiveCamera((activeCamId + 1) % camCount);
+    printf("Activated camera with id: %i\n", (activeCamId + 1) % camCount);
 }
 
 void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)

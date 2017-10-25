@@ -16,10 +16,8 @@ private:
     Renderer * renderer;
     Scene * currentScene;
 
-    double lastXPosition = 0;
-    double lastYPosition = 0;
     bool enableLookingAroud = false;
-    int mouseChange = 0;
+    
 
     void bindCallbacks();
 public:

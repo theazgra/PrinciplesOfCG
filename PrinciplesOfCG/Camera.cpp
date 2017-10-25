@@ -21,7 +21,8 @@ Camera::~Camera()
 
 glm::mat4 Camera::getViewMatrix() const
 {
-    return glm::lookAt(this->worldPosition, glm::normalize(this->worldPosition + this->target), this->upVector);
+    return glm::lookAt(this->worldPosition, this->worldPosition + this->target, this->upVector);
+    //return glm::lookAt(this->worldPosition, glm::normalize(this->worldPosition + this->target), this->upVector);
 }
 
 glm::mat4 Camera::getProjectionMatrix() const
@@ -78,53 +79,61 @@ void Camera::moveCamera(Direction direction)
     }
 }
 
-void Camera::moveCameraAndTarget(Direction direction)
-{
-    switch (direction)
-    {
-    case Up:
-        this->worldPosition += glm::vec3(0.0f, 0.5f, 0.0f);
-        this->target += glm::vec3(0.0f, 0.5f, 0.0f);
-        break;
-    case Down:
-        this->worldPosition += glm::vec3(0.0f, -0.5f, 0.0f);
-        this->target += glm::vec3(0.0f, -0.5f, 0.0f);;
-        break;
-    case Left:
-        this->worldPosition += glm::vec3(-0.5f, 0.0f, 0.0f);
-        this->target += glm::vec3(-0.5f, 0.0f, 0.0f);
-        break;
-    case Right:
-        this->worldPosition += glm::vec3(0.5f, 0.0f, 0.0f);
-        this->target += glm::vec3(0.5f, 0.0f, 0.0f);
-        break;
-    case Forward:
-        this->worldPosition += glm::vec3(0.0f, 0.0f, -0.5f);
-        this->target += glm::vec3(0.0f, 0.0f, -0.5f);
-        break;
-    case Backward:
-        this->worldPosition += glm::vec3(0.0f, 0.0f, 0.5f);
-        this->target += glm::vec3(0.0f, 0.0f, 0.5f);
-        break;
-    }
-
-    printf("Current camera position: [x: %f; y: %f, z: %f]\n",
-        this->worldPosition.x, this->worldPosition.y, this->worldPosition.z);
-    printf("Current eye position: [x: %f; y: %f, z: %f]\n",
-        this->target.x, this->target.y, this->target.z);
-
-    if (direction != None)
-    {
-        notifyObservers(getViewMatrix(), getProjectionMatrix());
-    }
-}
+//void Camera::moveCameraAndTarget(Direction direction)
+//{
+//    switch (direction)
+//    {
+//    case Up:
+//        this->worldPosition += glm::vec3(0.0f, 0.5f, 0.0f);
+//        this->target += glm::vec3(0.0f, 0.5f, 0.0f);
+//        break;
+//    case Down:
+//        this->worldPosition += glm::vec3(0.0f, -0.5f, 0.0f);
+//        this->target += glm::vec3(0.0f, -0.5f, 0.0f);;
+//        break;
+//    case Left:
+//        this->worldPosition += glm::vec3(-0.5f, 0.0f, 0.0f);
+//        this->target += glm::vec3(-0.5f, 0.0f, 0.0f);
+//        break;
+//    case Right:
+//        this->worldPosition += glm::vec3(0.5f, 0.0f, 0.0f);
+//        this->target += glm::vec3(0.5f, 0.0f, 0.0f);
+//        break;
+//    case Forward:
+//        this->worldPosition += glm::vec3(0.0f, 0.0f, -0.5f);
+//        this->target += glm::vec3(0.0f, 0.0f, -0.5f);
+//        break;
+//    case Backward:
+//        this->worldPosition += glm::vec3(0.0f, 0.0f, 0.5f);
+//        this->target += glm::vec3(0.0f, 0.0f, 0.5f);
+//        break;
+//    }
+//
+//    printf("Current camera position: [x: %f; y: %f, z: %f]\n",
+//        this->worldPosition.x, this->worldPosition.y, this->worldPosition.z);
+//    printf("Current eye position: [x: %f; y: %f, z: %f]\n",
+//        this->target.x, this->target.y, this->target.z);
+//
+//    if (direction != None)
+//    {
+//        notifyObservers(getViewMatrix(), getProjectionMatrix());
+//    }
+//}
 
 void Camera::mouseUpdate(const glm::vec2 & mousePosition)
 {
     glm::vec2 mouseDelta = mousePosition - oldMousePosition;
     
-    this->target = glm::mat3(glm::rotate(mouseDelta.x * 0.5f, this->upVector)) * this->target;   
-    printf("target x:%f y:%f z:%f\n", target.x, target.y, target.z);
+    if (glm::length(mouseDelta) > 50.0f)
+    {
+        oldMousePosition = mousePosition;
+        return;                                                                      
+    }
+
+    glm::vec3 toRotateAround = glm::cross(this->target, this->upVector);
+    glm::mat4 rotator = glm::rotate(mouseDelta.x / 500.0f, this->upVector) * glm::rotate(mouseDelta.y/500.0f, toRotateAround);
+    this->target = glm::mat3(rotator) * this->target;
+
 
     oldMousePosition = mousePosition;
     notifyObservers(this->getViewMatrix(), this->getProjectionMatrix());

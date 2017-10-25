@@ -68,6 +68,8 @@ void Renderer::renderDrawableObjects(Scene const& scene)
         this->lastShaderId = objectShaderId;
 
         glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
+        
+        glStencilFunc(GL_ALWAYS, scene.getDrawableObjects().at(i)->getObjectId(), 0xFF);
 
         switch (renderType)
         {

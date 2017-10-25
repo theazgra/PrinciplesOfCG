@@ -37,7 +37,7 @@ public:
     void setPerspective(float, float, float, float);
 
     void moveCamera(Direction);
-    void moveCameraAndTarget(Direction);
+    //void moveCameraAndTarget(Direction);
     void mouseUpdate(const glm::vec2& mousePosition);
     void resetCamera();
 

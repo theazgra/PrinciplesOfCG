@@ -31,6 +31,9 @@ void main () {
     Normal_cameraspace = ( viewMatrix * modelMatrix * vec4(normalPosition,0)).xyz;
 
     outWorldPosition = (modelMatrix * vec4(localPosition, 1.0)).xyz;
-    outWorldNormal = ((modelMatrix) * vec4(normalPosition, 1.0)).xyz;
+    //outWorldNormal = ((modelMatrix) * vec4(normalPosition, 1.0)).xyz;
+    outWorldNormal = transpose(inverse(mat3(modelMatrix)))*normalPosition;
+    //worldNormal   = transpose(inverse(mat3(modelMatrix)))*normal;
+
 
 }
