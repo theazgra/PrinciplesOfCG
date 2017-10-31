@@ -43,12 +43,29 @@ void main () {
 	//  - Looking into the reflection -> 1
 	//  - Looking elsewhere -> < 1
 	float cosAlpha = clamp( dot( E,R ), 0,1 );
-  //float LightPower = 55.0f;
-  frag_colour = 
+
+	vec4 diffuse = color * lightIntensity * lightPower * cosTheta / (distance*distance);
+	vec4 reflective = color * lightIntensity * lightPower * pow(cosAlpha,10) / (distance*distance);
+
+	if (diffuse.x < 0 || diffuse.y < 0 || diffuse.z < 0)
+	{
+		frag_colour = vec4(1.0, 0.0, 0.0, 1.0);  
+	}
+	else if (reflective.x < 0 || reflective.y < 0 || reflective.z < 0)
+	{
+		frag_colour = vec4(0.0, 1.0, 0.0, 1.0);  
+	}
+	else
+	{
+		frag_colour = 
 		// Ambient : simulates indirect lighting
-		lightAmbient +
+		vec4(lightAmbient, 1.0) +
 		// Diffuse : "color" of the object
 		color * lightIntensity * lightPower * cosTheta / (distance*distance) +
 		// Specular : reflective highlight, like a mirror
-		color * lightIntensity * lightPower * pow(cosAlpha,10) / (distance*distance);
+		color * lightIntensity * lightPower * pow(cosAlpha,50) / (distance*distance);
+	}
+
+  
+  
 }

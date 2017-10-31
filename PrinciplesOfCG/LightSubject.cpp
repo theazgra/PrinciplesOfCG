@@ -28,3 +28,8 @@ void LightSubject::notifyObservers(glm::vec3 worldPosition, glm::vec3 lightInten
         observer.lightNotify(worldPosition, lightIntensity, ambient, power);
     }
 }
+
+//glm::vec3 LightSubject::getAmbient()
+//{
+//    return glm::vec3(0);
+//}

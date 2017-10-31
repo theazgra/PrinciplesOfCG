@@ -11,11 +11,11 @@ CameraSubject::~CameraSubject()
 {
 }
 
-void CameraSubject::notifyObservers(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
+void CameraSubject::notifyObservers(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
     for (CameraObserver & observer : cameraObservers)
     {
-        observer.cameraNotify(viewMatrix, projectionMatrix);
+        observer.cameraNotify(viewMatrix, projectionMatrix, cameraPosition);
     }
 }
 

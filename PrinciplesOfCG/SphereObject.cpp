@@ -21,7 +21,7 @@ SphereObject::SphereObject(int objectId, int shaderId) : DrawableObject(objectId
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), (GLvoid*)sizeof(VERTICES[0].Position));
     glBindVertexArray(0);
 
-    verticesCount = pocetPrvku;
+    this->verticesCount = pocetPrvku;
 }
 
 

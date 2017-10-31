@@ -152,6 +152,7 @@
     <ClInclude Include="ControlObject.h" />
     <ClInclude Include="LightObserver.h" />
     <ClInclude Include="LightSubject.h" />
+    <ClInclude Include="PlainObject.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
@@ -174,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="ControlObject.cpp" />
     <ClCompile Include="LightSubject.cpp" />
+    <ClCompile Include="PlainObject.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Camera.cpp" />

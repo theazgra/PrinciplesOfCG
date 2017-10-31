@@ -85,6 +85,9 @@
     <ClInclude Include="LightSubject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlainObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -136,6 +139,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LightSubject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlainObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

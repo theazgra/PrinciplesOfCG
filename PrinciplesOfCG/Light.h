@@ -8,6 +8,7 @@ protected:
     Light();
 
     glm::vec3 intensity;
+    virtual glm::vec3 getAmbient() = 0;
     float power;
 public:
     

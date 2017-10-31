@@ -20,7 +20,7 @@ Scene::Scene(char* sceneName, Shader* shader, Camera* camera)
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(1.0f, 1.0f, 1.0f),
         glm::vec3(0.1f, 0.1f, 0.1f),
-        20);
+        0.5);
     pointLight.registerObserver(*this);
 }
         
@@ -101,6 +101,18 @@ SphereObject& Scene::addSphere()
     return *sphere;
 }
 
+PlainObject & Scene::addPlainObject()
+{
+    Shader *s = new Shader("VertexShader.glsl", "FragmentShader2.glsl");
+    int index = shaders.size();
+    shaders[index] = s;
+
+    PlainObject * plain = new PlainObject(drawableObjects.size(), index);
+    drawableObjects.push_back(plain);
+    this->pointLight.forceUpdate();
+    return *plain;
+}
+
 Camera& Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos)
 {
     Camera* newCam = new Camera(cameras.size(), worldPos, targetPos);
@@ -173,11 +185,11 @@ void Scene::swapCamera()
     printf("Activated camera with id: %i\n", (activeCamId + 1) % camCount);
 }
 
-void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
+void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
     for (int i = 0; i < shaders.size(); i++)
     {
-        shaders.at(i)->setCameraMatrices(viewMatrix, projectionMatrix);
+        shaders.at(i)->setCameraMatrices(viewMatrix, projectionMatrix, cameraPosition);
     }
 }
 

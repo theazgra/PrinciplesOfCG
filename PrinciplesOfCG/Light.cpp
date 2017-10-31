@@ -24,12 +24,12 @@ void Light::setIntensity(glm::vec3 intensity)
 void Light::setPower(float power)
 {
     this->power = power;
-    notifyObservers(this->worldPosition, this->intensity, glm::vec3(0), this->power);
+    notifyObservers(this->worldPosition, this->intensity, getAmbient(), this->power);
 }
 
 void Light::forceUpdate()
 {
-    notifyObservers(this->worldPosition, this->intensity, glm::vec3(0), this->power);
+    notifyObservers(this->worldPosition, this->intensity, getAmbient(), this->power);
 }
 
 float Light::getPower() const 

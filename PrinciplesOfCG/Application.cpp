@@ -166,12 +166,15 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
 
     if (key == GLFW_KEY_PAGE_DOWN)
     {
-        this->currentScene->getPointLight().setPower(this->currentScene->getPointLight().getPower() + 0.5f);
+        this->currentScene->getPointLight().setPower(this->currentScene->getPointLight().getPower() + 0.1f);
     }
     if (key == GLFW_KEY_PAGE_UP)
     {
-        this->currentScene->getPointLight().setPower(this->currentScene->getPointLight().getPower() - 0.5f);
+        this->currentScene->getPointLight().setPower(this->currentScene->getPointLight().getPower() - 0.1f);
     }
+
+    this->currentScene->getActiveCameraRef().forceUpdate();
+    this->currentScene->getPointLight().forceUpdate();
 
 
 }
@@ -205,7 +208,10 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
         {
             enableLookingAroud = false;
             
-            GLbyte color[4];             GLfloat depth;             GLuint index;            //int newy = (int)camera->getResolution().y - y - 10;
+            GLbyte color[4]; 
+            GLfloat depth; 
+            GLuint index;
+            //int newy = (int)camera->getResolution().y - y - 10;
             
             double x, y;
             glfwGetCursorPos(window, &x, &y);
@@ -219,7 +225,8 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
                 depth, index);
             
             //glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
-            //glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+            //glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+
         }
     }
 }

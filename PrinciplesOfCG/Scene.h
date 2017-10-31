@@ -6,6 +6,7 @@
 #include <map>
 
 #include "SphereObject.h"
+#include "PlainObject.h"
 #include "CameraObserver.h"
 #include "Camera.h"
 #include "PointLight.h"
@@ -37,6 +38,8 @@ public:
     DrawableObject& addDrawableObject(std::vector<float>, Shader* shader);
     DrawableObject& addDrawableObject(std::vector<float>, unsigned int);
     SphereObject& addSphere();
+    PlainObject& addPlainObject();
+
     std::vector<DrawableObject*> const& getDrawableObjects() const;
 
     Shader const& getBasicShader() const;
@@ -51,7 +54,7 @@ public:
     void swapCamera();
 
 
-    void cameraNotify(glm::mat4, glm::mat4) override;
+    void cameraNotify(glm::mat4, glm::mat4, glm::vec3) override;
     void lightNotify(glm::vec3, glm::vec3, glm::vec3, float) override;
 
     PointLight& getPointLight();

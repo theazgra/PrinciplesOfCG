@@ -14,6 +14,7 @@ private:
     GLuint modelTransformMatrix;
     GLuint viewMatrix;
     GLuint projectionMatrix;
+    GLuint cameraPositionPtr;
     
     GLuint lightPositionPtr;
     GLuint lightIntensityPtr;
@@ -22,6 +23,7 @@ private:
 
     glm::mat4 cameraViewMatrix;
     glm::mat4 cameraProjectionMatrix;
+    glm::vec3 cameraPosition;
 
     glm::vec3 lightPosition;
     glm::vec3 lightIntensity;
@@ -38,7 +40,7 @@ public:
     void applyCamera() const;
     void applyLight() const;
 
-    void setCameraMatrices(glm::mat4, glm::mat4); 
+    void setCameraMatrices(glm::mat4, glm::mat4, glm::vec3); 
     void setLightParameters(glm::vec3, glm::vec3, glm::vec3, float);
 };
 

@@ -15,6 +15,7 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform vec3 lightPosition;
+uniform vec3 cameraPosition;
 
 
 
@@ -23,7 +24,8 @@ void main () {
 
     vec3 localPosition_cameraspace = ( viewMatrix * modelMatrix * vec4(localPosition,1)).xyz;
 
-	EyeDirection_cameraspace = vec3(0,0,0) - localPosition_cameraspace;
+	//EyeDirection_cameraspace = vec3(0,0,0) - localPosition_cameraspace;
+    EyeDirection_cameraspace = vec3(0,0,0) - localPosition_cameraspace;
 
     vec3 LightPosition_cameraspace = ( viewMatrix * vec4(lightPosition,1)).xyz;
 	LightDirection_cameraspace = LightPosition_cameraspace + EyeDirection_cameraspace;

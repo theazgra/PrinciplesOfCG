@@ -36,6 +36,8 @@ int main()
     app->getCurrentScene().addSphere().translate(glm::vec3(2.0f, 0.0f, -2.0f));
     app->getCurrentScene().addSphere().translate(glm::vec3(-2.0f, 0.0f, -2.0f));
     app->getCurrentScene().addSphere().translate(glm::vec3(-2.0f, 0.0f, 2.0f));
+    
+    app->getCurrentScene().addPlainObject().translate(glm::vec3(0.0f, 0.0f, -3.0f));
 
     app->renderCurrentScene();
 

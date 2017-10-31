@@ -24,7 +24,7 @@ private:
     float zFar;
 
     glm::vec3 backupWorldPosition, backupTargetPosition;
-    const float CAMERA_SPEED = 0.5f;
+    const float CAMERA_SPEED = 0.05f;
     glm::vec2 oldMousePosition;
 
 public:
@@ -42,5 +42,6 @@ public:
     void resetCamera();
 
     void registerObserver(CameraObserver&) override;
+    void forceUpdate();
 };
 

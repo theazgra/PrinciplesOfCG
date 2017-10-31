@@ -15,6 +15,7 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
     this->modelTransformMatrix = glGetUniformLocation(this->shaderProgram, "modelMatrix");
     this->viewMatrix = glGetUniformLocation(this->shaderProgram, "viewMatrix");
     this->projectionMatrix = glGetUniformLocation(this->shaderProgram, "projectionMatrix");
+    this->cameraPositionPtr = glGetUniformLocation(this->shaderProgram, "cameraPosition");
 
     //this is how vec3 can be passed to vertex shader.
     this->lightPositionPtr = glGetUniformLocation(this->shaderProgram, "lightPosition");
@@ -37,6 +38,7 @@ void Shader::applyCamera() const
 {
     glUniformMatrix4fv(this->viewMatrix, 1, GL_FALSE, &cameraViewMatrix[0][0]);
     glUniformMatrix4fv(this->projectionMatrix, 1, GL_FALSE, &cameraProjectionMatrix[0][0]);
+    glUniform3f(this->cameraPositionPtr, this->cameraPosition.x, this->cameraPosition.y, this->cameraPosition.z);
 }
 
 void Shader::applyLight() const
@@ -52,10 +54,11 @@ void Shader::applyLight() const
     glUniform1f(this->lightPowerPtr, this->lightPower);
 }
 
-void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
+void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
     this->cameraViewMatrix = viewMatrix;
     this->cameraProjectionMatrix = projectionMatrix;
+    this->cameraPosition = cameraPosition;
 }
 
 void Shader::setLightParameters(glm::vec3 worldPosition, glm::vec3 lightIntensity, glm::vec3 ambient, float lightPower)

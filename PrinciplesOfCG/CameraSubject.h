@@ -11,6 +11,6 @@ public:
     virtual void registerObserver(CameraObserver&);
     void clearObservers();
 protected:
-    void notifyObservers(glm::mat4, glm::mat4);
+    void notifyObservers(glm::mat4, glm::mat4, glm::vec3);
 };
 

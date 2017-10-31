@@ -22,7 +22,6 @@ Camera::~Camera()
 glm::mat4 Camera::getViewMatrix() const
 {
     return glm::lookAt(this->worldPosition, this->worldPosition + this->target, this->upVector);
-    //return glm::lookAt(this->worldPosition, glm::normalize(this->worldPosition + this->target), this->upVector);
 }
 
 glm::mat4 Camera::getProjectionMatrix() const
@@ -75,7 +74,7 @@ void Camera::moveCamera(Direction direction)
 
     if (direction != None)
     {
-        notifyObservers(getViewMatrix(), getProjectionMatrix());
+        notifyObservers(this->getViewMatrix(), this->getProjectionMatrix(), this->worldPosition);
     }
 }
 
@@ -136,17 +135,23 @@ void Camera::mouseUpdate(const glm::vec2 & mousePosition)
 
 
     oldMousePosition = mousePosition;
-    notifyObservers(this->getViewMatrix(), this->getProjectionMatrix());
+    notifyObservers(this->getViewMatrix(), this->getProjectionMatrix(), this->worldPosition);
 }
 
 void Camera::resetCamera()
 {
     this->worldPosition = this->backupWorldPosition;
     this->target = this->backupTargetPosition;
+    notifyObservers(this->getViewMatrix(), this->getProjectionMatrix(), this->worldPosition);
 }
 
 void Camera::registerObserver(CameraObserver & observer)
 {
     CameraSubject::registerObserver(observer);
-    notifyObservers(getViewMatrix(), getProjectionMatrix());
+    notifyObservers(this->getViewMatrix(), this->getProjectionMatrix(), this->worldPosition);
+}
+
+void Camera::forceUpdate()
+{
+    this->notifyObservers(getViewMatrix(), getProjectionMatrix(), this->worldPosition);
 }

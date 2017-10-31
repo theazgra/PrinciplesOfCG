@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "PointLight.h"
 
+glm::vec3 PointLight::getAmbient()
+{
+    return this->ambient;
+}
+
 PointLight::PointLight()
 {
 }

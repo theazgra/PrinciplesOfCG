@@ -2,7 +2,7 @@
 out vec4 frag_colour;
 
 
-in vec3 vp_color;
+//in vec3 vp_color;
 
 
 void main () {
