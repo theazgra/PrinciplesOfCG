@@ -1,71 +1,37 @@
 #version 400
 out vec4 frag_colour;
 
-
-in vec3 outWorldPosition;
-in vec3 outWorldNormal;
-
-in vec3 Normal_cameraspace;
-in vec3 EyeDirection_cameraspace;
-in vec3 LightDirection_cameraspace;
-
 uniform vec3 lightPosition;
 uniform vec3 lightIntensity;
 uniform vec3 lightAmbient;
 uniform float lightPower;
 
+uniform vec3 cameraPosition;
 
-void main () {
-  vec4 color = vec4(0.385, 0.647, 0.812, 1.0);  
-  
-  // Distance to the light
-	float distance = length(lightPosition - outWorldNormal);
+in vec3 outFragPos;
+in vec3 outNormalPos;
 
-  // Normal of the computed fragment, in camera space
-	vec3 n = normalize( Normal_cameraspace );
-	// Direction of the light (from the fragment to the light)
-	vec3 l = normalize( LightDirection_cameraspace );
+void main()
+{
+	vec4 color = vec4(0.385, 0.647, 0.812, 1.0);  
 
-  // Cosine of the angle between the normal and the light direction, 
-	// clamped above 0
-	//  - light is at the vertical of the triangle -> 1
-	//  - light is perpendicular to the triangle -> 0
-	//  - light is behind the triangle -> 0
-	float cosTheta = clamp( dot( n,l ), 0,1 );
+	//ambient part = lightAmbient
+	float ambientStrength = 0.1f;
+	vec3 ambient = ambientStrength * lightIntensity;
+	
+	//diffuse
+	vec3 norm = normalize(outNormalPos);
+	vec3 lightDirection = normalize(lightPosition - outFragPos);
+	float diff = max(dot(norm, lightDirection), 0.0);
+	vec3 diffuse = diff * lightIntensity;
 
-  // Eye vector (towards the camera)
-	vec3 E = normalize(EyeDirection_cameraspace);
-	// Direction in which the triangle reflects the light
-	vec3 R = reflect(-l,n);
+	//specular
+	float specularStrength = 0.5f;
+	float specularExponent = 10;
+	vec3 viewDirection = normalize(cameraPosition - outFragPos);
+	vec3 reflectDirection = reflect(-lightDirection, norm);
+	float spec = pow(max(dot(viewDirection, reflectDirection), 0.0), specularExponent);
+	vec3 specular = specularStrength * spec * lightIntensity;
 
-  // Cosine of the angle between the Eye vector and the Reflect vector,
-	// clamped to 0
-	//  - Looking into the reflection -> 1
-	//  - Looking elsewhere -> < 1
-	float cosAlpha = clamp( dot( E,R ), 0,1 );
-
-	vec4 diffuse = color * lightIntensity * lightPower * cosTheta / (distance*distance);
-	vec4 reflective = color * lightIntensity * lightPower * pow(cosAlpha,10) / (distance*distance);
-
-	if (diffuse.x < 0 || diffuse.y < 0 || diffuse.z < 0)
-	{
-		frag_colour = vec4(1.0, 0.0, 0.0, 1.0);  
-	}
-	else if (reflective.x < 0 || reflective.y < 0 || reflective.z < 0)
-	{
-		frag_colour = vec4(0.0, 1.0, 0.0, 1.0);  
-	}
-	else
-	{
-		frag_colour = 
-		// Ambient : simulates indirect lighting
-		vec4(lightAmbient, 1.0) +
-		// Diffuse : "color" of the object
-		color * lightIntensity * lightPower * cosTheta / (distance*distance) +
-		// Specular : reflective highlight, like a mirror
-		color * lightIntensity * lightPower * pow(cosAlpha,50) / (distance*distance);
-	}
-
-  
-  
+	frag_colour = vec4((ambient + diffuse + specular), 1.0) * color;
 }

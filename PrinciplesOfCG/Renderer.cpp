@@ -24,7 +24,7 @@ void Renderer::reportRenderTime()
     }
 }
 
-void Renderer::renderScene(Scene const& scene)
+void Renderer::renderScene(Scene & scene)
 {
     lastRenderTime = glfwGetTime();
     frameCount = 0;
@@ -49,9 +49,11 @@ void Renderer::setRenderType(RenderType renderType)
     this->renderType = renderType;
 }
 
-void Renderer::renderDrawableObjects(Scene const& scene)
+void Renderer::renderDrawableObjects(Scene& scene)
 {
-    for (int i = 0; i < scene.getDrawableObjects().size(); i++)
+    //scene.getPointLight().move(glm::vec3(0.0f, 0.01f, 0.01f));
+    
+    for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
         unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
         

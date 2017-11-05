@@ -43,11 +43,6 @@ void Shader::applyCamera() const
 
 void Shader::applyLight() const
 {
-    //glUniform3f(this->lightPositionPtr, 0.2f, 13.0f, -0.5f);
-    //glUniform3f(this->lightIntensityPtr, 1.0f, 1.0f, 1.0f);
-    //glUniform3f(this->lightAmbientPtr, 0.1f, 0.1f, 0.1f);
-    //glUniform1f(this->lightPowerPtr, 50.0f);
-
     glUniform3f(this->lightPositionPtr, this->lightPosition[0], this->lightPosition[1], this->lightPosition[2]);
     glUniform3f(this->lightIntensityPtr, this->lightIntensity[0], this->lightIntensity[1], this->lightIntensity[2]);
     glUniform3f(this->lightAmbientPtr, this->lightAmbient[0], this->lightAmbient[1], this->lightAmbient[2]);

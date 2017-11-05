@@ -11,7 +11,6 @@ protected:
     virtual glm::vec3 getAmbient() = 0;
     float power;
 public:
-    
     Light(int, glm::vec3, glm::vec3, float);
     ~Light();
     void setIntensity(glm::vec3);
@@ -19,6 +18,8 @@ public:
 
     float getPower() const;
     glm::vec3 getIntensity() const;
+
+    void move(glm::vec3 vector) override;
 
     void forceUpdate();
     

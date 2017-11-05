@@ -12,7 +12,7 @@ class Renderer
 {
 private:
     GLFWwindow* window;
-    void renderDrawableObjects(Scene const&);
+    void renderDrawableObjects(Scene &);
     void reportRenderTime();
 
     double lastRenderTime;
@@ -22,7 +22,7 @@ private:
 public:
     Renderer(GLFWwindow&, RenderType);
     ~Renderer();
-    void renderScene(Scene const&);
+    void renderScene(Scene &);
     void setRenderType(RenderType);
 
 };

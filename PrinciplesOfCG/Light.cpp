@@ -42,3 +42,10 @@ glm::vec3 Light::getIntensity() const
     return this->intensity;
 }
 
+void Light::move(glm::vec3 vector)
+{
+    ControlObject::move(vector);
+    notifyObservers(this->worldPosition, this->intensity, getAmbient(), this->power);
+
+}
+
