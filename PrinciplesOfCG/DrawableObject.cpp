@@ -55,7 +55,8 @@ GLuint DrawableObject::getVAO() const
 
 void DrawableObject::resize(glm::vec3 resizeVector)
 {
-    glm::scale(objectMatrix, resizeVector);
+    //glm::scale(objectMatrix, resizeVector);
+    this->objectMatrix = glm::scale(this->objectMatrix, resizeVector);
 }
 
 unsigned int DrawableObject::getShaderId() const

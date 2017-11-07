@@ -11,9 +11,13 @@ uniform vec3 cameraPosition;
 in vec3 outFragPos;
 in vec3 outNormalPos;
 
+in vec2 texCoord;
+uniform sampler2D _texture;
+
 void main()
 {
-	vec4 color = vec4(0.385, 0.647, 0.812, 1.0);  
+	vec4 color = texture(_texture, texCoord);
+	//vec4 color = vec4(0.385, 0.647, 0.812, 1.0);  
 
 	//ambient part = lightAmbient
 	float ambientStrength = 0.1f;
@@ -34,4 +38,5 @@ void main()
 	vec3 specular = specularStrength * spec * lightIntensity;
 
 	frag_colour = vec4((ambient + diffuse + specular), 1.0) * color;
+	//frag_colour = color;
 }

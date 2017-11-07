@@ -22,6 +22,10 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
     this->lightIntensityPtr = glGetUniformLocation(this->shaderProgram, "lightIntensity");
     this->lightAmbientPtr = glGetUniformLocation(this->shaderProgram, "lightAmbient");
     this->lightPowerPtr = glGetUniformLocation(this->shaderProgram, "lightPower");
+
+    this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "texCoord");
+
+    setTexture("C:\vs_dev_lib\computer_graphics\PrinciplesOfCG\PrinciplesOfCG\texture.jpg");
 }
 
 void Shader::useProgram() const 
@@ -33,6 +37,8 @@ void Shader::modelTransform(DrawableObject & object) const
 {
     glUniformMatrix4fv(this->modelTransformMatrix, 1, GL_FALSE, &object.getObjectMatrix()[0][0]);
 }
+
+
 
 void Shader::applyCamera() const
 {
@@ -49,6 +55,11 @@ void Shader::applyLight() const
     glUniform1f(this->lightPowerPtr, this->lightPower);
 }
 
+void Shader::applyTexture() const
+{
+    glUniform1i(this->textureCoordPtr, 0);
+}
+
 void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
     this->cameraViewMatrix = viewMatrix;
@@ -62,6 +73,12 @@ void Shader::setLightParameters(glm::vec3 worldPosition, glm::vec3 lightIntensit
     this->lightIntensity = lightIntensity;
     this->lightAmbient = ambient;
     this->lightPower = lightPower;
+}
+
+void Shader::setTexture(char * textureFile)
+{
+    Texture tex;
+    tex.loadTexture(textureFile);
 }
 
 Shader::~Shader()

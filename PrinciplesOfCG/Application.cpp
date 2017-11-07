@@ -207,25 +207,28 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
         else if (action == GLFW_RELEASE)
         {
             enableLookingAroud = false;
-            
-            GLbyte color[4]; 
-            GLfloat depth; 
-            GLuint index;
-            //int newy = (int)camera->getResolution().y - y - 10;
-            
-            double x, y;
-            glfwGetCursorPos(window, &x, &y);
-            int sX, sY;
-            glfwGetWindowSize(window, &sX, &sY);
-            int newy = sY - y - 10;
-            glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
-            glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
-            glReadPixels(x, y, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
-            printf("Clicked on pixel %d, %d, color %02hhx%02hhx%02hhx%02hhx, depth %f, stencil index %u\n\n", x, y, color[0], color[1], color[2], color[3],
-                depth, index);
-            
+            //
+            //GLbyte color[4]; 
+            //GLfloat depth; 
+            //GLuint index;
+            //
+
+            //
+            //
+            //double x, y;
+            //glfwGetCursorPos(window, &x, &y);
+
+            //GLint x = (GLint)x;
+            //GLint y = (GLint)y;
+
+            //int newy = 5;// (int)Application::getInstance()->getScene()->getCamera()->getResolution().y – y;
+
+            //glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
             //glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
             //glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+
+            //printf("Clicked on pixel %d, %d, color % 02hhx % 02hhx % 02hhx % 02hhx, depth %f, stencil index %u\n",
+            //            x, y, color[0], color[1], color[2], color[3], depth, index);
 
         }
     }

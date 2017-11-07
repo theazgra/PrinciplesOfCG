@@ -103,7 +103,7 @@ SphereObject& Scene::addSphere()
 
 PlainObject & Scene::addPlainObject()
 {
-    Shader *s = new Shader("VertexShader.glsl", "FragmentShader2.glsl");
+    Shader *s = new Shader("VertexShader.glsl", "FragmentShader.glsl");
     int index = shaders.size();
     shaders[index] = s;
 
