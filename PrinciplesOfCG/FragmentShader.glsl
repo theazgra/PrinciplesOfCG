@@ -12,11 +12,12 @@ in vec3 outFragPos;
 in vec3 outNormalPos;
 
 in vec2 texCoord;
-uniform sampler2D _texture;
+uniform sampler2D textura;
 
 void main()
 {
-	vec4 color = texture(_texture, texCoord);
+	//textura
+	vec4 color = texture(textura, texCoord);
 	//vec4 color = vec4(0.385, 0.647, 0.812, 1.0);  
 
 	//ambient part = lightAmbient

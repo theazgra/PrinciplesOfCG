@@ -2,7 +2,7 @@
 
 layout(location = 0) in vec3 localPosition;
 layout(location = 1) in vec3 normalPosition;
-layout(location = 2) in vec2  vertexUV;
+layout(location = 2) in vec2 vertexUV;
 
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;

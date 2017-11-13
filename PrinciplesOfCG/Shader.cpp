@@ -23,9 +23,28 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
     this->lightAmbientPtr = glGetUniformLocation(this->shaderProgram, "lightAmbient");
     this->lightPowerPtr = glGetUniformLocation(this->shaderProgram, "lightPower");
 
-    this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "texCoord");
+    this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "textura");
+}
 
-    setTexture("C:\vs_dev_lib\computer_graphics\PrinciplesOfCG\PrinciplesOfCG\texture.jpg");
+Shader::Shader(const char * vertex_shader_file, const char * fragment_shader_file, const char * texture_file)
+{
+    this->shaderProgram = loadShader(vertex_shader_file, fragment_shader_file);
+
+    this->modelTransformMatrix = glGetUniformLocation(this->shaderProgram, "modelMatrix");
+    this->viewMatrix = glGetUniformLocation(this->shaderProgram, "viewMatrix");
+    this->projectionMatrix = glGetUniformLocation(this->shaderProgram, "projectionMatrix");
+    this->cameraPositionPtr = glGetUniformLocation(this->shaderProgram, "cameraPosition");
+
+    //this is how vec3 can be passed to vertex shader.
+    this->lightPositionPtr = glGetUniformLocation(this->shaderProgram, "lightPosition");
+    this->lightIntensityPtr = glGetUniformLocation(this->shaderProgram, "lightIntensity");
+    this->lightAmbientPtr = glGetUniformLocation(this->shaderProgram, "lightAmbient");
+    this->lightPowerPtr = glGetUniformLocation(this->shaderProgram, "lightPower");
+
+    this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "textura");
+
+    setTexture(texture_file);
+    this->hasTexture = true;
 }
 
 void Shader::useProgram() const 
@@ -57,7 +76,9 @@ void Shader::applyLight() const
 
 void Shader::applyTexture() const
 {
-    glUniform1i(this->textureCoordPtr, 0);
+    if (this->hasTexture)
+        glUniform1i(this->textureCoordPtr, 0);
+    //glUniform1i(glGetUniformLocation(this->shaderProgram, "textura"), 0);
 }
 
 void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
@@ -75,7 +96,7 @@ void Shader::setLightParameters(glm::vec3 worldPosition, glm::vec3 lightIntensit
     this->lightPower = lightPower;
 }
 
-void Shader::setTexture(char * textureFile)
+void Shader::setTexture(const char * textureFile)
 {
     Texture tex;
     tex.loadTexture(textureFile);

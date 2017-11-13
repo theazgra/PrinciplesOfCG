@@ -18,6 +18,7 @@ protected:
     
 public:
     DrawableObject(int);
+    //DrawableObject(int, float **, int, int);
     DrawableObject(int, std::vector<float>, int);
     ~DrawableObject();
 

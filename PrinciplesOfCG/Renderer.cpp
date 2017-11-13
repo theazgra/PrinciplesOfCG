@@ -26,7 +26,7 @@ void Renderer::reportRenderTime()
 
 void Renderer::renderScene(Scene & scene)
 {
-    scene.getDrawableObjects().at(2)->resize(glm::vec3(2.0f, 2.0f, 2.0f));
+    //scene.getDrawableObjects().at(2)->resize(glm::vec3(2.0f, 2.0f, 2.0f));
 
     lastRenderTime = glfwGetTime();
     frameCount = 0;
@@ -59,12 +59,6 @@ void Renderer::renderDrawableObjects(Scene& scene)
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
         unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
-
-        if (i == 4) {
-            scene.getDrawableObjects().at(i)->rotate(0.02f, glm::vec3(0.0f, 0.0f, 1.0f));
-        }
-        
-
         
         if (objectShaderId != lastShaderId)
         {

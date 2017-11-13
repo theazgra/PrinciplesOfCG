@@ -8,7 +8,7 @@ public:
     Texture();
     ~Texture();
 
-    GLuint loadTexture(char* textureFile);
+    GLuint loadTexture(const char* textureFile);
     
 };
 

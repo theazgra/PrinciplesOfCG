@@ -12,6 +12,7 @@ PlainObject::PlainObject(int objectId, int shaderId) : DrawableObject(objectId)
     glBindVertexArray(this->VAO);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 
     glGenBuffers(1, &this->VBO);
     glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
