@@ -37,7 +37,9 @@ public:
     DrawableObject& addDrawableObject(std::vector<float>);
     DrawableObject& addDrawableObject(std::vector<float>, Shader* shader);
     DrawableObject& addDrawableObject(std::vector<float>, unsigned int);
+    
     SphereObject& addSphere();
+    SphereObject& addSphere(Shader* shader);
     PlainObject& addPlainObject();
 
     std::vector<DrawableObject*> const& getDrawableObjects() const;

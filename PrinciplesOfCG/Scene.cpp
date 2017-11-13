@@ -101,6 +101,17 @@ SphereObject& Scene::addSphere()
     return *sphere;
 }
 
+SphereObject & Scene::addSphere(Shader * shader)
+{
+    int index = shaders.size();
+    shaders[index] = shader;
+
+    SphereObject * sphere = new SphereObject(drawableObjects.size(), index);
+    drawableObjects.push_back(sphere);
+    this->pointLight.forceUpdate();
+    return *sphere;
+}
+
 PlainObject & Scene::addPlainObject()
 {
     Shader *s = new Shader("VertexShader.glsl", "FragmentShader.glsl");

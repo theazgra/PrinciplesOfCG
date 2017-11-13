@@ -37,7 +37,8 @@ int main()
     //app->getCurrentScene().addSphere().translate(glm::vec3(-2.0f, 0.0f, -2.0f));
     //app->getCurrentScene().addSphere().translate(glm::vec3(-2.0f, 0.0f, 2.0f));
     //app->getCurrentScene().addSphere().resize(glm::vec3(20.0f, 20.0f, 20.0f));
-    app->getCurrentScene().addSphere();
+    app->getCurrentScene().addSphere(new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
+    app->getCurrentScene().addSphere(new Shader("VertexShader.glsl", "FragmentShader2.glsl")).translate(glm::vec3(2.0f, 0.0f, 2.0f));
 
     PlainObject * plain = &app->getCurrentScene().addPlainObject();
     //plain->rotate(90.0f, glm::vec3(1.0f, 1.0f, 0.0f));
