@@ -2,60 +2,74 @@
 #include "DrawableObject.h"
 
 
-DrawableObject::DrawableObject(int objectId, std::vector<float> vector, int shaderId) : Object(objectId)
+DrawableObject::DrawableObject(int objectId, std::vector<float> vector, unsigned int shaderId, unsigned int textureId) 
+    : Object(objectId)
+{
+    this->textureId = textureId;
+    this->shaderId = shaderId;
+    this->objectMatrix = glm::mat4(1.0f);
+    
+    this->verticesCount = vector.size() / 3;
+    size_t vecSize = vector.size() * sizeof(float);
+    
+    glGenVertexArrays(1, &this->VAO);
+    glBindVertexArray(this->VAO);
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+
+    glGenBuffers(1, &this->VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    glBufferData(GL_ARRAY_BUFFER, vecSize, vector.data(), GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid*)0);                     //position
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid*)(sizeof(float) * 3));   //normals
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid*)(sizeof(float) * 6));   //UVs
+}
+
+DrawableObject::DrawableObject(int objectId, std::vector<AssimpVertex> data, unsigned int shaderId, unsigned int textureId)
 {
     this->objectMatrix = glm::mat4(1.0f);
-    internalConstructor(vector);
     this->shaderId = shaderId;
+    this->textureId = textureId;
+    this->VBO = 0;
+    this->VAO = 0;
+    this->IBO = 0;
+    this->hasIndicesBuffer = true;
+
+    this->indices = data.at(0).indices;
+
+    glGenVertexArrays(1, &this->VAO);
+    glBindVertexArray(this->VAO);
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+    //glEnableVertexAttribArray(4);
+
+    glGenBuffers(1, &this->VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 11 * data.size(), data.data(), GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 11, (GLvoid*)0);                     //position
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 11, (GLvoid*)(sizeof(float) * 3));   //normals
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 11, (GLvoid*)(sizeof(float) * 6));   //UVs
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 11, (GLvoid*)(sizeof(float) * 8));   //tangens
+
+    //indices
+    glGenBuffers(1, &this->IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint), &this->indices[0], GL_STATIC_DRAW);
+    
+    this->verticesCount = data.size() * 3;
 }
 
 DrawableObject::DrawableObject(int objectId) : Object(objectId)
 {
 }
 
-//DrawableObject::DrawableObject(int objectId, float ** vertices, int shaderId, int verticiesCount) : Object(objectId)
-//{
-//    this->objectMatrix = glm::mat4(1.0f);
-//    this->shaderId = shaderId;
-//    this->VBO = 0;
-//    this->VAO = 0;
-//
-//    glGenVertexArrays(1, &this->VAO);
-//    glBindVertexArray(this->VAO);
-//    glEnableVertexAttribArray(0);
-//    glEnableVertexAttribArray(1);
-//    glEnableVertexAttribArray(2);
-//
-//    glGenBuffers(1, &this->VBO);
-//    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-//
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid*)0);
-//    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid*)(3 * sizeof(float)));
-//    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid*)(6 * sizeof(float)));
-//    glBindVertexArray(0);
-//
-//    this->verticesCount = 6;
-//}
-
-
-void DrawableObject::internalConstructor(std::vector<float> vector)
-{
-    verticesCount = vector.size() / 3;
-    size_t vecSize = vector.size() * sizeof(float);
-    this->VBO = 0;
-    glGenBuffers(1, &this->VBO); // generate the this->VBO
-    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-    glBufferData(GL_ARRAY_BUFFER, vecSize, vector.data(), GL_STATIC_DRAW);
-
-    this->VAO = 0;
-    glGenVertexArrays(1, &this->VAO); //generate the this->VAO
-    glBindVertexArray(this->VAO); //bind the this->VAO
-    glEnableVertexAttribArray(0); //position
-    glEnableVertexAttribArray(1); //normal
-    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-}
 
 DrawableObject::DrawableObject()
 {
@@ -97,6 +111,26 @@ void DrawableObject::rotate(float angle, glm::vec3 axis)
 void DrawableObject::translate(glm::vec3 translateVector)
 {
     objectMatrix = glm::translate(objectMatrix, translateVector);
+}
+
+bool DrawableObject::hasIndices()
+{
+    return this->hasIndicesBuffer;
+}
+
+std::vector<unsigned int> DrawableObject::getIndices() const
+{
+    return this->indices;
+}
+
+unsigned int DrawableObject::getIndicesCount() const
+{
+    return this->indices.size();
+}
+
+GLuint DrawableObject::getIBO() const
+{
+    return this->IBO;
 }
 
 glm::mat4 DrawableObject::getObjectMatrix() const

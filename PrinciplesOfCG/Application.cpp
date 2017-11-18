@@ -8,11 +8,6 @@ GLFWwindow & Application::getWindow()
     return *window;
 }
 
-void Application::setRenderType(RenderType renderType)
-{
-    renderer->setRenderType(renderType);
-}
-
 Application::Application()
 {
 
@@ -41,7 +36,7 @@ Application::Application()
 
     scenes = new std::vector<Scene*>();
 
-    renderer = new Renderer(*window, Triangles);
+    renderer = new Renderer(*window);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);

@@ -70,27 +70,32 @@ char * Scene::getSceneName() const
     return sceneName;
 }
 
-DrawableObject& Scene::addDrawableObject(std::vector<float> vec)
-{
-    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, BASIC_SHADER_ID);
-    drawableObjects.push_back(drawable);
-    return *drawable;
-}
+//DrawableObject& Scene::addDrawableObject(std::vector<float> vec)
+//{
+//    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, BASIC_SHADER_ID);
+//    drawableObjects.push_back(drawable);
+//    return *drawable;
+//}
+//
+//DrawableObject& Scene::addDrawableObject(std::vector<float> vec, Shader * shader)
+//{
+//    int index = shaders.size();
+//    shaders[index] = shader;
+//    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, index);
+//    drawableObjects.push_back(drawable);
+//    return *drawable;
+//}
+//
+//DrawableObject& Scene::addDrawableObject(std::vector<float> vec, unsigned int shaderId)
+//{
+//    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, shaderId);
+//    drawableObjects.push_back(drawable);
+//    return *drawable;
+//}
 
-DrawableObject& Scene::addDrawableObject(std::vector<float> vec, Shader * shader)
+void Scene::addDrawableObject(DrawableObject * drawableObject)
 {
-    int index = shaders.size();
-    shaders[index] = shader;
-    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, index);
-    drawableObjects.push_back(drawable);
-    return *drawable;
-}
-
-DrawableObject& Scene::addDrawableObject(std::vector<float> vec, unsigned int shaderId)
-{
-    DrawableObject* drawable = new DrawableObject(drawableObjects.size(), vec, shaderId);
-    drawableObjects.push_back(drawable);
-    return *drawable;
+    this->drawableObjects.push_back(drawableObject);
 }
 
 SphereObject& Scene::addSphere()
@@ -176,6 +181,11 @@ Shader const & Scene::getShader(unsigned int shaderId) const
         printf("Shader with id: %i, was not found! Will return basic shader.", shaderId);
         return *(shaders.at(BASIC_SHADER_ID));
     }
+}
+
+unsigned int Scene::getBasicShaderId() const
+{
+    return BASIC_SHADER_ID;
 }
 
 Camera const & Scene::getActiveCamera() const

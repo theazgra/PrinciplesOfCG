@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "Renderer.h"
 
-Renderer::Renderer(GLFWwindow& window, RenderType type)
+Renderer::Renderer(GLFWwindow& window)
 {
     this->window = &window;
-    this->renderType = type;
 }
 
 
@@ -46,10 +45,6 @@ void Renderer::renderScene(Scene & scene)
     }
 }
 
-void Renderer::setRenderType(RenderType renderType)
-{
-    this->renderType = renderType;
-}
 
 void Renderer::renderDrawableObjects(Scene& scene)
 {
@@ -76,21 +71,21 @@ void Renderer::renderDrawableObjects(Scene& scene)
         
         glStencilFunc(GL_ALWAYS, scene.getDrawableObjects().at(i)->getObjectId(), 0xFF);
 
-        switch (renderType)
+        if (scene.getDrawableObjects().at(i)->hasIndices())
         {
-            case Quads:
-            {
-                glDrawArrays(GL_QUADS, 0, scene.getDrawableObjects().at(i)->getVerticesCount());
-                break;
-            }
-                
-            case Triangles:
-            {
-                glDrawArrays(GL_TRIANGLES, 0, scene.getDrawableObjects().at(i)->getVerticesCount());
-                break;
-            }
+            glDrawElements(
+                GL_TRIANGLES,
+                scene.getDrawableObjects().at(i)->getIndicesCount(),
+                GL_UNSIGNED_INT,
+                NULL);
+                //scene.getDrawableObjects().at(i)->getIndices().data());
         }
-        
-        
+        else 
+        {
+            glDrawArrays(
+                GL_TRIANGLES, 
+                0, 
+                scene.getDrawableObjects().at(i)->getVerticesCount());
+        }
     }
 }

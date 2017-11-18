@@ -1,12 +1,6 @@
 #pragma once
-#define REPORT_FRAME_TIME 1
+#define REPORT_FRAME_TIME 0
 #include "Scene.h"
-
-enum RenderType
-{
-    Quads,
-    Triangles
-};
 
 class Renderer
 {
@@ -18,12 +12,10 @@ private:
     double lastRenderTime;
     unsigned int frameCount;
     unsigned int lastShaderId = -1;
-    RenderType renderType;
 public:
-    Renderer(GLFWwindow&, RenderType);
+    Renderer(GLFWwindow&);
     ~Renderer();
     void renderScene(Scene &);
-    void setRenderType(RenderType);
 
 };
 
