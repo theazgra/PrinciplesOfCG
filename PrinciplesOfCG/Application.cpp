@@ -34,8 +34,6 @@ Application::Application()
     float ratio = width / (float)height;
     glViewport(0, 0, width, height);
 
-    scenes = new std::vector<Scene*>();
-
     renderer = new Renderer(*window);
 
     glEnable(GL_DEPTH_TEST);
@@ -43,6 +41,11 @@ Application::Application()
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     bindCallbacks();
+
+    Shader* shader = new Shader("VertexShader.glsl", "FragmentShader.glsl");
+    int index = shaders.size();
+    shaders[index] = shader;
+    BASIC_SHADER_ID = index;
 }
 
 void Application::bindCallbacks()
@@ -68,21 +71,26 @@ Application::~Application()
     glfwDestroyWindow(window);
     glfwTerminate();
 
-    for (int i = 0; i < scenes->size(); i++)
+    for (unsigned int i = 0; i < shaders.size(); i++)
     {
-        delete scenes->at(i);
+        delete shaders.at(i);
+    }
+    shaders.empty();
+
+    for (int i = 0; i < scenes.size(); i++)
+    {
+        delete scenes.at(i);
     }
 
-    scenes->clear();
-    delete scenes;
+    scenes.clear();
 
     delete renderer;
 }
 
-void Application::createScene(char* sceneName, Shader* shader, Camera * cam)
+void Application::createScene(char* sceneName,  Camera * cam)
 {
-    Scene* newScene = new Scene(sceneName, shader, cam);
-    scenes->push_back(newScene);
+    Scene* newScene = new Scene(sceneName, cam);
+    scenes.push_back(newScene);
 
     currentScene = newScene;
 }
@@ -100,12 +108,12 @@ Scene & Application::getCurrentScene()
 void Application::setCurrentScene(char * sceneName)
 {
     bool found = false;
-    for (int i = 0; i < scenes->size(); i++)
+    for (int i = 0; i < scenes.size(); i++)
     {
-        if (scenes->at(i)->getSceneName() == sceneName)
+        if (scenes.at(i)->getSceneName() == sceneName)
         {
             found = true;
-            currentScene = scenes->at(i);
+            currentScene = scenes.at(i);
             break;
         }
     }
@@ -230,4 +238,44 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
 
         }
     }
+}
+
+Shader const& Application::getBasicShader() const
+{
+    return *(shaders.at(BASIC_SHADER_ID));
+}
+
+Shader * Application::getShader(unsigned int shaderId)
+{
+    if (shaders.count(shaderId))
+    {
+        return (shaders.at(shaderId));
+    }
+    else
+    {
+        printf("Shader with id: %i, was not found! Will return basic shader.", shaderId);
+        return (shaders.at(BASIC_SHADER_ID));
+    }
+}
+
+unsigned int Application::getBasicShaderId() const
+{
+    return BASIC_SHADER_ID;
+}
+
+unsigned int Application::addShader(Shader * shader)
+{
+    unsigned int shaderId = this->shaders.size();
+    shaders[shaderId] = shader;
+    return shaderId;
+}
+
+unsigned int Application::addTexture(const char * textureFile)
+{
+    unsigned int textureId = this->textures.size();
+    Texture tex;
+    tex.loadTexture(textureFile, textureId);
+    this->textures.push_back(textureId);
+
+    return textureId;
 }

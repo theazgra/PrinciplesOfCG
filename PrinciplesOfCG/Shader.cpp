@@ -26,27 +26,6 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
     this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "textura");
 }
 
-Shader::Shader(const char * vertex_shader_file, const char * fragment_shader_file, const char * texture_file)
-{
-    this->shaderProgram = loadShader(vertex_shader_file, fragment_shader_file);
-
-    this->modelTransformMatrix = glGetUniformLocation(this->shaderProgram, "modelMatrix");
-    this->viewMatrix = glGetUniformLocation(this->shaderProgram, "viewMatrix");
-    this->projectionMatrix = glGetUniformLocation(this->shaderProgram, "projectionMatrix");
-    this->cameraPositionPtr = glGetUniformLocation(this->shaderProgram, "cameraPosition");
-
-    //this is how vec3 can be passed to vertex shader.
-    this->lightPositionPtr = glGetUniformLocation(this->shaderProgram, "lightPosition");
-    this->lightIntensityPtr = glGetUniformLocation(this->shaderProgram, "lightIntensity");
-    this->lightAmbientPtr = glGetUniformLocation(this->shaderProgram, "lightAmbient");
-    this->lightPowerPtr = glGetUniformLocation(this->shaderProgram, "lightPower");
-
-    this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "textura");
-
-    setTexture(texture_file);
-    this->hasTexture = true;
-}
-
 void Shader::useProgram() const 
 {
     glUseProgram(this->shaderProgram);
@@ -74,11 +53,9 @@ void Shader::applyLight() const
     glUniform1f(this->lightPowerPtr, this->lightPower);
 }
 
-void Shader::applyTexture() const
+void Shader::applyTexture(unsigned int textureUnit) const
 {
-    if (this->hasTexture)
-        glUniform1i(this->textureCoordPtr, 0);
-    //glUniform1i(glGetUniformLocation(this->shaderProgram, "textura"), 0);
+    glUniform1i(this->textureCoordPtr, textureUnit);
 }
 
 void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
@@ -94,12 +71,6 @@ void Shader::setLightParameters(glm::vec3 worldPosition, glm::vec3 lightIntensit
     this->lightIntensity = lightIntensity;
     this->lightAmbient = ambient;
     this->lightPower = lightPower;
-}
-
-void Shader::setTexture(const char * textureFile)
-{
-    Texture tex;
-    tex.loadTexture(textureFile);
 }
 
 Shader::~Shader()

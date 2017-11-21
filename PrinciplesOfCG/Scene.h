@@ -15,12 +15,11 @@
 class Scene : public CameraObserver, public LightObserver
 {
 private:
-    int BASIC_SHADER_ID = 0;
 
     std::vector<DrawableObject*> drawableObjects;
     std::vector<Camera*> cameras;
     std::vector<Light*> lights;
-    std::map<int, Shader*> shaders;
+    std::vector<unsigned int> sceneShaderIds;
     PointLight pointLight;
  
     char* sceneName;
@@ -29,25 +28,16 @@ private:
 
     void internalSetActiveCamera(Camera*);
 public:
-    Scene(char*, Shader*, Camera*);
+    Scene(char*, Camera*);
     ~Scene();
     char* getSceneName() const;
 
-    
-    //DrawableObject& addDrawableObject(std::vector<float>);
-    //DrawableObject& addDrawableObject(std::vector<float>, Shader* shader);
-    //DrawableObject& addDrawableObject(std::vector<float>, unsigned int);
     void addDrawableObject(DrawableObject * drawableObject);
     
-    SphereObject& addSphere();
-    SphereObject& addSphere(Shader* shader);
+    SphereObject& addSphere(unsigned int shaderId);
     PlainObject& addPlainObject();
 
     std::vector<DrawableObject*> const& getDrawableObjects() const;
-
-    Shader const& getBasicShader() const;
-    Shader const& getShader(unsigned int) const;
-    unsigned int getBasicShaderId() const;
 
     Camera& addCamera(glm::vec3, glm::vec3);
     void setActiveCamera(unsigned int cameraId);

@@ -36,7 +36,8 @@ aiScene const* AssimpLoader::loadScene(const char * file)
 }
 
 
-std::vector<std::vector<AssimpVertex>> AssimpLoader::getVertexObjects(const char* file)
+std::vector<std::tuple<std::vector<AssimpVertex>, std::vector<unsigned int>>>
+AssimpLoader::getVertexObjects(const char* file)
 {
     Assimp::Importer importer;
 
@@ -55,12 +56,12 @@ std::vector<std::vector<AssimpVertex>> AssimpLoader::getVertexObjects(const char
         throw new std::exception("Error while loading scene from file.");
     }
     
-
-
-    std::vector<std::vector<AssimpVertex>> objects;
+    std::vector<std::tuple<std::vector<AssimpVertex>, std::vector<unsigned int>>> objects;
 
     if (loadedScene->mNumMeshes == 0)
         return objects;
+
+
 
     for (unsigned int i = 0; i < loadedScene->mNumMeshes; i++)
     {
@@ -99,20 +100,18 @@ std::vector<std::vector<AssimpVertex>> AssimpLoader::getVertexObjects(const char
             objectVertexes.push_back(vertex);
         }
 
-        objectVertexes.at(0).hasFaces = mesh->HasFaces();
-        if (objectVertexes.at(0).hasFaces)
+        std::vector<unsigned int> indices;
+        if (mesh->HasFaces())
         {
-            std::vector<unsigned int> indices;
             for (unsigned int i = 0; i < mesh->mNumFaces; i++)
             {
                 indices.push_back(mesh->mFaces[i].mIndices[0]);
                 indices.push_back(mesh->mFaces[i].mIndices[1]);
                 indices.push_back(mesh->mFaces[i].mIndices[2]);
-            }
-            objectVertexes.at(0).indices = indices;
+            }    
         }
 
-        objects.push_back(objectVertexes);
+        objects.push_back(std::tuple<std::vector<AssimpVertex>, std::vector<unsigned int>>(objectVertexes, indices));
     }
 
     return objects;

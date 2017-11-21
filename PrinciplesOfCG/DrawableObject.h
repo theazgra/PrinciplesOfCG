@@ -26,7 +26,7 @@ protected:
 public:
     DrawableObject(int objectId);
     DrawableObject(int objectId, std::vector<float> data, unsigned int shaderId, unsigned int textureId);
-    DrawableObject(int objectId, std::vector<AssimpVertex> data, unsigned int shaderId, unsigned int textureId);
+    DrawableObject(int objectId, std::vector<AssimpVertex> data, std::vector<unsigned int> indices, unsigned int shaderId, unsigned int textureId);
     ~DrawableObject();
 
     glm::mat4 getObjectMatrix() const;
@@ -34,6 +34,7 @@ public:
     GLuint getVAO() const;
     GLuint getVerticesCount();
     unsigned int getShaderId() const;
+    unsigned int getTextureId() const;
 
     void resize(glm::vec3 resizeVector);
     void rotate(float, glm::vec3);

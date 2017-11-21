@@ -15,19 +15,19 @@ ObjectFactory::~ObjectFactory()
 
 DrawableObject * ObjectFactory::createAssimpObject(const char * file, int id, unsigned int shaderId, unsigned int textureId)
 {
-    std::vector<AssimpVertex> objectData = AssimpLoader::getVertexObjects(file).at(0);
+    std::tuple<std::vector<AssimpVertex>, std::vector<unsigned int>> objectData = AssimpLoader::getVertexObjects(file).at(0);
     
-    DrawableObject * drawableObject = new DrawableObject(id, objectData, shaderId, textureId);
+    
+    DrawableObject * drawableObject = new DrawableObject(
+        id, 
+        std::get<std::vector<AssimpVertex>>(objectData),
+        std::get<std::vector<unsigned int>>(objectData),
+        shaderId, 
+        textureId);
 
     return drawableObject;
 }
 
-DrawableObject ObjectFactory::createAssimpObject(std::vector<AssimpVertex> vertices, int id, int shaderId, int textureId)
-{
-    DrawableObject drawableObject(id, vertices, shaderId, textureId);
-
-    return drawableObject;
-}
 
 DrawableObject ObjectFactory::createRawObject(std::vector<float> rawData, int id, int shaderId, int textureId)
 {

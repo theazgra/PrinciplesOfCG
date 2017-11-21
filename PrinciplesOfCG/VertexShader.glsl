@@ -20,5 +20,5 @@ void main () {
     outFragPos = vec3(modelMatrix * vec4(localPosition, 1.0));
     outNormalPos = mat3(transpose(inverse(modelMatrix))) * normalPosition;
 
-    texCoord = vertexUV;
+    texCoord = vec2(vertexUV.x, 1.0 - vertexUV.y);//vertexUV;
 }

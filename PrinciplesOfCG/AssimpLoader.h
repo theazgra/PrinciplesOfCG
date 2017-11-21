@@ -5,6 +5,7 @@
 #include <assimp\postprocess.h>
 #include <glm\glm.hpp>
 #include "Vertex.h"
+#include <tuple>
 
 struct Material
 {
@@ -24,8 +25,11 @@ public:
     ~AssimpLoader();
 
     static aiScene const* loadScene(const char * file);
-    //static std::vector<std::vector<AssimpVertex>> getVertexObjects(aiScene const* aiScene);
-    static std::vector<std::vector<AssimpVertex>> getVertexObjects(const char* file);
+    
+    static std::vector<std::tuple<std::vector<AssimpVertex>, std::vector<unsigned int>>> 
+    getVertexObjects(const char* file);
+    
+    //static std::vector<std::vector<AssimpVertex>> getVertexObjects(const char* file);
     static std::vector<Material> getMaterials(aiScene const* aiScene);
 
     

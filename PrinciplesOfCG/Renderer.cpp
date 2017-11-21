@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Renderer.h"
+#include "Application.h"
 
 Renderer::Renderer(GLFWwindow& window)
 {
@@ -25,8 +26,6 @@ void Renderer::reportRenderTime()
 
 void Renderer::renderScene(Scene & scene)
 {
-    //scene.getDrawableObjects().at(2)->resize(glm::vec3(2.0f, 2.0f, 2.0f));
-
     lastRenderTime = glfwGetTime();
     frameCount = 0;
 
@@ -55,19 +54,24 @@ void Renderer::renderDrawableObjects(Scene& scene)
     {
         unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
         
+        
         if (objectShaderId != lastShaderId)
         {
-            scene.getShader(objectShaderId).useProgram();
+            Application::getInstance()->getShader(objectShaderId)->useProgram();
         }
-        scene.getShader(objectShaderId).applyTexture();
-        scene.getShader(objectShaderId).applyCamera();
-        scene.getShader(objectShaderId).applyLight();
 
-        scene.getShader(objectShaderId).modelTransform(*(scene.getDrawableObjects().at(i)));
+        Application::getInstance()->getShader(objectShaderId)->applyTexture(
+            scene.getDrawableObjects().at(i)->getTextureId());
+
+        Application::getInstance()->getShader(objectShaderId)->applyCamera();
+        Application::getInstance()->getShader(objectShaderId)->applyLight();
+
+        Application::getInstance()->getShader(objectShaderId)->modelTransform(*(scene.getDrawableObjects().at(i)));
         
         this->lastShaderId = objectShaderId;
 
         glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
+        
         
         glStencilFunc(GL_ALWAYS, scene.getDrawableObjects().at(i)->getObjectId(), 0xFF);
 
@@ -77,8 +81,7 @@ void Renderer::renderDrawableObjects(Scene& scene)
                 GL_TRIANGLES,
                 scene.getDrawableObjects().at(i)->getIndicesCount(),
                 GL_UNSIGNED_INT,
-                NULL);
-                //scene.getDrawableObjects().at(i)->getIndices().data());
+                nullptr);
         }
         else 
         {

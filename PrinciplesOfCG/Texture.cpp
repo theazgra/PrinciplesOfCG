@@ -11,7 +11,7 @@ Texture::~Texture()
 {
 }
 
-GLuint Texture::loadTexture(const char * textureFile)
+GLuint Texture::loadTexture(const char * textureFile, unsigned int textureUnit)
 {
     GLuint textureId = -1;
     int width, height;
@@ -22,10 +22,9 @@ GLuint Texture::loadTexture(const char * textureFile)
         0,
         SOIL_LOAD_RGBA
     );
-
         
     glGenTextures(1, &textureId);
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(GL_TEXTURE_2D, textureId);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

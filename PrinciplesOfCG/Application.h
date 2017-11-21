@@ -5,6 +5,7 @@
 
 #include "Scene.h"
 #include "Renderer.h"
+#include "Texture.h"
 
 class Application
 {
@@ -12,25 +13,36 @@ private:
     Application();
 
     GLFWwindow*  window;
-    std::vector<Scene*>* scenes;
+    std::vector<Scene*> scenes;
     Renderer * renderer;
     Scene * currentScene;
 
-    bool enableLookingAroud = false;
+    std::map<int, Shader*> shaders;
+    std::vector<unsigned int> textures;
+    unsigned int BASIC_SHADER_ID = 0;
+
+
     
+    bool enableLookingAroud = false;
 
     void bindCallbacks();
 public:
     static Application* getInstance();
     ~Application();
 
-    void createScene(char*, Shader*, Camera*);
+    void createScene(char*, Camera*);
     void renderCurrentScene();
 
     Scene & getCurrentScene();
     void setCurrentScene(char* sceneName);
 
     GLFWwindow& getWindow();
+
+    Shader const& getBasicShader() const;
+    Shader * getShader(unsigned int);
+    unsigned int getBasicShaderId() const;
+    unsigned int addShader(Shader*);
+    unsigned int addTexture(const char* textureFile);
 
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void error_callback(int error, const char* description);

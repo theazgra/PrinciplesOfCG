@@ -7,6 +7,4 @@ struct AssimpVertex
     float Normal[3];
     float UV[2];
     float Tangent[3];
-    bool hasFaces;
-    std::vector<unsigned int> indices;
 };

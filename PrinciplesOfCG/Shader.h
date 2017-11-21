@@ -4,7 +4,6 @@
 
 #include "ShaderLoader.h"
 #include "DrawableObject.h"
-#include "Texture.h"
 
 class Shader : ShaderLoader
 {
@@ -33,13 +32,10 @@ private:
 
     glm::vec2 textureCoord;
     float lightPower;
-    void setTexture(const char* textureFile);
-
-    bool hasTexture = false;
 public:
     Shader();
     Shader(const char* vertex_shader_file, const char* fragment_shader_file);
-    Shader(const char* vertex_shader_file, const char* fragment_shader_file, const char* texture_file);
+    //Shader(const char* vertex_shader_file, const char* fragment_shader_file, );
 
     ~Shader();
 
@@ -47,7 +43,7 @@ public:
     void modelTransform(DrawableObject& object) const;
     void applyCamera() const;
     void applyLight() const;
-    void applyTexture() const;
+    void applyTexture(unsigned int textureUnit = 0) const;
 
     void setCameraMatrices(glm::mat4, glm::mat4, glm::vec3); 
     void setLightParameters(glm::vec3, glm::vec3, glm::vec3, float);
