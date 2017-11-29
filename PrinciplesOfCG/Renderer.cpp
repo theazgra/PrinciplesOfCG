@@ -47,7 +47,7 @@ void Renderer::renderScene(Scene & scene)
 
 void Renderer::renderDrawableObjects(Scene& scene)
 {
-    //scene.getPointLight().move(glm::vec3(0.0f, 0.01f, 0.01f));
+    //scene.getLights().at(0)->move(glm::vec3(0.0f, 0.01f, 0.0f));
     
     
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)

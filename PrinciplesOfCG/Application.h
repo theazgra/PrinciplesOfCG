@@ -12,6 +12,8 @@ class Application
 private:
     Application();
 
+    unsigned int nextObjectId = -1;
+
     GLFWwindow*  window;
     std::vector<Scene*> scenes;
     Renderer * renderer;
@@ -49,5 +51,7 @@ public:
     void window_size_callback(GLFWwindow* window, int width, int height);
     void cursor_pos_callback(GLFWwindow* window, double mouseX, double mouseY);
     void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
+    unsigned int getNextId();
 };
 

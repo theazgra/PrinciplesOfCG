@@ -151,7 +151,9 @@
   <ItemGroup>
     <ClInclude Include="AssimpLoader.h" />
     <ClInclude Include="ControlObject.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="LightObserver.h" />
+    <ClInclude Include="LightStruct.h" />
     <ClInclude Include="LightSubject.h" />
     <ClInclude Include="models\plain.h" />
     <ClInclude Include="ObjectFactory.h" />
@@ -167,11 +169,13 @@
     <ClInclude Include="models\worker.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectWithTarget.h" />
+    <ClInclude Include="PrinciplesOfCG.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SphereObject.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
@@ -180,6 +184,7 @@
   <ItemGroup>
     <ClCompile Include="AssimpLoader.cpp" />
     <ClCompile Include="ControlObject.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="LightSubject.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="PlainObject.cpp" />
@@ -197,6 +202,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="SphereObject.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

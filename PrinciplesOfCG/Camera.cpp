@@ -44,10 +44,10 @@ void Camera::moveCamera(Direction direction)
     switch (direction)
     {
     case Up:
-        this->worldPosition += CAMERA_SPEED * this->upVector;
+        this->worldPosition += 2.0f * (CAMERA_SPEED * this->upVector);
         break;
     case Down:
-        this->worldPosition += -CAMERA_SPEED * this->upVector;
+        this->worldPosition += 2.0f * (-CAMERA_SPEED * this->upVector);
         break;
     case Left: 
     {

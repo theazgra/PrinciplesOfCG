@@ -21,11 +21,11 @@ void LightSubject::clearObservers()
     this->lightObservers.clear();
 }
 
-void LightSubject::notifyObservers(glm::vec3 worldPosition, glm::vec3 lightIntensity, glm::vec3 ambient, float power)
+void LightSubject::notifyObservers(unsigned int lightId, LightStruct lightInfo)
 {
     for (LightObserver & observer : this->lightObservers)
     {
-        observer.lightNotify(worldPosition, lightIntensity, ambient, power);
+        observer.lightNotify(lightId, lightInfo);
     }
 }
 

@@ -20,7 +20,6 @@ private:
     std::vector<Camera*> cameras;
     std::vector<Light*> lights;
     std::vector<unsigned int> sceneShaderIds;
-    PointLight pointLight;
  
     char* sceneName;
 
@@ -33,11 +32,13 @@ public:
     char* getSceneName() const;
 
     void addDrawableObject(DrawableObject * drawableObject);
+    void addLight(Light * light);
     
     SphereObject& addSphere(unsigned int shaderId);
     PlainObject& addPlainObject();
 
     std::vector<DrawableObject*> const& getDrawableObjects() const;
+    std::vector<Light*> & getLights();
 
     Camera& addCamera(glm::vec3, glm::vec3);
     void setActiveCamera(unsigned int cameraId);
@@ -49,9 +50,7 @@ public:
 
 
     void cameraNotify(glm::mat4, glm::mat4, glm::vec3) override;
-    void lightNotify(glm::vec3, glm::vec3, glm::vec3, float) override;
-
-    PointLight& getPointLight();
+    void lightNotify(unsigned int lightId, LightStruct lightInfo) override;
 
 };
 

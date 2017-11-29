@@ -6,30 +6,41 @@ Light::Light()
 {
 }
 
-Light::Light(int objectId, glm::vec3 worldPosition, glm::vec3 intensity, float power) : ControlObject(objectId, worldPosition)
+Light::Light(int objectId, glm::vec3 intensity) : 
+    ControlObject(objectId, glm::vec3(0.0f, 0.0f, 0.0f))
 {
-    this->intensity = intensity;
-    this->power = power;
+    this->ambientStrength = 0.2f;
+    this->specularStrength = 0.5f;
+    this->lightColor = intensity;
+    this->power = 1.0f;
+    
+    notifyObservers(getObjectId(), getLightInfo());
 }
 
 Light::~Light()
 {
 }
 
-void Light::setIntensity(glm::vec3 intensity)
+LightStruct Light::getLightInfo()
 {
-    this->intensity = intensity;
+    return LightStruct();
+}
+
+void Light::setLightColor(glm::vec3 intensity)
+{
+    this->lightColor = intensity;
+    notifyObservers(getObjectId(), getLightInfo());
 }
 
 void Light::setPower(float power)
 {
     this->power = power;
-    notifyObservers(this->worldPosition, this->intensity, getAmbient(), this->power);
+    notifyObservers(getObjectId(), getLightInfo());
 }
 
 void Light::forceUpdate()
 {
-    notifyObservers(this->worldPosition, this->intensity, getAmbient(), this->power);
+    notifyObservers(getObjectId(), getLightInfo());
 }
 
 float Light::getPower() const 
@@ -37,15 +48,41 @@ float Light::getPower() const
     return this->power;
 }
 
-glm::vec3 Light::getIntensity() const
+glm::vec3 Light::getLightColor() const
 {
-    return this->intensity;
+    return this->lightColor;
 }
 
 void Light::move(glm::vec3 vector)
 {
     ControlObject::move(vector);
-    notifyObservers(this->worldPosition, this->intensity, getAmbient(), this->power);
+    notifyObservers(getObjectId(), getLightInfo());
+}
 
+void Light::setPosition(glm::vec3 position)
+{
+    ControlObject::setPosition(position);
+    notifyObservers(getObjectId(), getLightInfo());
+}
+
+float Light::getAmbientStrength() const
+{
+    return this->ambientStrength;
+}
+
+float Light::getSpecularStrength() const
+{
+    return this->specularStrength;
+}
+
+void Light::setAmbientStrength(float ambient)
+{
+    this->ambientStrength = ambient;
+    notifyObservers(getObjectId(), getLightInfo());
+}
+
+void Light::setSpeculatStrength(float specular)
+{
+    this->specularStrength = specular;
 }
 

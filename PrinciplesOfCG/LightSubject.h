@@ -13,6 +13,6 @@ public:
     virtual void registerObserver(LightObserver& lightObserver);
     void clearObservers();
 protected:
-    void notifyObservers(glm::vec3, glm::vec3, glm::vec3, float);
+    void notifyObservers(unsigned int lightId, LightStruct lightInfo);
 };
 

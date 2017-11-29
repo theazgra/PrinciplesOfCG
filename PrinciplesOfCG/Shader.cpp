@@ -24,6 +24,7 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
     this->lightPowerPtr = glGetUniformLocation(this->shaderProgram, "lightPower");
 
     this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "textura");
+    this->lightCount = glGetUniformLocation(this->shaderProgram, "lightCount");
 }
 
 void Shader::useProgram() const 
@@ -47,10 +48,54 @@ void Shader::applyCamera() const
 
 void Shader::applyLight() const
 {
-    glUniform3f(this->lightPositionPtr, this->lightPosition[0], this->lightPosition[1], this->lightPosition[2]);
-    glUniform3f(this->lightIntensityPtr, this->lightIntensity[0], this->lightIntensity[1], this->lightIntensity[2]);
-    glUniform3f(this->lightAmbientPtr, this->lightAmbient[0], this->lightAmbient[1], this->lightAmbient[2]);
-    glUniform1f(this->lightPowerPtr, this->lightPower);
+    glUniform1i(this->lightCount, this->lights.size());
+    int i = 0;
+    for (std::pair<GLuint, LightStruct> pair : this->lights)
+    {
+        glUniform1ui(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].lightType").c_str()),
+            pair.second.lightType);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].power").c_str()),
+            pair.second.power);
+
+        glUniform3f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].position").c_str()),
+            pair.second.position.x,
+            pair.second.position.y,
+            pair.second.position.z);
+
+        glUniform3f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].direction").c_str()),
+            pair.second.direction.x,
+            pair.second.direction.y,
+            pair.second.direction.z);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].cutOff").c_str()),
+            pair.second.cutOff);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].outerCutOff").c_str()),
+            pair.second.outerCutOff);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].ambientStrength").c_str()),
+            pair.second.ambientStrength);
+
+        glUniform3f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].lightColor").c_str()),
+            pair.second.lightColor.x,
+            pair.second.lightColor.y,
+            pair.second.lightColor.z);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].specularStrength").c_str()),
+            pair.second.specularStrength);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].constant").c_str()),
+            pair.second.constantFallOff);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].linear").c_str()),
+            pair.second.linearFallOff);
+
+        glUniform1f(glGetUniformLocation(this->shaderProgram, ("lights[" + std::to_string(i) + "].quadratic").c_str()),
+            pair.second.quadraticFallOff);   
+
+        ++i;
+    }
 }
 
 void Shader::applyTexture(unsigned int textureUnit) const
@@ -65,12 +110,21 @@ void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix,
     this->cameraPosition = cameraPosition;
 }
 
-void Shader::setLightParameters(glm::vec3 worldPosition, glm::vec3 lightIntensity, glm::vec3 ambient, float lightPower)
+void Shader::setLightParameters(unsigned int lightId, LightStruct lightInfo)
 {
-    this->lightPosition = worldPosition;
-    this->lightIntensity = lightIntensity;
-    this->lightAmbient = ambient;
-    this->lightPower = lightPower;
+    this->lights[lightId] = lightInfo;
+    //switch (lightInfo.lightType)
+    //{
+    //case POINT_LIGHT:
+    //    this->pointLights[lightId] = lightInfo;
+    //    break;
+    //case DIRECTIONAL_LIGHT:
+    //    this->directionalLights[lightId] = lightInfo;
+    //    break;
+    //case SPOT_LIGHT:
+    //    this->spotLights[lightId] = lightInfo;
+    //    break;
+    //}
 }
 
 Shader::~Shader()

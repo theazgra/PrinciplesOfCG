@@ -35,3 +35,21 @@ DrawableObject ObjectFactory::createRawObject(std::vector<float> rawData, int id
 
     return drawableObject;
 }
+
+PointLight * ObjectFactory::createPointLight(unsigned int id, glm::vec3 intensity)
+{
+    PointLight * light = new PointLight(id, intensity);
+    return light;
+}
+
+SpotLight * ObjectFactory::createSpotLight(unsigned int id, glm::vec3 intensity, float cutOff, float outerCutOff, glm::vec3 direction)
+{
+    SpotLight * light = new SpotLight(id, intensity, cutOff, outerCutOff, direction);
+    return light;
+}
+
+DirectionalLight * ObjectFactory::createDirectionalLight(unsigned int id, glm::vec3 intensity, glm::vec3 direction)
+{
+    DirectionalLight * light = new DirectionalLight(id, intensity, direction);
+    return light;
+}

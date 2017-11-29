@@ -13,6 +13,7 @@ public:
     ~ControlObject();
 
     virtual void move(glm::vec3 vector);
+    virtual void setPosition(glm::vec3 position);
 
     glm::vec3 getWorldPosition() const;
 };

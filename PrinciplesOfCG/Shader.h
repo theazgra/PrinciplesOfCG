@@ -1,9 +1,13 @@
 #pragma once
 #include <glm\glm.hpp>
 #include <stdexcpt.h>
+#include <map>
+#include <string>
 
 #include "ShaderLoader.h"
 #include "DrawableObject.h"
+#include "LightStruct.h"
+
 
 class Shader : ShaderLoader
 {
@@ -20,6 +24,8 @@ private:
     GLuint lightAmbientPtr;
     GLuint lightPowerPtr;
 
+    GLuint lightCount;
+
     GLuint textureCoordPtr;
 
     glm::mat4 cameraViewMatrix;
@@ -31,11 +37,11 @@ private:
     glm::vec3 lightAmbient;
 
     glm::vec2 textureCoord;
-    float lightPower;
+
+    std::map<GLuint, LightStruct> lights;
 public:
     Shader();
     Shader(const char* vertex_shader_file, const char* fragment_shader_file);
-    //Shader(const char* vertex_shader_file, const char* fragment_shader_file, );
 
     ~Shader();
 
@@ -46,7 +52,6 @@ public:
     void applyTexture(unsigned int textureUnit = 0) const;
 
     void setCameraMatrices(glm::mat4, glm::mat4, glm::vec3); 
-    void setLightParameters(glm::vec3, glm::vec3, glm::vec3, float);
-    
+    void setLightParameters(unsigned int lightId, LightStruct lightInfo);    
 };
 

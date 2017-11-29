@@ -169,15 +169,14 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
 
     if (key == GLFW_KEY_PAGE_DOWN)
     {
-        this->currentScene->getPointLight().setPower(this->currentScene->getPointLight().getPower() + 0.1f);
+        
     }
     if (key == GLFW_KEY_PAGE_UP)
     {
-        this->currentScene->getPointLight().setPower(this->currentScene->getPointLight().getPower() - 0.1f);
+        
     }
 
     this->currentScene->getActiveCameraRef().forceUpdate();
-    this->currentScene->getPointLight().forceUpdate();
 
 
 }
@@ -238,6 +237,11 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
 
         }
     }
+}
+
+unsigned int Application::getNextId()
+{
+    return ++this->nextObjectId;
 }
 
 Shader const& Application::getBasicShader() const

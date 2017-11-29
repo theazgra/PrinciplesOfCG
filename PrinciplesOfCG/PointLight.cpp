@@ -1,31 +1,65 @@
 #include "stdafx.h"
 #include "PointLight.h"
 
-glm::vec3 PointLight::getAmbient()
-{
-    return this->ambient;
-}
 
 PointLight::PointLight()
 {
 }
 
-PointLight::PointLight(int objectId, glm::vec3 worldPosition, glm::vec3 intensity, glm::vec3 ambient, float power)
-    : Light(objectId, worldPosition, intensity, power)
+PointLight::PointLight(int objectId, glm::vec3 intensity) : Light(objectId, intensity)
 {
-    this->ambient = ambient;
+    this->constant = 0.6f;
+    this->linear = 0.09f;
+    this->quadratic = 0.032f;
 }
 
 PointLight::~PointLight()
 {
 }
 
-glm::vec3 PointLight::getAmbient() const
-{
-    return this->ambient;
+void PointLight::setConstantFallof(float value)
+{                
+    this->constant = value;
 }
 
-void PointLight::setAmbient(glm::vec3 ambient)
+void PointLight::setLinearFallof(float value)
+{                
+    this->linear = value;
+}
+
+void PointLight::setQuadraticFallof(float value)
 {
-    this->ambient = ambient;
+    this->quadratic = value;
+}
+
+float PointLight::getConstantFallof() const
+{
+    return this->constant;
+}
+
+float PointLight::getLinearFallof() const
+{
+    return this->linear;
+}
+
+float PointLight::getQuadraticFallof() const
+{
+    return this->quadratic;
+}
+
+LightStruct PointLight::getLightInfo()
+{
+    LightStruct lightInfo;
+    lightInfo.lightType = POINT_LIGHT;
+
+    lightInfo.position = this->worldPosition;
+    lightInfo.ambientStrength = this->ambientStrength;
+    lightInfo.lightColor = this->lightColor;
+    lightInfo.specularStrength = this->specularStrength;
+    lightInfo.constantFallOff = this->constant;
+    lightInfo.linearFallOff = this->linear;
+    lightInfo.quadraticFallOff = this->quadratic;
+    lightInfo.power = this->power;
+
+    return lightInfo;
 }

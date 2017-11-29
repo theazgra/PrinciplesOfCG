@@ -10,16 +10,6 @@ Scene::Scene(char* sceneName, Camera* camera)
 
     cameras.push_back(camera);
     internalSetActiveCamera(camera);
-
-
-    //basic point light
-    pointLight = PointLight(
-        0,
-        glm::vec3(5.0f, 5.0f, 5.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(0.1f, 0.1f, 0.1f),
-        0.5);
-    pointLight.registerObserver(*this);
 }
         
 
@@ -99,13 +89,21 @@ void Scene::addDrawableObject(DrawableObject * drawableObject)
     {
         this->sceneShaderIds.push_back(drawableObject->getShaderId());
     }
+
+    this->activeCamera->forceUpdate();
+}
+
+void Scene::addLight(Light * light)
+{
+    this->lights.push_back(light);
+    light->registerObserver(*this);
+    light->forceUpdate();
 }
 
 SphereObject & Scene::addSphere(unsigned int shaderId)
 {
     SphereObject * sphere = new SphereObject(drawableObjects.size(), shaderId);
     drawableObjects.push_back(sphere);
-    this->pointLight.forceUpdate();
     return *sphere;
 }
 
@@ -117,7 +115,6 @@ PlainObject & Scene::addPlainObject()
 
     PlainObject * plain = new PlainObject(drawableObjects.size(), 0);
     drawableObjects.push_back(plain);
-    this->pointLight.forceUpdate();
     return *plain;
 }
 
@@ -157,6 +154,11 @@ std::vector<DrawableObject*> const& Scene::getDrawableObjects() const
     return drawableObjects;
 }
 
+std::vector<Light*>& Scene::getLights()
+{
+    return this->lights;
+}
+
 Camera const & Scene::getActiveCamera() const
 {
     return *activeCamera;
@@ -186,23 +188,15 @@ void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::
     }
 }
 
-void Scene::lightNotify(glm::vec3 worldPosition, glm::vec3 lightIntensity, glm::vec3 ambient, float power)
+void Scene::lightNotify(unsigned int lightId, LightStruct lightInfo)
 {
     for (int i = 0; i < sceneShaderIds.size(); i++)
     {
         Application::getInstance()->getShader(this->sceneShaderIds.at(i))->setLightParameters(
-            worldPosition,
-            lightIntensity,
-            ambient,
-            power
+            lightId,
+            lightInfo
         );
     }
-}
-
-
-PointLight & Scene::getPointLight()
-{
-    return pointLight;
 }
 
 

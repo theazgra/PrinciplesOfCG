@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "ObjectFactory.h"
+#include "PrinciplesOfCG.h"
 
 
 
@@ -24,9 +25,51 @@ int main()
     app->getCurrentScene().addDrawableObject(
         ObjectFactory::createAssimpObject(
             "test.obj",
-            88,
+            app->getNextId(),
             app->getBasicShaderId(),
             houseTexture));
+
+    //app->getCurrentScene().addLight(
+    //    ObjectFactory::createDirectionalLight(
+    //        app->getNextId(),
+    //        glm::vec3(1.0f, 1.0f, 1.0f),
+    //        glm::vec3(0.5f, 0.0f, 0.5f)
+    //    )
+    //);
+
+    //PointLight * pl = ObjectFactory::createPointLight(
+    //    app->getNextId(),
+    //    glm::vec3(1.0f, 1.0f, 1.0f)
+    //);
+
+    //pl->setPosition(glm::vec3(5.0f, 0.0f, 10.0f));
+
+    //PointLight * pl2 = ObjectFactory::createPointLight(
+    //    app->getNextId(),
+    //    glm::vec3(3.0f, 1.0f, 1.0f)
+    //);
+
+    //pl2->setPosition(glm::vec3(-6.0f, 0.0f, -8.0f));
+
+    //app->getCurrentScene().addLight(
+    //  pl  
+    //);
+
+    //app->getCurrentScene().addLight(
+    //    pl2
+    //);
+    //radians, 12.5, 17.5
+    SpotLight * sl = ObjectFactory::createSpotLight(
+        app->getNextId(),
+        glm::vec3(3.0f, 3.0f, 3.0f),
+        glm::radians(5.0f),
+        glm::radians(6.5f),
+        glm::vec3(0.0f, 1.0f, 0.0f)
+    );
+    sl->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+    app->getCurrentScene().addLight(sl);
+
+    
         
     
 
