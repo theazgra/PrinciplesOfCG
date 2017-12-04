@@ -45,6 +45,7 @@ public:
     unsigned int getBasicShaderId() const;
     unsigned int addShader(Shader*);
     unsigned int addTexture(const char* textureFile);
+    unsigned int addSkyBoxTexture(const char* x, const char* nx, const char* y, const char* ny, const char* z, const char* nz);
 
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void error_callback(int error, const char* description);

@@ -22,6 +22,7 @@ protected:
     
     std::vector<unsigned int> indices;
     bool hasIndicesBuffer = false;
+    bool skyBox = false;
 
 public:
     DrawableObject(int objectId);
@@ -40,10 +41,16 @@ public:
     void rotate(float, glm::vec3);
     void translate(glm::vec3);
 
+    void setPosition(glm::vec3 position);
+
     bool hasIndices();
     std::vector<unsigned int> getIndices() const;
     unsigned int getIndicesCount() const;
     GLuint getIBO() const;
+
+    void setIsSkyBox(bool value);
+    bool isSkyBox() const;
+
 
 };
 

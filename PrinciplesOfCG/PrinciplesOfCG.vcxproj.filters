@@ -198,5 +198,11 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="FSCubeMap.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="VSCubeMap.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

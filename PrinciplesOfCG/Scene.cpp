@@ -43,6 +43,8 @@ Scene::~Scene()
         delete lights.at(i);
     }
     lights.clear();
+
+    
 }
 
 char * Scene::getSceneName() const
@@ -98,6 +100,33 @@ void Scene::addLight(Light * light)
     this->lights.push_back(light);
     light->registerObserver(*this);
     light->forceUpdate();
+}
+
+void Scene::addSkyBox(DrawableObject * drawableObject)
+{
+    this->drawableObjects.push_back(drawableObject);
+    this->skyBox = drawableObject;
+    this->skyBox->setIsSkyBox(true);
+
+    bool found = false;
+    for (unsigned int i = 0; i < this->sceneShaderIds.size(); i++)
+    {
+        if (this->sceneShaderIds.at(i) == drawableObject->getShaderId())
+        {
+            found = true;
+        }
+    }
+    if (!found)
+    {
+        this->sceneShaderIds.push_back(drawableObject->getShaderId());
+    }
+
+    this->activeCamera->forceUpdate();
+}
+
+DrawableObject * Scene::getSkybox() const
+{
+    return skyBox;
 }
 
 SphereObject & Scene::addSphere(unsigned int shaderId)
@@ -179,6 +208,14 @@ void Scene::swapCamera()
 
 void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
+    if (skyBox != NULL) 
+    {
+        skyBox->translate(cameraPosition - oldSkyBoxPosition);
+        oldSkyBoxPosition = cameraPosition;
+        //skyBox->setPosition(cameraPosition);
+    }
+    
+
     for (int i = 0; i < this->sceneShaderIds.size(); i++)
     {
         Application::getInstance()->getShader(this->sceneShaderIds.at(i))->setCameraMatrices(

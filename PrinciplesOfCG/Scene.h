@@ -26,6 +26,8 @@ private:
     Camera* activeCamera = NULL;
 
     void internalSetActiveCamera(Camera*);
+    DrawableObject * skyBox = NULL;
+    glm::vec3 oldSkyBoxPosition = glm::vec3(0.0f);
 public:
     Scene(char*, Camera*);
     ~Scene();
@@ -33,6 +35,9 @@ public:
 
     void addDrawableObject(DrawableObject * drawableObject);
     void addLight(Light * light);
+    void addSkyBox(DrawableObject * drawableObject);
+
+    DrawableObject * getSkybox() const;
     
     SphereObject& addSphere(unsigned int shaderId);
     PlainObject& addPlainObject();

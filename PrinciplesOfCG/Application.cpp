@@ -283,3 +283,13 @@ unsigned int Application::addTexture(const char * textureFile)
 
     return textureId;
 }
+
+unsigned int Application::addSkyBoxTexture(const char* x, const char* nx, const char* y, const char* ny, const char* z, const char* nz)
+{
+    unsigned int textureId = this->textures.size();
+    Texture tex;
+    tex.loadSkyBox(x, nx, y, ny, z, nz, textureId);
+    this->textures.push_back(textureId);
+
+    return textureId;
+}

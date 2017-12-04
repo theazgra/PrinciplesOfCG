@@ -2,16 +2,16 @@
 #include "DrawableObject.h"
 
 
-DrawableObject::DrawableObject(int objectId, std::vector<float> vector, unsigned int shaderId, unsigned int textureId) 
+DrawableObject::DrawableObject(int objectId, std::vector<float> vector, unsigned int shaderId, unsigned int textureId)
     : Object(objectId)
 {
     this->textureId = textureId;
     this->shaderId = shaderId;
     this->objectMatrix = glm::mat4(1.0f);
-    
+
     this->verticesCount = vector.size() / 3;
     size_t vecSize = vector.size() * sizeof(float);
-    
+
     glGenVertexArrays(1, &this->VAO);
     glBindVertexArray(this->VAO);
 
@@ -62,7 +62,7 @@ DrawableObject::DrawableObject(int objectId, std::vector<AssimpVertex> data, std
     glGenBuffers(1, &this->IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(unsigned int), this->indices.data(), GL_STATIC_DRAW);
-    
+
     this->verticesCount = data.size() * 3;
 }
 
@@ -117,6 +117,13 @@ void DrawableObject::translate(glm::vec3 translateVector)
     objectMatrix = glm::translate(objectMatrix, translateVector);
 }
 
+void DrawableObject::setPosition(glm::vec3 position)
+{
+    this->objectMatrix[0][3] = position.x;
+    this->objectMatrix[1][3] = position.y;
+    this->objectMatrix[2][3] = position.z;
+}
+
 bool DrawableObject::hasIndices()
 {
     return this->hasIndicesBuffer;
@@ -135,6 +142,16 @@ unsigned int DrawableObject::getIndicesCount() const
 GLuint DrawableObject::getIBO() const
 {
     return this->IBO;
+}
+
+void DrawableObject::setIsSkyBox(bool value)
+{
+    this->skyBox = value;
+}
+
+bool DrawableObject::isSkyBox() const
+{
+    return this->skyBox;
 }
 
 glm::mat4 DrawableObject::getObjectMatrix() const

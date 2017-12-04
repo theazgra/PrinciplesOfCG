@@ -18,9 +18,19 @@ int main()
     app->createScene("Basic scene", 
         new Camera(0, glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 
-    app->getCurrentScene().addCamera(glm::vec3(50.0f, 50.0f, 50.0f), glm::vec3(0.0f, 0.0f, 2.0f));
+    //app->getCurrentScene().addCamera(glm::vec3(50.0f, 50.0f, 50.0f), glm::vec3(0.0f, 0.0f, 2.0f));
+    app->getCurrentScene().addCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 2.0f));
+    unsigned int skyBoxShader = app->addShader(new Shader("VSCubeMap.glsl", "FSCubeMap.glsl"));
     unsigned int houseTexture = app->addTexture("test.png");
-    unsigned int mine = app->addTexture("mine.jpg");
+    unsigned int redTexture = app->addTexture("mine.jpg");
+    unsigned int skyBoxTexture = app->addSkyBoxTexture(
+        "sky/cubemap/posx.jpg",
+        "sky/cubemap/negx.jpg",
+        "sky/cubemap/posy.jpg",
+        "sky/cubemap/negy.jpg",
+        "sky/cubemap/posz.jpg",
+        "sky/cubemap/negz.jpg"
+    );
 
     app->getCurrentScene().addDrawableObject(
         ObjectFactory::createAssimpObject(
@@ -29,13 +39,22 @@ int main()
             app->getBasicShaderId(),
             houseTexture));
 
-    //app->getCurrentScene().addLight(
-    //    ObjectFactory::createDirectionalLight(
-    //        app->getNextId(),
-    //        glm::vec3(1.0f, 1.0f, 1.0f),
-    //        glm::vec3(0.5f, 0.0f, 0.5f)
-    //    )
-    //);
+    app->getCurrentScene().addSkyBox(
+        ObjectFactory::createAssimpObject(
+            "sky/skybox.obj",
+            app->getNextId(),
+            skyBoxShader,
+            skyBoxTexture
+        )
+    );
+
+    app->getCurrentScene().addLight(
+        ObjectFactory::createDirectionalLight(
+            app->getNextId(),
+            glm::vec3(1.0f, 1.0f, 1.0f),
+            glm::vec3(0.5f, 0.0f, 0.5f)
+        )
+    );
 
     //PointLight * pl = ObjectFactory::createPointLight(
     //    app->getNextId(),

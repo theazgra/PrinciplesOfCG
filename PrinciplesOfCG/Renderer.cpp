@@ -47,11 +47,64 @@ void Renderer::renderScene(Scene & scene)
 
 void Renderer::renderDrawableObjects(Scene& scene)
 {
-    //scene.getLights().at(0)->move(glm::vec3(0.0f, 0.01f, 0.0f));
+    int ignore = -1;
+    for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
+    {
+        if (scene.getDrawableObjects().at(i)->isSkyBox())
+        {
+            ignore = i;
+
+            unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
+
+
+            if (objectShaderId != lastShaderId)
+            {
+                Application::getInstance()->getShader(objectShaderId)->useProgram();
+            }
+
+            Application::getInstance()->getShader(objectShaderId)->applyTexture(
+                scene.getDrawableObjects().at(i)->getTextureId());
+
+            Application::getInstance()->getShader(objectShaderId)->applyCamera();
+            Application::getInstance()->getShader(objectShaderId)->applyLight();
+
+            Application::getInstance()->getShader(objectShaderId)->modelTransform(*(scene.getDrawableObjects().at(i)));
+
+            this->lastShaderId = objectShaderId;
+
+            glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
+
+
+            glStencilFunc(GL_ALWAYS, scene.getDrawableObjects().at(i)->getObjectId(), 0xFF);
+
+            if (scene.getDrawableObjects().at(i)->hasIndices())
+            {
+                glDrawElements(
+                    GL_TRIANGLES,
+                    scene.getDrawableObjects().at(i)->getIndicesCount(),
+                    GL_UNSIGNED_INT,
+                    nullptr);
+            }
+            else
+            {
+                glDrawArrays(
+                    GL_TRIANGLES,
+                    0,
+                    scene.getDrawableObjects().at(i)->getVerticesCount());
+            }
+
+            glClear(GL_DEPTH_BUFFER_BIT);
+            break;
+        }
+    }
     
     
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
+        if (ignore == i)
+            continue;
+
+
         unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
         
         
@@ -90,5 +143,11 @@ void Renderer::renderDrawableObjects(Scene& scene)
                 0, 
                 scene.getDrawableObjects().at(i)->getVerticesCount());
         }
+
+        //if (scene.getDrawableObjects().at(i)->isSkyBox())
+        //{
+        //    glClear(GL_DEPTH_BUFFER_BIT);
+        //}
+
     }
 }
