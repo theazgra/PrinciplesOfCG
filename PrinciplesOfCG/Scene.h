@@ -4,9 +4,6 @@
 #include <GLFW\glfw3.h>
 #include <vector>
 #include <map>
-
-#include "SphereObject.h"
-#include "PlainObject.h"
 #include "CameraObserver.h"
 #include "Camera.h"
 #include "PointLight.h"
@@ -38,9 +35,6 @@ public:
     void addSkyBox(DrawableObject * drawableObject);
 
     DrawableObject * getSkybox() const;
-    
-    SphereObject& addSphere(unsigned int shaderId);
-    PlainObject& addPlainObject();
 
     std::vector<DrawableObject*> const& getDrawableObjects() const;
     std::vector<Light*> & getLights();

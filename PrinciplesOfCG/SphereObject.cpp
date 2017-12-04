@@ -2,11 +2,12 @@
 #include "SphereObject.h"
 
 
-SphereObject::SphereObject(int objectId, int shaderId) : DrawableObject(objectId)
+SphereObject::SphereObject(int objectId, int shaderId, int textureId) : DrawableObject(objectId)
 {
     this->shaderId = shaderId;
     this->VBO = 0;
     this->VAO = 0;
+    this->textureId = textureId;
 
     glGenVertexArrays(1, &this->VAO);
     glBindVertexArray(this->VAO);

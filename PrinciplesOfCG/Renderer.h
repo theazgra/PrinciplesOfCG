@@ -6,6 +6,7 @@ class Renderer
 {
 private:
     GLFWwindow* window;
+    void renderObject(DrawableObject&);
     void renderDrawableObjects(Scene &);
     void reportRenderTime();
 

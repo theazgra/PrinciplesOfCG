@@ -2,9 +2,10 @@
 #include "PlainObject.h"
 
 
-PlainObject::PlainObject(int objectId, int shaderId) : DrawableObject(objectId)
+PlainObject::PlainObject(int objectId, int shaderId, int textureId) : DrawableObject(objectId)
 {
     this->shaderId = shaderId;
+    this->textureId = textureId;
     this->VBO = 0;
     this->VAO = 0;
 

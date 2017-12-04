@@ -36,6 +36,18 @@ DrawableObject ObjectFactory::createRawObject(std::vector<float> rawData, int id
     return drawableObject;
 }
 
+SphereObject * ObjectFactory::createSphere(int id, int shaderId, int textureId)
+{
+    SphereObject * sphere = new SphereObject(id, shaderId, textureId);
+    return sphere;
+}
+
+PlainObject * ObjectFactory::createPlain(int id, int shaderId, int textureId)
+{
+    PlainObject * plain = new PlainObject(id, shaderId, textureId);
+    return plain;
+}
+
 PointLight * ObjectFactory::createPointLight(unsigned int id, glm::vec3 intensity)
 {
     PointLight * light = new PointLight(id, intensity);

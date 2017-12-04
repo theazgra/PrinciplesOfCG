@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "SpotLight.h"
 #include "DirectionalLight.h"
+#include "SphereObject.h"
+#include "PlainObject.h"
 
 enum ObjectType
 {
@@ -19,6 +21,8 @@ public:
 
     static DrawableObject * createAssimpObject(const char * file, int id, unsigned int shaderId = -1, unsigned int textureId = -1);
     static DrawableObject createRawObject(std::vector<float> rawData, int id, int shaderId = -1, int textureId = -1);
+    static SphereObject * createSphere(int id, int shaderId, int textureId);
+    static PlainObject * createPlain(int id, int shaderId, int textureId);
     static Scene createScene(const char * file, Camera* camera = NULL, PointLight* pointLight = NULL);
 
     static PointLight * createPointLight(unsigned int id, glm::vec3 intensity);

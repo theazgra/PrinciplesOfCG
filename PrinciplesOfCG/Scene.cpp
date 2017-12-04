@@ -129,24 +129,6 @@ DrawableObject * Scene::getSkybox() const
     return skyBox;
 }
 
-SphereObject & Scene::addSphere(unsigned int shaderId)
-{
-    SphereObject * sphere = new SphereObject(drawableObjects.size(), shaderId);
-    drawableObjects.push_back(sphere);
-    return *sphere;
-}
-
-PlainObject & Scene::addPlainObject()
-{
-    //Shader *s = new Shader("VertexShader.glsl", "FragmentShader.glsl");
-    //int index = shaders.size();
-    //shaders[index] = s;
-
-    PlainObject * plain = new PlainObject(drawableObjects.size(), 0);
-    drawableObjects.push_back(plain);
-    return *plain;
-}
-
 Camera& Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos)
 {
     Camera* newCam = new Camera(cameras.size(), worldPos, targetPos);
@@ -212,7 +194,6 @@ void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::
     {
         skyBox->translate(cameraPosition - oldSkyBoxPosition);
         oldSkyBoxPosition = cameraPosition;
-        //skyBox->setPosition(cameraPosition);
     }
     
 

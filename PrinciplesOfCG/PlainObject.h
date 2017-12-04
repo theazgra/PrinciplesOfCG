@@ -5,7 +5,7 @@
 class PlainObject : public DrawableObject
 {
 public:
-    PlainObject(int, int);
+    PlainObject(int id, int shaderId, int textureId);
     ~PlainObject();
 };
 

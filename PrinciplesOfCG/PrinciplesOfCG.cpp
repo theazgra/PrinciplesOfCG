@@ -21,6 +21,7 @@ int main()
     //app->getCurrentScene().addCamera(glm::vec3(50.0f, 50.0f, 50.0f), glm::vec3(0.0f, 0.0f, 2.0f));
     app->getCurrentScene().addCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 2.0f));
     unsigned int skyBoxShader = app->addShader(new Shader("VSCubeMap.glsl", "FSCubeMap.glsl"));
+    unsigned int grassTexture = app->addTexture("tex.jpg");
     unsigned int houseTexture = app->addTexture("test.png");
     unsigned int redTexture = app->addTexture("mine.jpg");
     unsigned int skyBoxTexture = app->addSkyBoxTexture(
@@ -31,6 +32,15 @@ int main()
         "sky/cubemap/posz.jpg",
         "sky/cubemap/negz.jpg"
     );
+
+    PlainObject * plain = ObjectFactory::createPlain(
+        app->getNextId(),
+        app->getBasicShaderId(),
+        grassTexture);
+
+    plain->resize(glm::vec3(30.0f));
+
+    app->getCurrentScene().addDrawableObject(plain);
 
     app->getCurrentScene().addDrawableObject(
         ObjectFactory::createAssimpObject(
@@ -87,6 +97,8 @@ int main()
     );
     sl->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
     app->getCurrentScene().addLight(sl);
+
+    app->getCurrentScene().addDrawableObject(ObjectFactory::createSphere(app->getNextId(), app->getBasicShaderId(), redTexture));
 
     
         

@@ -45,6 +45,48 @@ void Renderer::renderScene(Scene & scene)
 }
 
 
+void Renderer::renderObject(DrawableObject & obj)
+{
+    unsigned int objectShaderId = obj.getShaderId();
+
+
+    if (objectShaderId != lastShaderId)
+    {
+        Application::getInstance()->getShader(objectShaderId)->useProgram();
+    }
+
+    Application::getInstance()->getShader(objectShaderId)->applyTexture(
+        obj.getTextureId());
+
+    Application::getInstance()->getShader(objectShaderId)->applyCamera();
+    Application::getInstance()->getShader(objectShaderId)->applyLight();
+
+    Application::getInstance()->getShader(objectShaderId)->modelTransform(obj);
+
+    this->lastShaderId = objectShaderId;
+
+    glBindVertexArray(obj.getVAO());
+
+
+    glStencilFunc(GL_ALWAYS, obj.getObjectId(), 0xFF);
+
+    if (obj.hasIndices())
+    {
+        glDrawElements(
+            GL_TRIANGLES,
+            obj.getIndicesCount(),
+            GL_UNSIGNED_INT,
+            nullptr);
+    }
+    else
+    {
+        glDrawArrays(
+            GL_TRIANGLES,
+            0,
+            obj.getVerticesCount());
+    }
+}
+
 void Renderer::renderDrawableObjects(Scene& scene)
 {
     int ignore = -1;
@@ -53,45 +95,7 @@ void Renderer::renderDrawableObjects(Scene& scene)
         if (scene.getDrawableObjects().at(i)->isSkyBox())
         {
             ignore = i;
-
-            unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
-
-
-            if (objectShaderId != lastShaderId)
-            {
-                Application::getInstance()->getShader(objectShaderId)->useProgram();
-            }
-
-            Application::getInstance()->getShader(objectShaderId)->applyTexture(
-                scene.getDrawableObjects().at(i)->getTextureId());
-
-            Application::getInstance()->getShader(objectShaderId)->applyCamera();
-            Application::getInstance()->getShader(objectShaderId)->applyLight();
-
-            Application::getInstance()->getShader(objectShaderId)->modelTransform(*(scene.getDrawableObjects().at(i)));
-
-            this->lastShaderId = objectShaderId;
-
-            glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
-
-
-            glStencilFunc(GL_ALWAYS, scene.getDrawableObjects().at(i)->getObjectId(), 0xFF);
-
-            if (scene.getDrawableObjects().at(i)->hasIndices())
-            {
-                glDrawElements(
-                    GL_TRIANGLES,
-                    scene.getDrawableObjects().at(i)->getIndicesCount(),
-                    GL_UNSIGNED_INT,
-                    nullptr);
-            }
-            else
-            {
-                glDrawArrays(
-                    GL_TRIANGLES,
-                    0,
-                    scene.getDrawableObjects().at(i)->getVerticesCount());
-            }
+            renderObject(*scene.getDrawableObjects().at(i));
 
             glClear(GL_DEPTH_BUFFER_BIT);
             break;
@@ -104,50 +108,6 @@ void Renderer::renderDrawableObjects(Scene& scene)
         if (ignore == i)
             continue;
 
-
-        unsigned int objectShaderId = scene.getDrawableObjects().at(i)->getShaderId();
-        
-        
-        if (objectShaderId != lastShaderId)
-        {
-            Application::getInstance()->getShader(objectShaderId)->useProgram();
-        }
-
-        Application::getInstance()->getShader(objectShaderId)->applyTexture(
-            scene.getDrawableObjects().at(i)->getTextureId());
-
-        Application::getInstance()->getShader(objectShaderId)->applyCamera();
-        Application::getInstance()->getShader(objectShaderId)->applyLight();
-
-        Application::getInstance()->getShader(objectShaderId)->modelTransform(*(scene.getDrawableObjects().at(i)));
-        
-        this->lastShaderId = objectShaderId;
-
-        glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
-        
-        
-        glStencilFunc(GL_ALWAYS, scene.getDrawableObjects().at(i)->getObjectId(), 0xFF);
-
-        if (scene.getDrawableObjects().at(i)->hasIndices())
-        {
-            glDrawElements(
-                GL_TRIANGLES,
-                scene.getDrawableObjects().at(i)->getIndicesCount(),
-                GL_UNSIGNED_INT,
-                nullptr);
-        }
-        else 
-        {
-            glDrawArrays(
-                GL_TRIANGLES, 
-                0, 
-                scene.getDrawableObjects().at(i)->getVerticesCount());
-        }
-
-        //if (scene.getDrawableObjects().at(i)->isSkyBox())
-        //{
-        //    glClear(GL_DEPTH_BUFFER_BIT);
-        //}
-
+        renderObject(*scene.getDrawableObjects().at(i));
     }
 }
