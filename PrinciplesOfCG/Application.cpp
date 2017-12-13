@@ -43,6 +43,7 @@ Application::Application()
     bindCallbacks();
 
     Shader* shader = new Shader("VertexShader.glsl", "FragmentShader.glsl");
+    
     int index = shaders.size();
     shaders[index] = shader;
     BASIC_SHADER_ID = index;
@@ -85,6 +86,13 @@ Application::~Application()
     scenes.clear();
 
     delete renderer;
+
+    for (unsigned int i = 0; i < this->textures.size(); i++)
+    {
+        printf("Delete texture in unit %i\n", this->textures.at(i));
+        glDeleteTextures(1, &this->textures.at(i));
+    }
+  
 }
 
 void Application::createScene(char* sceneName,  Camera * cam)
@@ -262,6 +270,18 @@ Shader * Application::getShader(unsigned int shaderId)
     }
 }
 
+Shader * Application::getShadowShader()
+{
+    if (shaders.count(SHADOW_SHADER_ID))
+    {
+        return (shaders.at(SHADOW_SHADER_ID));
+    }
+    else
+    {
+        throw new std::exception("Shadow shader is not set");
+    }
+}
+
 unsigned int Application::getBasicShaderId() const
 {
     return BASIC_SHADER_ID;
@@ -274,9 +294,18 @@ unsigned int Application::addShader(Shader * shader)
     return shaderId;
 }
 
+unsigned int Application::addShadowShader(Shader * shader)
+{
+    unsigned int shaderId = this->shaders.size();
+    shaders[shaderId] = shader;
+    this->SHADOW_SHADER_ID = shaderId;
+    return shaderId;
+}
+
 unsigned int Application::addTexture(const char * textureFile)
 {
-    unsigned int textureId = this->textures.size();
+    //Texture with id 0 is reserved for shadow map.
+    unsigned int textureId = 1 + this->textures.size();
     Texture tex;
     tex.loadTexture(textureFile, textureId);
     this->textures.push_back(textureId);
@@ -286,7 +315,7 @@ unsigned int Application::addTexture(const char * textureFile)
 
 unsigned int Application::addSkyBoxTexture(const char* x, const char* nx, const char* y, const char* ny, const char* z, const char* nz)
 {
-    unsigned int textureId = this->textures.size();
+    unsigned int textureId = 1 + this->textures.size();
     Texture tex;
     tex.loadSkyBox(x, nx, y, ny, z, nz, textureId);
     this->textures.push_back(textureId);

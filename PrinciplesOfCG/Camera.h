@@ -28,7 +28,7 @@ private:
     glm::vec2 oldMousePosition;
 
 public:
-    Camera(int, glm::vec3, glm::vec3);
+    Camera(int, glm::vec3 worldPosition, glm::vec3 target);
     ~Camera();
 
     glm::mat4 getViewMatrix() const;

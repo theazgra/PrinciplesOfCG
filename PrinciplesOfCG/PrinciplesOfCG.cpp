@@ -18,9 +18,10 @@ int main()
     app->createScene("Basic scene", 
         new Camera(0, glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 
-    //app->getCurrentScene().addCamera(glm::vec3(50.0f, 50.0f, 50.0f), glm::vec3(0.0f, 0.0f, 2.0f));
     app->getCurrentScene().addCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 2.0f));
+    app->addShadowShader(new Shader("VSShadow.glsl", "FSShadow.glsl"));
     unsigned int skyBoxShader = app->addShader(new Shader("VSCubeMap.glsl", "FSCubeMap.glsl"));
+    unsigned int shadowTexShader = app->addShader(new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
     unsigned int grassTexture = app->addTexture("tex.jpg");
     unsigned int houseTexture = app->addTexture("test.png");
     unsigned int redTexture = app->addTexture("mine.jpg");
@@ -38,9 +39,18 @@ int main()
         app->getBasicShaderId(),
         grassTexture);
 
-    plain->resize(glm::vec3(30.0f));
-
+    plain->resize(glm::vec3(50.0f));
     app->getCurrentScene().addDrawableObject(plain);
+
+    PlainObject * shadowMap = ObjectFactory::createPlain(
+        app->getNextId(),
+        shadowTexShader,
+        redTexture);
+
+    shadowMap->resize(glm::vec3(5.0f));
+    shadowMap->translate(glm::vec3(3.0f, 1.0f, 0.0f));
+    shadowMap->rotate(glm::degrees(45.0f), glm::vec3(1, 0, 0));
+    app->getCurrentScene().addDrawableObject(shadowMap);
 
     app->getCurrentScene().addDrawableObject(
         ObjectFactory::createAssimpObject(
@@ -58,66 +68,37 @@ int main()
         )
     );
 
-    app->getCurrentScene().addLight(
-        ObjectFactory::createDirectionalLight(
-            app->getNextId(),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            glm::vec3(0.5f, 0.0f, 0.5f)
-        )
-    );
-
-    //PointLight * pl = ObjectFactory::createPointLight(
-    //    app->getNextId(),
-    //    glm::vec3(1.0f, 1.0f, 1.0f)
-    //);
-
-    //pl->setPosition(glm::vec3(5.0f, 0.0f, 10.0f));
-
-    //PointLight * pl2 = ObjectFactory::createPointLight(
-    //    app->getNextId(),
-    //    glm::vec3(3.0f, 1.0f, 1.0f)
-    //);
-
-    //pl2->setPosition(glm::vec3(-6.0f, 0.0f, -8.0f));
-
-    //app->getCurrentScene().addLight(
-    //  pl  
-    //);
-
-    //app->getCurrentScene().addLight(
-    //    pl2
-    //);
-    //radians, 12.5, 17.5
-    SpotLight * sl = ObjectFactory::createSpotLight(
+    SpotLight * spot = ObjectFactory::createSpotLight(
         app->getNextId(),
-        glm::vec3(3.0f, 3.0f, 3.0f),
-        glm::radians(5.0f),
-        glm::radians(6.5f),
+        glm::vec3(5.0f, 5.0f, 5.0f),
+        glm::radians(12.5f),
+        glm::radians(20.0f),
         glm::vec3(0.0f, 1.0f, 0.0f)
     );
-    sl->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
-    app->getCurrentScene().addLight(sl);
-
-    app->getCurrentScene().addDrawableObject(ObjectFactory::createSphere(app->getNextId(), app->getBasicShaderId(), redTexture));
-
+    spot->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
     
-        
+    app->getCurrentScene().addShadowLight(spot);
     
-
-    //app->getCurrentScene().addSphere().translate(glm::vec3(2.0f, 0.0f, 2.0f));
-    //app->getCurrentScene().addSphere().translate(glm::vec3(2.0f, 0.0f, -2.0f));
-    //app->getCurrentScene().addSphere().translate(glm::vec3(-2.0f, 0.0f, -2.0f));
-    //app->getCurrentScene().addSphere().translate(glm::vec3(-2.0f, 0.0f, 2.0f));
-    //app->getCurrentScene().addSphere().resize(glm::vec3(20.0f, 20.0f, 20.0f));
-    //app->getCurrentScene().addSphere(new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
-    //app->getCurrentScene().addSphere(new Shader("VertexShader.glsl", "FragmentShader2.glsl")).translate(glm::vec3(2.0f, 0.0f, 2.0f));
-
     
+    //app->getCurrentScene().addShadowLight(ObjectFactory::createDirectionalLight(
+    //    app->getNextId(),
+    //    glm::vec3(5.0f, 5.0f, 5.0f),
+    //    glm::vec3(0.0f, 1.0f, 0.0f)
+    //));
 
-    //PlainObject * plain = &app->getCurrentScene().addPlainObject();
-    //plain->translate(glm::vec3(0.0f, -10.0f, 0.0f));
-    //plain->resize(glm::vec3(10.0f, 10.0f, 10.0f));
-    
+    DrawableObject* d = ObjectFactory::createSphere(app->getNextId(), app->getBasicShaderId(), redTexture);
+    d->translate(glm::vec3(0.0f, 9.0f, 0.0f));
+
+    DrawableObject* d2 = ObjectFactory::createSphere(app->getNextId(), app->getBasicShaderId(), redTexture);
+    d2->translate(glm::vec3(0.0f, 9.0f, -5.0f));
+
+    DrawableObject* d3 = ObjectFactory::createSphere(app->getNextId(), app->getBasicShaderId(), redTexture);
+    d3->translate(glm::vec3(0.0f, 9.0f, 5.0f));
+
+    app->getCurrentScene().addDrawableObject(d);
+    app->getCurrentScene().addDrawableObject(d2);
+    app->getCurrentScene().addDrawableObject(d3);
+
     app->renderCurrentScene();
 
     delete app;

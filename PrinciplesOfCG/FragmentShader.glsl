@@ -25,7 +25,7 @@ struct Light
 	float power;
 };
 
-out vec4 frag_colour;
+
 
 
 uniform int lightCount;
@@ -36,9 +36,15 @@ in vec3 outFragPos;
 in vec3 outNormalPos;
 
 in vec2 texCoord;
+in vec4 ShadowCoord;
+
 uniform sampler2D textura;
+uniform sampler2D shadowMap;
 
 uniform Light lights[20];
+
+//layout(location = 0) out vec3 color;
+out vec4 frag_colour;
 
 vec3 CalcPointLight(Light light, vec3 normal, vec3 viewDirection, vec3 fragPosition);
 vec3 CalcDirectionalLight(Light light, vec3 normal, vec3 viewDirection);
@@ -47,9 +53,20 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 viewDirection, vec3 fragPositi
 void main()
 {
 
+	float visibility = 1.0;
+
+	float distanceFromLight = texture(shadowMap, ShadowCoord.xy).z;
+	float distanceFromCamera = ShadowCoord.z;
+	bool shadow = false;
+	if (distanceFromLight < distanceFromCamera){
+		visibility = 0.5;
+		shadow = true;
+	}
+
 	vec3 norm = normalize(outNormalPos);
 	vec3 viewDirection = normalize(cameraPosition - outFragPos);
 
+	//textura je cislo texturovaci jednotky
 	vec4 color = texture(textura, texCoord);	
 
 	vec3 result = vec3(0, 0, 0);
@@ -71,7 +88,10 @@ void main()
 			
 	}
 	
-	frag_colour = vec4(result, 1.0) * color;
+	frag_colour = (vec4(result, 1.0) * color) * visibility;
+	if (shadow)
+		frag_colour = vec4(0.0, 1.0, 0.0, 1.0);
+
 }
 
 vec3 CalcDirectionalLight(Light light, vec3 normal, vec3 viewDirection)

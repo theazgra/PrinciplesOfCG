@@ -3,8 +3,11 @@ out vec4 frag_colour;
 
 
 //in vec3 vp_color;
-
+uniform sampler2D shadowMap;
+in vec2 texCoord;
+in vec4 ShadowCoord;
 
 void main () {
-  frag_colour = vec4 (0.5f, 0.0, 0.5f, 1.0);
+	
+	frag_colour =  texture(shadowMap, ShadowCoord.xy);
 }

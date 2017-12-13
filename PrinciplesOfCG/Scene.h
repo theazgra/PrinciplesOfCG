@@ -24,6 +24,7 @@ private:
 
     void internalSetActiveCamera(Camera*);
     DrawableObject * skyBox = NULL;
+    Light * shadowLight = NULL;
     glm::vec3 oldSkyBoxPosition = glm::vec3(0.0f);
 public:
     Scene(char*, Camera*);
@@ -33,6 +34,7 @@ public:
     void addDrawableObject(DrawableObject * drawableObject);
     void addLight(Light * light);
     void addSkyBox(DrawableObject * drawableObject);
+    void addShadowLight(Light * light);
 
     DrawableObject * getSkybox() const;
 
@@ -50,7 +52,7 @@ public:
 
     void cameraNotify(glm::mat4, glm::mat4, glm::vec3) override;
     void lightNotify(unsigned int lightId, LightStruct lightInfo) override;
-
+    Light& getShadowLight() const;
 };
 
 

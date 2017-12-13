@@ -204,5 +204,11 @@
     <None Include="VSCubeMap.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="FSShadow.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="VSShadow.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

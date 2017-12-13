@@ -14,6 +14,7 @@ SpotLight::SpotLight(int objectId, glm::vec3 intensity, float cutOff, float oute
     this->constant = 1.0f;
     this->linear = 0.09f;
     this->quadratic = 0.032f;
+    
 }
 
 SpotLight::~SpotLight()

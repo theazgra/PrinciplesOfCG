@@ -102,9 +102,18 @@ void Scene::addLight(Light * light)
     light->forceUpdate();
 }
 
+
+void Scene::addShadowLight(Light * light)
+{
+    this->lights.push_back(light);
+    light->registerObserver(*this);
+    light->forceUpdate();
+    this->shadowLight = light;
+}
+
 void Scene::addSkyBox(DrawableObject * drawableObject)
 {
-    this->drawableObjects.push_back(drawableObject);
+    this->drawableObjects.push_back(drawableObject);    
     this->skyBox = drawableObject;
     this->skyBox->setIsSkyBox(true);
 
@@ -216,6 +225,12 @@ void Scene::lightNotify(unsigned int lightId, LightStruct lightInfo)
         );
     }
 }
+
+Light & Scene::getShadowLight() const
+{
+    return *this->shadowLight;
+}
+
 
 
 

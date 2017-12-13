@@ -25,16 +25,23 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
 
     this->textureCoordPtr = glGetUniformLocation(this->shaderProgram, "textura");
     this->lightCount = glGetUniformLocation(this->shaderProgram, "lightCount");
+    this->shadowTexturePtr = glGetUniformLocation(this->shaderProgram, "shadowMap");
+
+    this->depthViewMatrix = glGetUniformLocation(this->shaderProgram, "depthViewMatrix");
+    this->depthProjectionMatrix = glGetUniformLocation(this->shaderProgram, "depthProjectionMatrix");
 }
 
 void Shader::useProgram() const 
 {
     glUseProgram(this->shaderProgram);
+    glUniform1i(this->shadowTexturePtr, 0);
+    applyCamera();
+    applyLight();
 }
 
 void Shader::modelTransform(DrawableObject & object) const
 {
-    glUniformMatrix4fv(this->modelTransformMatrix, 1, GL_FALSE, &object.getObjectMatrix()[0][0]);
+    glUniformMatrix4fv(this->modelTransformMatrix, 1, GL_FALSE, &object.getObjectMatrix()[0][0]);            
 }
 
 
@@ -103,6 +110,12 @@ void Shader::applyTexture(unsigned int textureUnit) const
     glUniform1i(this->textureCoordPtr, textureUnit);
 }
 
+void Shader::setDepthMatrices(glm::mat4 depthViewMatrix, glm::mat4 depthProjectionMatrix)
+{
+    glUniformMatrix4fv(this->depthProjectionMatrix, 1, GL_FALSE, &depthProjectionMatrix[0][0]);
+    glUniformMatrix4fv(this->depthViewMatrix, 1, GL_FALSE, &depthViewMatrix[0][0]);
+}
+
 void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
     this->cameraViewMatrix = viewMatrix;
@@ -113,18 +126,6 @@ void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix,
 void Shader::setLightParameters(unsigned int lightId, LightStruct lightInfo)
 {
     this->lights[lightId] = lightInfo;
-    //switch (lightInfo.lightType)
-    //{
-    //case POINT_LIGHT:
-    //    this->pointLights[lightId] = lightInfo;
-    //    break;
-    //case DIRECTIONAL_LIGHT:
-    //    this->directionalLights[lightId] = lightInfo;
-    //    break;
-    //case SPOT_LIGHT:
-    //    this->spotLights[lightId] = lightInfo;
-    //    break;
-    //}
 }
 
 Shader::~Shader()

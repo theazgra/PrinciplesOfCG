@@ -24,4 +24,5 @@ LightStruct DirectionalLight::getLightInfo()
     lightInfo.power = this->power;
 
     return lightInfo;
+
 }

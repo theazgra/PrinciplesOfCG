@@ -22,6 +22,7 @@ private:
     std::map<int, Shader*> shaders;
     std::vector<unsigned int> textures;
     unsigned int BASIC_SHADER_ID = 0;
+    unsigned int SHADOW_SHADER_ID;
 
 
     
@@ -42,8 +43,10 @@ public:
 
     Shader const& getBasicShader() const;
     Shader * getShader(unsigned int);
+    Shader * getShadowShader();
     unsigned int getBasicShaderId() const;
     unsigned int addShader(Shader*);
+    unsigned int addShadowShader(Shader*);
     unsigned int addTexture(const char* textureFile);
     unsigned int addSkyBoxTexture(const char* x, const char* nx, const char* y, const char* ny, const char* z, const char* nz);
 

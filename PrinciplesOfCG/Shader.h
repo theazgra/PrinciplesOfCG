@@ -18,6 +18,9 @@ private:
     GLuint viewMatrix;
     GLuint projectionMatrix;
     GLuint cameraPositionPtr;
+
+    GLuint depthViewMatrix;
+    GLuint depthProjectionMatrix;
     
     GLuint lightPositionPtr;
     GLuint lightIntensityPtr;
@@ -25,8 +28,11 @@ private:
     GLuint lightPowerPtr;
 
     GLuint lightCount;
+    GLuint shadowTexturePtr;
 
     GLuint textureCoordPtr;
+
+    GLuint depthMatrix;
 
     glm::mat4 cameraViewMatrix;
     glm::mat4 cameraProjectionMatrix;
@@ -39,6 +45,8 @@ private:
     glm::vec2 textureCoord;
 
     std::map<GLuint, LightStruct> lights;
+    void applyCamera() const;
+    void applyLight() const;
 public:
     Shader();
     Shader(const char* vertex_shader_file, const char* fragment_shader_file);
@@ -47,11 +55,10 @@ public:
 
     void useProgram() const;
     void modelTransform(DrawableObject& object) const;
-    void applyCamera() const;
-    void applyLight() const;
     void applyTexture(unsigned int textureUnit = 0) const;
+    void setDepthMatrices(glm::mat4 depthViewMatrix, glm::mat4 depthProjectionMatrix);
 
-    void setCameraMatrices(glm::mat4, glm::mat4, glm::vec3); 
-    void setLightParameters(unsigned int lightId, LightStruct lightInfo);    
+    void setCameraMatrices(glm::mat4 view, glm::mat4 projection, glm::vec3 cameraPosition); 
+    void setLightParameters(unsigned int lightId, LightStruct lightInfo);   
 };
 
