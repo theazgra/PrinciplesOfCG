@@ -21,9 +21,9 @@ mat4 biasMatrix;
 
 
 void main () {
-	biasMatrix[0] = vec4(0.5, 0.0, 0.0, 0.0);
-	biasMatrix[1] = vec4(0.0, 0.5, 0.0, 0.0);
-	biasMatrix[2] = vec4(0.0, 0.0, 0.5, 0.0);
+	biasMatrix[0] = vec4(0.5, 0.0, 0.0, 0.5);
+	biasMatrix[1] = vec4(0.0, 0.5, 0.0, 0.5);
+	biasMatrix[2] = vec4(0.0, 0.0, 0.5, 0.5);
 	biasMatrix[3] = vec4(0.5, 0.5, 0.5, 1.0);
 
 
