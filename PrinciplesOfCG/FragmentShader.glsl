@@ -26,8 +26,6 @@ struct Light
 };
 
 
-
-
 uniform int lightCount;
 
 uniform vec3 cameraPosition;
@@ -43,7 +41,6 @@ uniform sampler2D shadowMap;
 
 uniform Light lights[20];
 
-//layout(location = 0) out vec3 color;
 out vec4 frag_colour;
 
 vec3 CalcPointLight(Light light, vec3 normal, vec3 viewDirection, vec3 fragPosition);

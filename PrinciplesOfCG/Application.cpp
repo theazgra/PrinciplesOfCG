@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Application.h"
+#include "ObjectFactory.h"
 
 static Application* instance;
 
@@ -252,6 +253,7 @@ unsigned int Application::getNextId()
     return ++this->nextObjectId;
 }
 
+
 Shader const& Application::getBasicShader() const
 {
     return *(shaders.at(BASIC_SHADER_ID));
@@ -321,4 +323,97 @@ unsigned int Application::addSkyBoxTexture(const char* x, const char* nx, const 
     this->textures.push_back(textureId);
 
     return textureId;
+}
+
+
+void Application::setUpBasicScene()
+{
+    ///Create scene
+    createScene("Basic scene",
+        new Camera(0, glm::vec3(10.0f, 12.0f, -4.0f), glm::vec3(0.0f, 4.0f, 0.0f)));
+
+    
+    currentScene->addCamera(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 2.0f));
+
+    addShadowShader(new Shader("VSShadow.glsl", "FSShadow.glsl"));
+    unsigned int skyBoxShader = addShader(new Shader("VSCubeMap.glsl", "FSCubeMap.glsl"));
+    unsigned int shadowTexShader = addShader(new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
+    unsigned int grassTexture = addTexture("tex.jpg");
+    unsigned int houseTexture = addTexture("test.png");
+    unsigned int redTexture = addTexture("mine.jpg");
+    unsigned int skyBoxTexture = addSkyBoxTexture(
+        "sky/cubemap/posx.jpg",
+        "sky/cubemap/negx.jpg",
+        "sky/cubemap/posy.jpg",
+        "sky/cubemap/negy.jpg",
+        "sky/cubemap/posz.jpg",
+        "sky/cubemap/negz.jpg"
+    );
+
+    PlainObject * plain = ObjectFactory::createPlain(
+        getNextId(),
+        getBasicShaderId(),
+        grassTexture);
+
+    plain->resize(glm::vec3(50.0f));
+    currentScene->addDrawableObject(plain);
+
+    PlainObject * shadowMap = ObjectFactory::createPlain(
+        getNextId(),
+        shadowTexShader,
+        redTexture);
+
+    shadowMap->resize(glm::vec3(5.0f));
+    shadowMap->translate(glm::vec3(3.0f, 1.0f, 0.0f));
+    shadowMap->rotate(glm::degrees(45.0f), glm::vec3(1, 0, 0));
+    currentScene->addDrawableObject(shadowMap);
+
+    currentScene->addDrawableObject(
+        ObjectFactory::createAssimpObject(
+            "test.obj",
+            getNextId(),
+            getBasicShaderId(),
+            houseTexture));
+
+    currentScene->addSkyBox(
+        ObjectFactory::createAssimpObject(
+            "sky/skybox.obj",
+            getNextId(),
+            skyBoxShader,
+            skyBoxTexture
+        )
+    );
+
+    //SpotLight * spot = ObjectFactory::createSpotLight(
+    //    getNextId(),
+    //    glm::vec3(5.0f, 5.0f, 5.0f),
+    //    glm::radians(12.5f),
+    //    glm::radians(20.0f),
+    //    glm::vec3(0.0f, 2.0f, 0.1f)
+    //);
+    //spot->setPosition(glm::vec3(0.0f, 18.0f, 0.0f));
+    //currentScene->addShadowLight(spot);
+    //currentScene->addCamera(spot->getWorldPosition(), spot->getLightInfo().direction);
+
+
+    currentScene->addShadowLight(ObjectFactory::createDirectionalLight(
+        getNextId(),
+        glm::vec3(1.5f, 1.5f, 1.5f), //glm::vec3(5.0f, 5.0f, 5.0f)
+        glm::vec3(20.0f, 5.0f, 0.0f)
+    ));
+
+    DrawableObject* d = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
+    d->translate(glm::vec3(0.0f, 8.5f, 0.0f));
+
+    DrawableObject* d2 = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
+    d2->translate(glm::vec3(0.0f, 8.5f, -5.0f));
+
+    DrawableObject* d3 = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
+    d3->translate(glm::vec3(0.0f, 8.5f, 5.0f));
+
+    currentScene->addDrawableObject(d);
+    currentScene->addDrawableObject(d2);
+    currentScene->addDrawableObject(d3);
+
+    renderCurrentScene();
 }

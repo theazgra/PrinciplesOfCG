@@ -29,7 +29,7 @@ public:
     float getAmbientStrength() const;
     float getSpecularStrength() const;
 
-    void move(glm::vec3 vector) override;
+    virtual void move(glm::vec3 vector) override;
     void setPosition(glm::vec3 position) override;
 
     void forceUpdate();

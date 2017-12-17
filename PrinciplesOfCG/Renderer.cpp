@@ -6,22 +6,34 @@ Renderer::Renderer(GLFWwindow& window)
 {
     this->window = &window;
 
-    GLint shadowTextureWidth = 1024;
-    GLint shadowTextureHeight = 1024;
+    int width, height;
+    glfwGetWindowSize(&window, &width, &height);
+
+    GLint shadowTextureWidth = width;// 1024;
+    GLint shadowTextureHeight = height;// 1024;
     this->shadowFrameBuffer = 0;
 
-    glGenFramebuffers(1, &this->shadowFrameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, this->shadowFrameBuffer);
+    this->offsetMatrix = glm::mat4(
+        glm::vec4(0.5f, 0.0f, 0.0f, 0.0f),
+        glm::vec4(0.0f, 0.5f, 0.0f, 0.0f),
+        glm::vec4(0.0f, 0.0f, 0.5f, 0.0f),
+        glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)
+    );
 
 
     glGenTextures(1, &depthTexture);
     glBindTexture(GL_TEXTURE_2D, depthTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, shadowTextureWidth, shadowTextureHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 
+
+    glGenFramebuffers(1, &this->shadowFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->shadowFrameBuffer);
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture, 0);
     glDrawBuffer(GL_NONE);
 
@@ -50,57 +62,47 @@ void Renderer::reportRenderTime()
 void Renderer::shadowPass(Scene & scene)
 {
     glBindFramebuffer(GL_FRAMEBUFFER, this->shadowFrameBuffer);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
     LightStruct shadowProducingLight = scene.getShadowLight().getLightInfo();
+    glm::mat4 depthModelMatrix = glm::mat4(1.0);
+    glm::mat4 depthProjectionMatrix;
+    glm::mat4 depthViewMatrix;
 
     if (shadowProducingLight.lightType == SPOT_LIGHT)
     {
-        /*
-        this->target = glm::vec3(
-        target.x - worldPosition.x,
-        target.y - worldPosition.y,
-        target.z - worldPosition.z
-        );
-        */
+        Camera lightCam(0, shadowProducingLight.position, shadowProducingLight.direction);
+        depthViewMatrix = lightCam.getViewMatrix();
+        depthProjectionMatrix = lightCam.getProjectionMatrix();
 
-        glm::vec3 tar = glm::vec3(
-            0 - shadowProducingLight.position.x,
-            1 - shadowProducingLight.position.y,
-            0 - shadowProducingLight.position.z
-            );
-
-        this->depthProjectionMatrix = glm::perspective<float>(glm::radians(45.0f), 1.0f, 2.0f, 50.0f);
-        //this->depthViewMatrix = glm::lookAt(
-        //    shadowProducingLight.position,
-        //    shadowProducingLight.position - shadowProducingLight.direction,
-        //    glm::vec3(0, 1, 0));
-
-        this->depthViewMatrix = glm::lookAt(
-            glm::vec3(0, 15, 0),
-            glm::vec3(0, 15, 0) + tar,
-            glm::vec3(0, 1, 0));
+        //glm::vec3 lightInvDir = glm::vec3(0.0f, -2, 0);
+        //glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+        //glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     }
     else
     {
-        this->depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-        this->depthViewMatrix = glm::lookAt(scene.getShadowLight().getLightInfo().direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+        Camera lightCam(0, shadowProducingLight.position, shadowProducingLight.direction);
 
+        //printf("pos: x: %f y: %f z: %f \n", shadowProducingLight.position.x, shadowProducingLight.position.y, shadowProducingLight.position.z);
+        //printf("target: x: %f y: %f z: %f \n", shadowProducingLight.target.x, shadowProducingLight.target.y, shadowProducingLight.target.z);
+        depthViewMatrix = lightCam.getViewMatrix();
     }
 
-
-
-
-    Application::getInstance()->getShadowShader()->setCameraMatrices(
-        this->depthViewMatrix,
-        this->depthProjectionMatrix,
-        glm::vec3());
+    depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
     Application::getInstance()->getShadowShader()->useProgram();
 
+    DrawableObject tmp(0);
+    
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
         if (!scene.getDrawableObjects().at(i)->isSkyBox())
         {
-            Application::getInstance()->getShadowShader()->modelTransform(*(scene.getDrawableObjects().at(i)));
+            Application::getInstance()->getShadowShader()->setDepthMVP(depthMVP);
+
+            //Application::getInstance()->getShadowShader()->modelTransform(*(scene.getDrawableObjects().at(i)));
+            Application::getInstance()->getShadowShader()->modelTransform(tmp);
             glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
 
             if (scene.getDrawableObjects().at(i)->hasIndices())
@@ -125,7 +127,6 @@ void Renderer::shadowPass(Scene & scene)
     glBindTexture(GL_TEXTURE_2D, this->depthTexture);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 }
 
 void Renderer::renderScene(Scene & scene)
@@ -143,6 +144,9 @@ void Renderer::renderScene(Scene & scene)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shadowPass(scene);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         renderDrawableObjects(scene);
 
 
@@ -162,10 +166,8 @@ void Renderer::renderObject(DrawableObject & obj)
         Application::getInstance()->getShader(objectShaderId)->useProgram();
     }
 
-    Application::getInstance()->getShader(objectShaderId)->setDepthMatrices(
-        this->depthViewMatrix,
-        this->depthProjectionMatrix
-    );
+    glm::mat4 DepthBiasMVP = this->offsetMatrix * depthMVP;
+    Application::getInstance()->getShader(objectShaderId)->setDepthBiasMVP(DepthBiasMVP);
 
     Application::getInstance()->getShader(objectShaderId)->applyTexture(
         obj.getTextureId());

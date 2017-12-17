@@ -10,6 +10,7 @@ struct LightStruct
 
     glm::vec3 position;
     glm::vec3 direction;
+    glm::vec3 target;
 
     float cutOff;
     float outerCutOff;

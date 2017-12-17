@@ -3,18 +3,17 @@
 
 
 //radians, 12.5, 17.5
-SpotLight::SpotLight(int objectId, glm::vec3 intensity, float cutOff, float outerCutOff, glm::vec3 direction)
+SpotLight::SpotLight(int objectId, glm::vec3 intensity, float cutOff, float outerCutOff, glm::vec3 target)
     : Light(objectId, intensity)
 {
-    this->direction = direction;
+    this->direction = target - this->Light::worldPosition;
 
     this->cutOff = cutOff;
     this->outerCutOff = outerCutOff;
 
-    this->constant = 1.0f;
-    this->linear = 0.09f;
-    this->quadratic = 0.032f;
-    
+    this->constant = 0.5f;
+    this->linear = 0.06f;
+    this->quadratic = 0.022f;
 }
 
 SpotLight::~SpotLight()
@@ -44,6 +43,18 @@ void SpotLight::setLinearFallof(float value)
 void SpotLight::setQuadraticFallof(float value)
 {
     this->quadratic = value;
+}
+
+void SpotLight::setTarget(glm::vec3 target)
+{
+    this->target = target;
+}
+
+void SpotLight::move(glm::vec3 delta)
+{
+    this->direction += delta;
+    notifyObservers(getObjectId(), getLightInfo());
+    //forceUpdate();
 }
 
 float SpotLight::getCutOff() const
@@ -76,8 +87,9 @@ LightStruct SpotLight::getLightInfo()
     LightStruct lightInfo;
     lightInfo.lightType = SPOT_LIGHT;
 
-    lightInfo.position = this->worldPosition;
+    lightInfo.position = this->Light::worldPosition;
     lightInfo.direction = this->direction;
+    lightInfo.target = this->target;
 
     lightInfo.cutOff = this->cutOff;
     lightInfo.outerCutOff = this->outerCutOff;

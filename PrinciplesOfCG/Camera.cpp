@@ -69,8 +69,8 @@ void Camera::moveCamera(Direction direction)
         break;
     }
 
-    printf("Current camera position: [x: %f; y: %f, z: %f]\n",
-        this->worldPosition.x, this->worldPosition.y, this->worldPosition.z);
+    //printf("Current camera position: [x: %f; y: %f, z: %f]\n",
+    //    this->worldPosition.x, this->worldPosition.y, this->worldPosition.z);
 
     if (direction != None)
     {

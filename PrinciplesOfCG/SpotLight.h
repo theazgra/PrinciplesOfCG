@@ -1,10 +1,12 @@
 #pragma once
 #include "Light.h"
+
 class SpotLight :
     public Light
 {
 private:
     glm::vec3 direction;
+    glm::vec3 target;
 
     float cutOff;
     float outerCutOff;
@@ -13,7 +15,7 @@ private:
     float linear;
     float quadratic;
 public:
-    SpotLight(int objectId, glm::vec3 intensity, float cutOff, float outerCutOff, glm::vec3 direction);
+    SpotLight(int objectId, glm::vec3 intensity, float cutOff, float outerCutOff, glm::vec3 target);
     ~SpotLight();
 
 
@@ -22,6 +24,9 @@ public:
     void setConstantFallof(float value);
     void setLinearFallof(float value);
     void setQuadraticFallof(float value);
+    void setTarget(glm::vec3 target);
+
+    void move(glm::vec3 delta) override;
 
     float getCutOff() const;
     float getOuterCutOff() const;

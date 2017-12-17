@@ -41,7 +41,7 @@ public:
     std::vector<DrawableObject*> const& getDrawableObjects() const;
     std::vector<Light*> & getLights();
 
-    Camera& addCamera(glm::vec3, glm::vec3);
+    Camera& addCamera(glm::vec3 worldPos, glm::vec3 targetPos);
     void setActiveCamera(unsigned int cameraId);
     std::vector<Camera*> const& getCameras() const;
     Camera const& getActiveCamera() const;

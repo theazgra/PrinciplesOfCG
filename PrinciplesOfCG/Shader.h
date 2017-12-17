@@ -29,6 +29,8 @@ private:
 
     GLuint lightCount;
     GLuint shadowTexturePtr;
+    GLuint shadowVP;
+    GLuint depthMVP;
 
     GLuint textureCoordPtr;
 
@@ -56,9 +58,10 @@ public:
     void useProgram() const;
     void modelTransform(DrawableObject& object) const;
     void applyTexture(unsigned int textureUnit = 0) const;
-    void setDepthMatrices(glm::mat4 depthViewMatrix, glm::mat4 depthProjectionMatrix);
 
     void setCameraMatrices(glm::mat4 view, glm::mat4 projection, glm::vec3 cameraPosition); 
     void setLightParameters(unsigned int lightId, LightStruct lightInfo);   
+    void setDepthBiasMVP(glm::mat4 depthBiasMVP);
+    void setDepthMVP(glm::mat4 depthMVP);
 };
 

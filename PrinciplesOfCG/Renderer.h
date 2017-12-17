@@ -19,8 +19,9 @@ private:
 
     GLuint shadowFrameBuffer; 
     GLuint depthTexture;
-    glm::mat4 depthViewMatrix;
-    glm::mat4 depthProjectionMatrix;
+    
+    glm::mat4 depthMVP;
+    glm::mat4 offsetMatrix;
 public:
     Renderer(GLFWwindow&);
     ~Renderer();

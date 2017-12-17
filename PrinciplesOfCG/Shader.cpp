@@ -29,6 +29,8 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
 
     this->depthViewMatrix = glGetUniformLocation(this->shaderProgram, "depthViewMatrix");
     this->depthProjectionMatrix = glGetUniformLocation(this->shaderProgram, "depthProjectionMatrix");
+    this->shadowVP = glGetUniformLocation(this->shadowVP, "shadowVP");
+    this->depthMVP = glGetUniformLocation(this->shadowVP, "depthMVP");
 }
 
 void Shader::useProgram() const 
@@ -110,12 +112,6 @@ void Shader::applyTexture(unsigned int textureUnit) const
     glUniform1i(this->textureCoordPtr, textureUnit);
 }
 
-void Shader::setDepthMatrices(glm::mat4 depthViewMatrix, glm::mat4 depthProjectionMatrix)
-{
-    glUniformMatrix4fv(this->depthProjectionMatrix, 1, GL_FALSE, &depthProjectionMatrix[0][0]);
-    glUniformMatrix4fv(this->depthViewMatrix, 1, GL_FALSE, &depthViewMatrix[0][0]);
-}
-
 void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
     this->cameraViewMatrix = viewMatrix;
@@ -126,6 +122,16 @@ void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix,
 void Shader::setLightParameters(unsigned int lightId, LightStruct lightInfo)
 {
     this->lights[lightId] = lightInfo;
+}
+
+void Shader::setDepthBiasMVP(glm::mat4 depthBiasMVP)
+{
+    glUniformMatrix4fv(this->shadowVP, 1, GL_FALSE, &depthBiasMVP[0][0]);
+}
+
+void Shader::setDepthMVP(glm::mat4 depthMVP)
+{
+    glUniformMatrix4fv(this->depthMVP, 1, GL_FALSE, &depthMVP[0][0]);
 }
 
 Shader::~Shader()
