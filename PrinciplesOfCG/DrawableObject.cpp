@@ -56,7 +56,7 @@ DrawableObject::DrawableObject(int objectId, std::vector<AssimpVertex> data, std
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), (GLvoid*)0);                     //position
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), (GLvoid*)(sizeof(float) * 3));   //normals
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), (GLvoid*)(sizeof(float) * 6));   //UVs
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), (GLvoid*)(sizeof(float) * 8));   //tangens
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(AssimpVertex), (GLvoid*)(sizeof(float) * 8));   //tangents
 
     //indices
     glGenBuffers(1, &this->IBO);
@@ -107,6 +107,11 @@ unsigned int DrawableObject::getTextureId() const
     return this->textureId;
 }
 
+unsigned int DrawableObject::getNormalTextureId() const
+{
+    return this->normalTextureId;
+}
+
 void DrawableObject::rotate(float angle, glm::vec3 axis)
 {
     objectMatrix = glm::rotate(objectMatrix, angle, axis);
@@ -152,6 +157,11 @@ void DrawableObject::setIsSkyBox(bool value)
 bool DrawableObject::isSkyBox() const
 {
     return this->skyBox;
+}
+
+void DrawableObject::setNormalTextureId(unsigned int normalTextureId)
+{
+    this->normalTextureId = normalTextureId;
 }
 
 glm::mat4 DrawableObject::getObjectMatrix() const

@@ -50,12 +50,6 @@ void SpotLight::setTarget(glm::vec3 target)
     this->target = target;
 }
 
-void SpotLight::move(glm::vec3 delta)
-{
-    this->direction += delta;
-    notifyObservers(getObjectId(), getLightInfo());
-    //forceUpdate();
-}
 
 float SpotLight::getCutOff() const
 {

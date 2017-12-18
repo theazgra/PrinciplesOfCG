@@ -26,7 +26,6 @@ public:
     void setQuadraticFallof(float value);
     void setTarget(glm::vec3 target);
 
-    void move(glm::vec3 delta) override;
 
     float getCutOff() const;
     float getOuterCutOff() const;

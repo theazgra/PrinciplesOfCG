@@ -147,6 +147,17 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     Direction direction = None;
     switch (key)
     {
+    case GLFW_KEY_TAB:
+        tabCount++;
+        if (tabCount == 2) 
+        {
+            this->moveCamera = !this->moveCamera;
+            printf("Switched to %s moving mode.\n", moveCamera ? "camera" : "shadow producing light");
+            tabCount = 0;
+        }
+        
+        break;
+
     case GLFW_KEY_UP:
         direction = Forward;
         break;
@@ -168,7 +179,36 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     }
     if (direction != None)
     {
-        this->currentScene->getActiveCameraRef().moveCamera(direction);
+        if (!moveCamera) {
+            switch (direction)
+            {
+            case Up:
+                currentScene->getShadowLight()->move(glm::vec3(0, 0.2, 0));
+                break;
+            case Down:
+                currentScene->getShadowLight()->move(glm::vec3(0, -0.2, 0));
+                break;
+            case Left:
+                currentScene->getShadowLight()->move(glm::vec3(-0.2, 0.0, 0));
+                break;
+            case Right:
+                currentScene->getShadowLight()->move(glm::vec3(0.2, 0.0, 0));
+                break;
+            case Forward:
+                currentScene->getShadowLight()->move(glm::vec3(0, 0.0, -0.2));
+                break;
+            case Backward:
+                currentScene->getShadowLight()->move(glm::vec3(0, 0.2, 0.2));
+                break;
+            default:
+                break;
+
+            }
+        }
+        else
+        {
+            this->currentScene->getActiveCameraRef().moveCamera(direction);
+        }
     }
 
     if (mods == GLFW_MOD_CONTROL && key == GLFW_KEY_R)
@@ -186,8 +226,6 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     }
 
     this->currentScene->getActiveCameraRef().forceUpdate();
-
-
 }
 
 void Application::window_size_callback(GLFWwindow* window, int width, int height) {
@@ -195,7 +233,6 @@ void Application::window_size_callback(GLFWwindow* window, int width, int height
 }
 
 void Application::cursor_pos_callback(GLFWwindow* window, double mouseX, double mouseY) {
-    //printf("cursor_pos_callback %d, %d \n", (int)mouseX, (int)mouseY);
 
     if (enableLookingAroud)
     {
@@ -328,7 +365,7 @@ unsigned int Application::addSkyBoxTexture(const char* x, const char* nx, const 
 
 void Application::setUpBasicScene()
 {
-    ///Create scene
+    //Create scene
     createScene("Basic scene",
         new Camera(0, glm::vec3(10.0f, 12.0f, -4.0f), glm::vec3(0.0f, 4.0f, 0.0f)));
 
@@ -340,7 +377,10 @@ void Application::setUpBasicScene()
     unsigned int shadowTexShader = addShader(new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
     unsigned int grassTexture = addTexture("tex.jpg");
     unsigned int houseTexture = addTexture("test.png");
-    unsigned int redTexture = addTexture("mine.jpg");
+    unsigned int redTexture = addTexture("mine.png");
+    unsigned int cylinderTexture = addTexture("normal/diffuse.bmp");
+    unsigned int houseNormal = addTexture("normal/houseNormal.png");
+    //unsigned int cylinderNormal = addTexture("normal/cylinder_normal.bmp");
     unsigned int skyBoxTexture = addSkyBoxTexture(
         "sky/cubemap/posx.jpg",
         "sky/cubemap/negx.jpg",
@@ -361,19 +401,29 @@ void Application::setUpBasicScene()
     PlainObject * shadowMap = ObjectFactory::createPlain(
         getNextId(),
         shadowTexShader,
-        redTexture);
+        0);
 
     shadowMap->resize(glm::vec3(5.0f));
     shadowMap->translate(glm::vec3(3.0f, 1.0f, 0.0f));
     shadowMap->rotate(glm::degrees(45.0f), glm::vec3(1, 0, 0));
     currentScene->addDrawableObject(shadowMap);
 
-    currentScene->addDrawableObject(
-        ObjectFactory::createAssimpObject(
-            "test.obj",
-            getNextId(),
-            getBasicShaderId(),
-            houseTexture));
+    DrawableObject * house = ObjectFactory::createAssimpObject("test.obj",getNextId(),getBasicShaderId(),houseTexture);
+    
+    house->setNormalTextureId(houseNormal);    
+    currentScene->addDrawableObject(house);
+
+
+    DrawableObject * cylinder = ObjectFactory::createAssimpObject(
+        "normal/cylinder.obj",
+        getNextId(),
+        getBasicShaderId(),
+        cylinderTexture);
+
+    cylinder->resize(glm::vec3(1, 5, 1));
+    cylinder->translate(glm::vec3(-15.0f, 0.0f, 0.0f));
+    //cylinder->setNormalTextureId(cylinderNormal);
+    currentScene->addDrawableObject(cylinder);
 
     currentScene->addSkyBox(
         ObjectFactory::createAssimpObject(
@@ -384,26 +434,28 @@ void Application::setUpBasicScene()
         )
     );
 
-    //SpotLight * spot = ObjectFactory::createSpotLight(
-    //    getNextId(),
-    //    glm::vec3(5.0f, 5.0f, 5.0f),
-    //    glm::radians(12.5f),
-    //    glm::radians(20.0f),
-    //    glm::vec3(0.0f, 2.0f, 0.1f)
-    //);
-    //spot->setPosition(glm::vec3(0.0f, 18.0f, 0.0f));
-    //currentScene->addShadowLight(spot);
-    //currentScene->addCamera(spot->getWorldPosition(), spot->getLightInfo().direction);
-
-
-    currentScene->addShadowLight(ObjectFactory::createDirectionalLight(
+    SpotLight * spot = ObjectFactory::createSpotLight(
         getNextId(),
-        glm::vec3(1.5f, 1.5f, 1.5f), //glm::vec3(5.0f, 5.0f, 5.0f)
-        glm::vec3(20.0f, 5.0f, 0.0f)
-    ));
+        glm::vec3(5.0f, 5.0f, 5.0f) * 2.0f,
+        glm::radians(12.5f),
+        glm::radians(20.0f),
+        glm::vec3(-37, -9, 0.02)
+        //glm::vec3(-15.0f, -0.5f, 0.0f)
+    );
+    //spot->setPosition(glm::vec3(0.0f, 18.0f, 0.0f));
+    spot->setPosition(glm::vec3(-27.0f, 12.0f, 0.04f));
+    currentScene->addShadowLight(spot);
+    currentScene->addCamera(spot->getWorldPosition(), spot->getLightInfo().direction);
+
+
+    //currentScene->addShadowLight(ObjectFactory::createDirectionalLight(
+    //    getNextId(),
+    //    glm::vec3(1.5f, 1.5f, 1.5f), //glm::vec3(5.0f, 5.0f, 5.0f)
+    //    glm::vec3(20.0f, 5.0f, 0.0f)
+    //));
 
     DrawableObject* d = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
-    d->translate(glm::vec3(0.0f, 8.5f, 0.0f));
+    d->translate(glm::vec3(0.0f, 6.5f, 0.0f));
 
     DrawableObject* d2 = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
     d2->translate(glm::vec3(0.0f, 8.5f, -5.0f));

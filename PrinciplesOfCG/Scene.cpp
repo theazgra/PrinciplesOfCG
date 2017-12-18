@@ -226,9 +226,9 @@ void Scene::lightNotify(unsigned int lightId, LightStruct lightInfo)
     }
 }
 
-Light & Scene::getShadowLight() const
+Light * Scene::getShadowLight()
 {
-    return *this->shadowLight;
+    return this->shadowLight;
 }
 
 

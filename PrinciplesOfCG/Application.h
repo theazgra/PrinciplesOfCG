@@ -27,6 +27,8 @@ private:
 
     
     bool enableLookingAroud = false;
+    bool moveCamera = true;
+    int tabCount = 0;
 
     void bindCallbacks();
 public:

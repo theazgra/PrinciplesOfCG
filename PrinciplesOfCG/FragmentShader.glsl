@@ -32,12 +32,15 @@ uniform vec3 cameraPosition;
 
 in vec3 outFragPos;
 in vec3 outNormalPos;
+in vec3 outTangent;
 
 in vec2 texCoord;
 in vec4 ShadowCoord;
 
 uniform sampler2D textura;
 uniform sampler2D shadowMap;
+uniform sampler2D normalTexture;
+uniform int hasNormalTexture;
 
 uniform Light lights[20];
 
@@ -46,9 +49,15 @@ out vec4 frag_colour;
 vec3 CalcPointLight(Light light, vec3 normal, vec3 viewDirection, vec3 fragPosition);
 vec3 CalcDirectionalLight(Light light, vec3 normal, vec3 viewDirection);
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 viewDirection, vec3 fragPosition);
+vec3 calcNormal();
 
 void main()
 {
+	vec3 norm = normalize(outNormalPos);
+	
+	if (hasNormalTexture == 1){
+		norm = normalize(calcNormal());	
+	}
 
 	float visibility = 1.0;
 
@@ -60,7 +69,8 @@ void main()
 		shadow = true;
 	}
 
-	vec3 norm = normalize(outNormalPos);
+	//if (hasNormalTexture == 1){ shadow = true;}
+	
 	vec3 viewDirection = normalize(cameraPosition - outFragPos);
 
 	//textura je cislo texturovaci jednotky
@@ -89,6 +99,22 @@ void main()
 	if (shadow)
 		frag_colour = vec4(0.0, 1.0, 0.0, 1.0);
 
+}
+
+vec3 calcNormal() {
+    vec3 normal = normalize(outNormalPos);
+    vec3 tangent = normalize(outTangent);
+    
+	//Gram–Schmidt process
+    tangent = normalize(tangent - dot(tangent, normal) * normal);       
+    vec3 bitangent = cross(tangent, normal);
+    vec3 bumpMapNormal = texture(normalTexture, texCoord).xyz;
+    
+	//převod z vektoru barvy o rozsahu <0,1> do vektoru normály <-1,1>
+    bumpMapNormal = 2.0 * bumpMapNormal - vec3(1.0, 1.0, 1.0); 
+    // Transformační  matice TBN
+    mat3 TBN = mat3(tangent, bitangent, normal);   
+    return normalize(TBN * bumpMapNormal);
 }
 
 vec3 CalcDirectionalLight(Light light, vec3 normal, vec3 viewDirection)

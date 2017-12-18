@@ -33,8 +33,9 @@ private:
     GLuint depthMVP;
 
     GLuint textureCoordPtr;
+    GLuint normalTexture;
+    GLuint hasNormalTexture;
 
-    GLuint depthMatrix;
 
     glm::mat4 cameraViewMatrix;
     glm::mat4 cameraProjectionMatrix;
@@ -58,6 +59,7 @@ public:
     void useProgram() const;
     void modelTransform(DrawableObject& object) const;
     void applyTexture(unsigned int textureUnit = 0) const;
+    void applyNormalTexture(unsigned int textureUnit = 0) const;
 
     void setCameraMatrices(glm::mat4 view, glm::mat4 projection, glm::vec3 cameraPosition); 
     void setLightParameters(unsigned int lightId, LightStruct lightInfo);   

@@ -19,6 +19,7 @@ protected:
     
     unsigned int shaderId;
     unsigned int textureId;
+    unsigned int normalTextureId = 0;
     
     std::vector<unsigned int> indices;
     bool hasIndicesBuffer = false;
@@ -36,6 +37,8 @@ public:
     GLuint getVerticesCount();
     unsigned int getShaderId() const;
     unsigned int getTextureId() const;
+    unsigned int getNormalTextureId() const;
+    
 
     void resize(glm::vec3 resizeVector);
     void rotate(float, glm::vec3);
@@ -50,6 +53,7 @@ public:
 
     void setIsSkyBox(bool value);
     bool isSkyBox() const;
+    void setNormalTextureId(unsigned int normalTextureId);
 
 
 };

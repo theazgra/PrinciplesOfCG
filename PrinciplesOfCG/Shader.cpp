@@ -29,8 +29,11 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
 
     this->depthViewMatrix = glGetUniformLocation(this->shaderProgram, "depthViewMatrix");
     this->depthProjectionMatrix = glGetUniformLocation(this->shaderProgram, "depthProjectionMatrix");
-    this->shadowVP = glGetUniformLocation(this->shadowVP, "shadowVP");
-    this->depthMVP = glGetUniformLocation(this->shadowVP, "depthMVP");
+    this->shadowVP = glGetUniformLocation(this->shaderProgram, "shadowVP");
+    this->depthMVP = glGetUniformLocation(this->shaderProgram, "depthMVP");
+
+    this->normalTexture = glGetUniformLocation(this->shaderProgram, "normalTexture");
+    this->hasNormalTexture = glGetUniformLocation(this->shaderProgram, "hasNormalTexture");
 }
 
 void Shader::useProgram() const 
@@ -110,6 +113,12 @@ void Shader::applyLight() const
 void Shader::applyTexture(unsigned int textureUnit) const
 {
     glUniform1i(this->textureCoordPtr, textureUnit);
+}
+
+void Shader::applyNormalTexture(unsigned int textureUnit) const
+{
+    glUniform1i(this->normalTexture, textureUnit);
+    glUniform1i(this->hasNormalTexture, textureUnit != 0 ? 1 : 0);
 }
 
 void Shader::setCameraMatrices(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
