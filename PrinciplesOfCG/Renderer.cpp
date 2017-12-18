@@ -74,7 +74,6 @@ void Renderer::shadowPass(Scene & scene)
         Camera lightCam(0, shadowProducingLight.position, shadowProducingLight.direction);
         depthViewMatrix = lightCam.getViewMatrix();
         depthProjectionMatrix = lightCam.getProjectionMatrix();
-
         //glm::vec3 lightInvDir = glm::vec3(0.0f, -2, 0);
         //depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
         //depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
@@ -84,12 +83,12 @@ void Renderer::shadowPass(Scene & scene)
         depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
         Camera lightCam(0, shadowProducingLight.position, shadowProducingLight.direction);
         depthViewMatrix = lightCam.getViewMatrix();
-
         //printf("pos: x: %f y: %f z: %f \n", shadowProducingLight.position.x, shadowProducingLight.position.y, shadowProducingLight.position.z);
         //printf("target: x: %f y: %f z: %f \n", shadowProducingLight.target.x, shadowProducingLight.target.y, shadowProducingLight.target.z);
     }
 
-    depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+    //depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+    depthVP = depthProjectionMatrix * depthViewMatrix;
 
     
 
@@ -101,9 +100,10 @@ void Renderer::shadowPass(Scene & scene)
         if (!scene.getDrawableObjects().at(i)->isSkyBox())
         {
             Application::getInstance()->getShadowShader()->applyCamera();
-            Application::getInstance()->getShadowShader()->setDepthMVP(depthMVP);
-
+            //Application::getInstance()->getShadowShader()->setDepthMVP(depthMVP);
+            Application::getInstance()->getShadowShader()->setDepthVP(depthVP);
             Application::getInstance()->getShadowShader()->modelTransform(*(scene.getDrawableObjects().at(i)));
+
             //Application::getInstance()->getShadowShader()->modelTransform(tmp);
             glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
 
@@ -168,10 +168,14 @@ void Renderer::renderObject(DrawableObject & obj)
         Application::getInstance()->getShader(objectShaderId)->useProgram();
     }
 
-    glm::mat4 DepthBiasMVP = this->offsetMatrix * depthMVP;
+    //glm::mat4 DepthBiasMVP = this->offsetMatrix * depthMVP;
+    glm::mat4 DepthBiasMVP = this->offsetMatrix * depthVP;
+
     Application::getInstance()->getShader(objectShaderId)->applyCamera();
     Application::getInstance()->getShader(objectShaderId)->applyLight();
-    Application::getInstance()->getShader(objectShaderId)->setDepthBiasMVP(DepthBiasMVP);
+    //Application::getInstance()->getShader(objectShaderId)->setDepthBiasMVP(DepthBiasMVP);
+    Application::getInstance()->getShader(objectShaderId)->setDepthVP(DepthBiasMVP);
+
 
     Application::getInstance()->getShader(objectShaderId)->applyTexture(obj.getTextureId());
     Application::getInstance()->getShader(objectShaderId)->applyNormalTexture(obj.getNormalTextureId());

@@ -143,6 +143,11 @@ void Shader::setDepthMVP(glm::mat4 depthMVP)
     glUniformMatrix4fv(this->depthMVP, 1, GL_FALSE, &depthMVP[0][0]);
 }
 
+void Shader::setDepthVP(glm::mat4 depthVP)
+{
+    glUniformMatrix4fv(glGetUniformLocation(this->shaderProgram, "depthVP"), 1, GL_FALSE, &depthVP[0][0]);
+}
+
 Shader::~Shader()
 {
     deleteShader();

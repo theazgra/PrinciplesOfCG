@@ -65,6 +65,8 @@ public:
     void setDepthBiasMVP(glm::mat4 depthBiasMVP);
     void setDepthMVP(glm::mat4 depthMVP);
 
+    void setDepthVP(glm::mat4 depthVP);
+
     void applyCamera() const;
     void applyLight() const;
 };

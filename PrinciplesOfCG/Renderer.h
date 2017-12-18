@@ -21,6 +21,7 @@ private:
     GLuint depthTexture;
     
     glm::mat4 depthMVP;
+    glm::mat4 depthVP;
     glm::mat4 offsetMatrix;
 public:
     Renderer(GLFWwindow&);

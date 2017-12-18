@@ -10,6 +10,9 @@ uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 depthBiasMVP;
 
+//test
+uniform mat4 depthVP;
+
 out vec3 outFragPos;
 out vec3 outNormalPos;
 out vec3 outTangent;
@@ -24,7 +27,9 @@ void main () {
     outNormalPos = mat3(transpose(inverse(modelMatrix))) * normalPosition;
     outTangent = tangents;
 
-	ShadowCoord = depthBiasMVP * vec4(localPosition,1);
+
+	//ShadowCoord = depthBiasMVP * vec4(localPosition,1);
+    ShadowCoord = depthVP * modelMatrix * vec4(localPosition, 1);
 	
 
     texCoord = vec2(vertexUV.x, 1.0 - vertexUV.y);//vertexUV;

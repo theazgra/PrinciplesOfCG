@@ -439,11 +439,12 @@ void Application::setUpBasicScene()
         glm::vec3(5.0f, 5.0f, 5.0f) * 2.0f,
         glm::radians(12.5f),
         glm::radians(20.0f),
-        glm::vec3(-37, -9, 0.02)
+        glm::vec3(00, 1, 0.02)
+        //glm::vec3(-37, -9, 0.02)
         //glm::vec3(-15.0f, -0.5f, 0.0f)
     );
-    //spot->setPosition(glm::vec3(0.0f, 18.0f, 0.0f));
-    spot->setPosition(glm::vec3(-27.0f, 12.0f, 0.04f));
+    spot->setPosition(glm::vec3(0.0f, 18.0f, 0.0f));
+    //spot->setPosition(glm::vec3(-27.0f, 12.0f, 0.04f));
     currentScene->addShadowLight(spot);
     currentScene->addCamera(spot->getWorldPosition(), spot->getLightInfo().direction);
 
