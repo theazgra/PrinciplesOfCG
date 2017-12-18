@@ -40,8 +40,8 @@ void Shader::useProgram() const
 {
     glUseProgram(this->shaderProgram);
     glUniform1i(this->shadowTexturePtr, 0);
-    applyCamera();
-    applyLight();
+//    applyCamera();
+//    applyLight();
 }
 
 void Shader::modelTransform(DrawableObject & object) const

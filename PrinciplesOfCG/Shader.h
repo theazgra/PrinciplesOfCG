@@ -48,8 +48,7 @@ private:
     glm::vec2 textureCoord;
 
     std::map<GLuint, LightStruct> lights;
-    void applyCamera() const;
-    void applyLight() const;
+    
 public:
     Shader();
     Shader(const char* vertex_shader_file, const char* fragment_shader_file);
@@ -65,5 +64,8 @@ public:
     void setLightParameters(unsigned int lightId, LightStruct lightInfo);   
     void setDepthBiasMVP(glm::mat4 depthBiasMVP);
     void setDepthMVP(glm::mat4 depthMVP);
+
+    void applyCamera() const;
+    void applyLight() const;
 };
 

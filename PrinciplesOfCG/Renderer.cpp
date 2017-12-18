@@ -95,14 +95,15 @@ void Renderer::shadowPass(Scene & scene)
 
     DrawableObject tmp(0);
     
+    Application::getInstance()->getShadowShader()->useProgram();
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
         if (!scene.getDrawableObjects().at(i)->isSkyBox())
         {
-            Application::getInstance()->getShadowShader()->useProgram();
+            Application::getInstance()->getShadowShader()->applyCamera();
             Application::getInstance()->getShadowShader()->setDepthMVP(depthMVP);
 
-            //Application::getInstance()->getShadowShader()->modelTransform(*(scene.getDrawableObjects().at(i)));
+            Application::getInstance()->getShadowShader()->modelTransform(*(scene.getDrawableObjects().at(i)));
             //Application::getInstance()->getShadowShader()->modelTransform(tmp);
             glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
 
@@ -168,6 +169,8 @@ void Renderer::renderObject(DrawableObject & obj)
     }
 
     glm::mat4 DepthBiasMVP = this->offsetMatrix * depthMVP;
+    Application::getInstance()->getShader(objectShaderId)->applyCamera();
+    Application::getInstance()->getShader(objectShaderId)->applyLight();
     Application::getInstance()->getShader(objectShaderId)->setDepthBiasMVP(DepthBiasMVP);
 
     Application::getInstance()->getShader(objectShaderId)->applyTexture(obj.getTextureId());
