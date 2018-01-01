@@ -230,6 +230,7 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
 
 void Application::window_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+    currentScene->getActiveCameraRef().setDimensions(width, height);
 }
 
 void Application::cursor_pos_callback(GLFWwindow* window, double mouseX, double mouseY) {
@@ -281,6 +282,7 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
             printf("Clicked on pixel %d, %d, color % 02hhx % 02hhx % 02hhx % 02hhx, depth %f, stencil index %u\n",
                         x, y, color[0], color[1], color[2], color[3], depth, index);
 
+            currentScene->deleteObject(index);
         }
     }
 }
@@ -380,7 +382,7 @@ void Application::setUpBasicScene()
     unsigned int redTexture = addTexture("mine.png");
     unsigned int cylinderTexture = addTexture("normal/diffuse.bmp");
     unsigned int houseNormal = addTexture("normal/houseNormal.png");
-    //unsigned int cylinderNormal = addTexture("normal/cylinder_normal.bmp");
+    unsigned int cylinderNormal = addTexture("normal/cylinder_normal.bmp");
     unsigned int skyBoxTexture = addSkyBoxTexture(
         "sky/cubemap/posx.jpg",
         "sky/cubemap/negx.jpg",
@@ -420,9 +422,9 @@ void Application::setUpBasicScene()
         getBasicShaderId(),
         cylinderTexture);
 
-    cylinder->resize(glm::vec3(1, 5, 1));
+    cylinder->resize(glm::vec3(1, 2, 1));
     cylinder->translate(glm::vec3(-15.0f, 0.0f, 0.0f));
-    //cylinder->setNormalTextureId(cylinderNormal);
+    cylinder->setNormalTextureId(cylinderNormal);
     currentScene->addDrawableObject(cylinder);
 
     currentScene->addSkyBox(
@@ -447,6 +449,8 @@ void Application::setUpBasicScene()
     //spot->setPosition(glm::vec3(-27.0f, 12.0f, 0.04f));
     currentScene->addShadowLight(spot);
     currentScene->addCamera(spot->getWorldPosition(), spot->getLightInfo().direction);
+    
+    currentScene->addCamera(glm::vec3(15.0f, 18.0f, 0.0f), glm::vec3(0.5f, 1.0f, 0.1f));
 
 
     //currentScene->addShadowLight(ObjectFactory::createDirectionalLight(
@@ -456,13 +460,13 @@ void Application::setUpBasicScene()
     //));
 
     DrawableObject* d = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
-    d->translate(glm::vec3(0.0f, 6.5f, 0.0f));
+    d->translate(glm::vec3(5.0f, 6.5f, 0.0f));
 
     DrawableObject* d2 = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
     d2->translate(glm::vec3(0.0f, 8.5f, -5.0f));
 
     DrawableObject* d3 = ObjectFactory::createSphere(getNextId(), getBasicShaderId(), redTexture);
-    d3->translate(glm::vec3(0.0f, 8.5f, 5.0f));
+    d3->translate(glm::vec3(5.0f, 8.5f, 5.0f));
 
     currentScene->addDrawableObject(d);
     currentScene->addDrawableObject(d2);

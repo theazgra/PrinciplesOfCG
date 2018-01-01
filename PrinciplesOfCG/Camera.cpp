@@ -37,7 +37,11 @@ void Camera::setPerspective(float degrees, float aspectRatio, float zNear, float
     this->zFar = zFar;
 }
 
-
+void Camera::setDimensions(int width, int heights)
+{
+    this->aspectRatio = (int)width / heights;
+    forceUpdate();
+}
 
 void Camera::moveCamera(Direction direction)
 {

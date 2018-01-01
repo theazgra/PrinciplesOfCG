@@ -231,6 +231,19 @@ Light * Scene::getShadowLight()
     return this->shadowLight;
 }
 
+void Scene::deleteObject(int id)
+{
+    for (int i = 0; i < this->drawableObjects.size(); i++)
+    {
+        if (drawableObjects.at(i)->getObjectId() == id)
+        {
+            delete drawableObjects.at(i);
+            drawableObjects.erase(drawableObjects.begin() + i);
+        }
+
+    }
+}
+
 
 
 

@@ -89,12 +89,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\vs_dev_lib\computer_graphics\SOIL2\include\SOIL2;..\..\glew\include;..\..\glm;..\..\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\pugixml-1.8\src;..\..\SOIL2\include\SOIL2;..\..\glew\include;..\..\glm;..\..\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vs_dev_lib\computer_graphics\SOIL2\lib;..\..\glew\lib\Release\Win32;..\..\glm\glm;..\..\glfw\lib-vc2015;..\..\glew\bin\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\SOIL2\lib;..\..\glew\lib\Release\Win32;..\..\glm\glm;..\..\glfw\lib-vc2015;..\..\glew\bin\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssimpLoader.h" />
+    <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="ControlObject.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="LightObserver.h" />
@@ -180,9 +181,11 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="XmlScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssimpLoader.cpp" />
+    <ClCompile Include="BezierCurve.cpp" />
     <ClCompile Include="ControlObject.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="LightSubject.cpp" />
@@ -210,6 +213,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="XmlScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShader.glsl" />

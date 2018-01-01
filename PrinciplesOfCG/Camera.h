@@ -43,5 +43,6 @@ public:
 
     void registerObserver(CameraObserver&) override;
     void forceUpdate();
+    void setDimensions(int width, int heights);
 };
 

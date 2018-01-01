@@ -53,6 +53,8 @@ public:
     void cameraNotify(glm::mat4, glm::mat4, glm::vec3) override;
     void lightNotify(unsigned int lightId, LightStruct lightInfo) override;
     Light* getShadowLight();
+
+    void deleteObject(int id);
 };
 
 
