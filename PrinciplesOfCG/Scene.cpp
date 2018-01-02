@@ -4,14 +4,17 @@
 #include "Application.h"
 
 
-Scene::Scene(char* sceneName, Camera* camera)
+Scene::Scene(const char* sceneName, Camera * camera)
 {
     this->sceneName = sceneName;
 
-    cameras.push_back(camera);
-    internalSetActiveCamera(camera);
+    if (camera != nullptr)
+    {
+        cameras.push_back(camera);
+        internalSetActiveCamera(camera);
+    }
 }
-        
+
 
 void Scene::internalSetActiveCamera(Camera * camera)
 {
@@ -44,10 +47,10 @@ Scene::~Scene()
     }
     lights.clear();
 
-    
+
 }
 
-char * Scene::getSceneName() const
+const char * Scene::getSceneName() const
 {
     return sceneName;
 }
@@ -78,7 +81,7 @@ char * Scene::getSceneName() const
 void Scene::addDrawableObject(DrawableObject * drawableObject)
 {
     this->drawableObjects.push_back(drawableObject);
-    
+
     bool found = false;
     for (unsigned int i = 0; i < this->sceneShaderIds.size(); i++)
     {
@@ -113,7 +116,7 @@ void Scene::addShadowLight(Light * light)
 
 void Scene::addSkyBox(DrawableObject * drawableObject)
 {
-    this->drawableObjects.push_back(drawableObject);    
+    this->drawableObjects.push_back(drawableObject);
     this->skyBox = drawableObject;
     this->skyBox->setIsSkyBox(true);
 
@@ -142,7 +145,7 @@ Camera& Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos)
 {
     Camera* newCam = new Camera(cameras.size(), worldPos, targetPos);
     cameras.push_back(newCam);
-    internalSetActiveCamera(newCam);    
+    internalSetActiveCamera(newCam);
     return *newCam;
 }
 
@@ -199,12 +202,12 @@ void Scene::swapCamera()
 
 void Scene::cameraNotify(glm::mat4 viewMatrix, glm::mat4 projectionMatrix, glm::vec3 cameraPosition)
 {
-    if (skyBox != NULL) 
+    if (skyBox != NULL)
     {
         skyBox->translate(cameraPosition - oldSkyBoxPosition);
         oldSkyBoxPosition = cameraPosition;
     }
-    
+
 
     for (int i = 0; i < this->sceneShaderIds.size(); i++)
     {

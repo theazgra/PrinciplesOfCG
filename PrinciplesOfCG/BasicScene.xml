@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Scene Name="My first scene">
+	<Shader_set>
+		<Shader Id="1">
+			<VS>VSShadow.glsl</VS>
+			<FS>FSShadow.glsl</FS>
+			<Shadow>True</Shadow>
+		</Shader>
+		<Shader Id="2">
+			<VS>VSCubeMap.glsl</VS>
+			<FS>FSCubeMap.glsl</FS>
+			<Shadow>False</Shadow>
+		</Shader>
+	</Shader_set>
+	<Texture_set>
+		<Texture Id="2" CubeMap="False">
+			<Image>test.png</Image>
+		</Texture>
+		<Texture Id="3" CubeMap="False">
+			<Image>grass.jpg</Image>
+		</Texture>
+		<Texture Id="4" CubeMap="False">
+			<Image>normal/diffuse.bmp</Image>
+		</Texture>
+		<Texture Id="5" CubeMap="False">
+			<Image>normal/houseNormal.png</Image>
+		</Texture>
+		<Texture Id="6" CubeMap="False">
+			<Image>normal/cylinder_normal.bmp</Image>
+		</Texture>
+		<Texture Id="7" CubeMap="True">
+			<PosX>sky/cubemap/posx.jpg</PosX>
+			<NegX>sky/cubemap/negx.jpg</NegX>
+			<PosY>sky/cubemap/posy.jpg</PosY>
+			<NegY>sky/cubemap/negy.jpg</NegY>
+			<PosZ>sky/cubemap/posz.jpg</PosZ>
+			<NegZ>sky/cubemap/negz.jpg</NegZ>
+		</Texture>
+	</Texture_set>
+	<Camera_set>
+		<Camera>
+			<WorldPosition  x="10.0" y="12.0" z="-4.0"/>
+			<TargetPosition x="0.0" y="4.0" z="0.0"/>
+		</Camera>
+		<Camera>
+			<WorldPosition  x="0.0" y="5.0" z="0.0"/>
+			<TargetPosition x="0.0" y="0.0" z="2.0"/>
+		</Camera>
+		<Camera>
+			<WorldPosition  x="15.0" y="18.0" z="0.0"/>
+			<TargetPosition x="0.5" y="1.0" z="0.1"/>
+		</Camera>
+	</Camera_set>
+	<Light_set>
+		<!-- <Light Type="P"> -->
+			<!-- <Intensity x="1.0" y="1.0" z="1.0"/> -->
+			<!-- <WorldPosition x="1.0" y="1.0" z="1.0"/> -->
+		<!-- </Light> -->
+		<Light Type="S" Shadow="True">
+			<Intensity x="10.0" y="10.0" z="10.0"/>
+			<WorldPosition x="1.0" y="18.0" z="1.0"/>
+			<Direction x="0.0" y="1.0" z="0.02"/>
+			<CutOff Inner="12.5" Outer="20.0" />
+		</Light>
+		<Light Type="D">
+			<Intensity x="1.0" y="1.0" z="1.0"/>
+			<Direction x="1.0" y="1.0" z="0.0"/>
+		</Light>
+	</Light_set>
+	<Object_set>
+		<Object SkyBox="False">
+			<ObjFile>test.obj</ObjFile>
+			<TextureId>2</TextureId>
+			<NormalTextureId>5</NormalTextureId>
+			<ObjMatrix>1;0;0;0;0;1;0;0;0;0;1;0;0;0;0;1</ObjMatrix>
+		</Object>
+		<Object SkyBox="True">
+			<ObjFile>sky/skybox.obj</ObjFile>
+			<ShaderId>2</ShaderId>
+			<TextureId>7</TextureId>
+			<ObjMatrix>1;0;0;0;0;1;0;0;0;0;1;0;0;0;0;1</ObjMatrix>
+		</Object>
+		<Object>
+			<ObjFile>normal/cylinder.obj</ObjFile>
+			<TextureId>4</TextureId>
+			<NormalTextureId>6</NormalTextureId>
+			<ObjMatrix>1;0;0;0;0;1;0;0;0;0;1;0;0;0;0;1</ObjMatrix>
+		</Object>
+		<Object>
+			<ObjFile>Plain</ObjFile>
+			<TextureId>3</TextureId>
+			<ObjMatrix>30;0;0;0;0;30;0;0;0;0;30;0;0;0;0;1</ObjMatrix>
+		</Object>
+	</Object_set>
+</Scene>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

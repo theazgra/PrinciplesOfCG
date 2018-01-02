@@ -44,6 +44,7 @@ Application::Application()
     bindCallbacks();
 
     Shader* shader = new Shader("VertexShader.glsl", "FragmentShader.glsl");
+
     
     int index = shaders.size();
     shaders[index] = shader;
@@ -138,6 +139,7 @@ void Application::error_callback(int error, const char* description) {
 
 void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    ++keyClickCount;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -148,12 +150,11 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     switch (key)
     {
     case GLFW_KEY_TAB:
-        tabCount++;
-        if (tabCount == 2) 
+        if (keyClickCount > 2) 
         {
             this->moveCamera = !this->moveCamera;
             printf("Switched to %s moving mode.\n", moveCamera ? "camera" : "shadow producing light");
-            tabCount = 0;
+            keyClickCount = 0;
         }
         
         break;
@@ -216,13 +217,16 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
         this->currentScene->getActiveCameraRef().resetCamera();
     }
 
-    if (key == GLFW_KEY_PAGE_DOWN)
+    if (mods == GLFW_MOD_CONTROL && key == GLFW_KEY_S && keyClickCount >= 4) 
     {
+        printf("Saving scene...\n");
         
-    }
-    if (key == GLFW_KEY_PAGE_UP)
-    {
-        
+        if (xmlScene.saveScene(*currentScene))
+            printf("Scene saved.\n");
+        else
+            printf("Error occured when saving scene.");
+
+        keyClickCount = 0;
     }
 
     this->currentScene->getActiveCameraRef().forceUpdate();
@@ -242,7 +246,24 @@ void Application::cursor_pos_callback(GLFWwindow* window, double mouseX, double 
 }
 
 void Application::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    //printf("mouse_button_callback %d, %d, %d \n", button, action, mods);
+    
+    double cx, cy;
+    glfwGetCursorPos(window, &cx, &cy);
+
+    GLint x = (GLint)cx;
+    GLint y = (GLint)cy;
+
+    int w, h;
+    glfwGetWindowSize(window, &w, &h);
+
+    int newy = h - y;
+    GLbyte color[4];
+    GLfloat depth;
+    GLuint index;
+    glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+    glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+    glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+
     if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT)
     {
         currentScene->swapCamera();
@@ -257,33 +278,15 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
         {
             enableLookingAroud = false;
             
-            GLbyte color[4]; 
-            GLfloat depth; 
-            GLuint index;
-            
-
-            
-            
-            double cx, cy;
-            glfwGetCursorPos(window, &cx, &cy);
-
-            GLint x = (GLint)cx;
-            GLint y = (GLint)cy;
-
-            int w, h;
-            glfwGetWindowSize(window, &w, &h);
-
-            int newy = h - y;
-
-            glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
-            glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
-            glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
 
             printf("Clicked on pixel %d, %d, color % 02hhx % 02hhx % 02hhx % 02hhx, depth %f, stencil index %u\n",
                         x, y, color[0], color[1], color[2], color[3], depth, index);
-
-            currentScene->deleteObject(index);
         }
+        
+    }
+    else if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE)
+    {
+        currentScene->deleteObject(index);
     }
 }
 
@@ -291,7 +294,6 @@ unsigned int Application::getNextId()
 {
     return ++this->nextObjectId;
 }
-
 
 Shader const& Application::getBasicShader() const
 {
@@ -335,9 +337,22 @@ unsigned int Application::addShader(Shader * shader)
     return shaderId;
 }
 
+unsigned int Application::addShader(Shader * shader, unsigned int shaderId)
+{
+    shaders[shaderId] = shader;
+    return shaderId;
+}
+
 unsigned int Application::addShadowShader(Shader * shader)
 {
     unsigned int shaderId = this->shaders.size();
+    shaders[shaderId] = shader;
+    this->SHADOW_SHADER_ID = shaderId;
+    return shaderId;
+}
+
+unsigned int Application::addShadowShader(Shader * shader, unsigned int shaderId)
+{
     shaders[shaderId] = shader;
     this->SHADOW_SHADER_ID = shaderId;
     return shaderId;
@@ -347,6 +362,17 @@ unsigned int Application::addTexture(const char * textureFile)
 {
     //Texture with id 0 is reserved for shadow map.
     unsigned int textureId = 1 + this->textures.size();
+    Texture tex;
+    tex.loadTexture(textureFile, textureId);
+    this->textures.push_back(textureId);
+
+    return textureId;
+}
+
+unsigned int Application::addTexture(const char * textureFile, unsigned int textureId)
+{
+    if (textureId == 0)
+        throw new std::exception("Texture with id 0 is reserved for shadow texture.");
     Texture tex;
     tex.loadTexture(textureFile, textureId);
     this->textures.push_back(textureId);
@@ -364,9 +390,40 @@ unsigned int Application::addSkyBoxTexture(const char* x, const char* nx, const 
     return textureId;
 }
 
+unsigned int Application::addSkyBoxTexture(const char * x, const char * nx, const char * y, const char * ny, const char * z, const char * nz, unsigned int textureId)
+{
+    if (textureId == 0)
+        throw new std::exception("Texture with id 0 is reserved for shadow texture.");
+
+    Texture tex;
+    tex.loadSkyBox(x, nx, y, ny, z, nz, textureId);
+    this->textures.push_back(textureId);
+
+    return textureId;
+}
+
+
+void Application::loadScene(const char * xmlSceneFile)
+{
+    Scene * loadedScene = this->xmlScene.loadScene(xmlSceneFile);
+    scenes.push_back(loadedScene);
+    currentScene = loadedScene;
+}
+
 
 void Application::setUpBasicScene()
 {
+    XmlScene xmlScene;
+    Scene * scene = xmlScene.loadScene("BasicScene.xml");
+
+    scenes.push_back(scene);
+    currentScene = scene;
+    renderCurrentScene();
+    return;
+
+
+    //createScene()
+
     //Create scene
     createScene("Basic scene",
         new Camera(0, glm::vec3(10.0f, 12.0f, -4.0f), glm::vec3(0.0f, 4.0f, 0.0f)));
@@ -376,7 +433,7 @@ void Application::setUpBasicScene()
 
     addShadowShader(new Shader("VSShadow.glsl", "FSShadow.glsl"));
     unsigned int skyBoxShader = addShader(new Shader("VSCubeMap.glsl", "FSCubeMap.glsl"));
-    unsigned int shadowTexShader = addShader(new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
+    //unsigned int shadowTexShader = addShader(new Shader("VertexShader.glsl", "FragmentShader2.glsl"));
     unsigned int grassTexture = addTexture("tex.jpg");
     unsigned int houseTexture = addTexture("test.png");
     unsigned int redTexture = addTexture("mine.png");
@@ -400,15 +457,15 @@ void Application::setUpBasicScene()
     plain->resize(glm::vec3(50.0f));
     currentScene->addDrawableObject(plain);
 
-    PlainObject * shadowMap = ObjectFactory::createPlain(
-        getNextId(),
-        shadowTexShader,
-        0);
+    //PlainObject * shadowMap = ObjectFactory::createPlain(
+    //    getNextId(),
+    //    shadowTexShader,
+    //    0);
 
-    shadowMap->resize(glm::vec3(5.0f));
-    shadowMap->translate(glm::vec3(3.0f, 1.0f, 0.0f));
-    shadowMap->rotate(glm::degrees(45.0f), glm::vec3(1, 0, 0));
-    currentScene->addDrawableObject(shadowMap);
+    //shadowMap->resize(glm::vec3(5.0f));
+    //shadowMap->translate(glm::vec3(3.0f, 1.0f, 0.0f));
+    //shadowMap->rotate(glm::degrees(45.0f), glm::vec3(1, 0, 0));
+    //currentScene->addDrawableObject(shadowMap);
 
     DrawableObject * house = ObjectFactory::createAssimpObject("test.obj",getNextId(),getBasicShaderId(),houseTexture);
     

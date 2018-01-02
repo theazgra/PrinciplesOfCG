@@ -9,6 +9,7 @@ class DrawableObject : public Object
 private:
 
 protected:
+    const char* objFile;
     DrawableObject();
 
     glm::mat4 objectMatrix;
@@ -55,6 +56,10 @@ public:
     bool isSkyBox() const;
     void setNormalTextureId(unsigned int normalTextureId);
 
+    void setObjectMatrix(glm::mat4 objectMatrix);
+    
+    void setObjFile(const char* objFile);
+    const char* getObjFile();
 
 };
 

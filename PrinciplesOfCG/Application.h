@@ -6,11 +6,13 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "XmlScene.h"
 
 class Application
 {
 private:
     Application();
+    
 
     unsigned int nextObjectId = -1;
 
@@ -28,9 +30,13 @@ private:
     
     bool enableLookingAroud = false;
     bool moveCamera = true;
-    int tabCount = 0;
+    int keyClickCount = 0;
 
     void bindCallbacks();
+
+    XmlScene xmlScene;
+    //will be removed.
+    void setUpBasicScene();
 public:
     static Application* getInstance();
     ~Application();
@@ -48,9 +54,14 @@ public:
     Shader * getShadowShader();
     unsigned int getBasicShaderId() const;
     unsigned int addShader(Shader*);
+    unsigned int addShader(Shader*, unsigned int shaderId);
     unsigned int addShadowShader(Shader*);
+    unsigned int addShadowShader(Shader*, unsigned int shaderId);
     unsigned int addTexture(const char* textureFile);
+    unsigned int addTexture(const char* textureFile, unsigned int textureId);
     unsigned int addSkyBoxTexture(const char* x, const char* nx, const char* y, const char* ny, const char* z, const char* nz);
+    unsigned int addSkyBoxTexture(const char* x, const char* nx, const char* y, const char* ny, const char* z, const char* nz, unsigned int textureId);
+    
 
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void error_callback(int error, const char* description);
@@ -60,6 +71,6 @@ public:
 
     unsigned int getNextId();
 
-    void setUpBasicScene();
+    void loadScene(const char* xmlSceneFile);
 };
 

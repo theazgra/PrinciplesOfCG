@@ -7,8 +7,12 @@
 int main()
 {
     Application* app = Application::getInstance();      
+
+    app->loadScene("BasicScene.xml");
+
+    app->renderCurrentScene();
     
-    app->setUpBasicScene();
+    //app->setUpBasicScene();
     
     delete app;
 

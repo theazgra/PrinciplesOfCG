@@ -25,6 +25,8 @@ DrawableObject * ObjectFactory::createAssimpObject(const char * file, int id, un
         shaderId, 
         textureId);
 
+    drawableObject->setObjFile(file);
+
     return drawableObject;
 }
 
@@ -45,6 +47,7 @@ SphereObject * ObjectFactory::createSphere(int id, int shaderId, int textureId)
 PlainObject * ObjectFactory::createPlain(int id, int shaderId, int textureId)
 {
     PlainObject * plain = new PlainObject(id, shaderId, textureId);
+    plain->setObjFile("Plain");
     return plain;
 }
 

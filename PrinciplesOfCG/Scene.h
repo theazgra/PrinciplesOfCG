@@ -18,7 +18,7 @@ private:
     std::vector<Light*> lights;
     std::vector<unsigned int> sceneShaderIds;
  
-    char* sceneName;
+    const char* sceneName;
 
     Camera* activeCamera = NULL;
 
@@ -27,9 +27,9 @@ private:
     Light * shadowLight = NULL;
     glm::vec3 oldSkyBoxPosition = glm::vec3(0.0f);
 public:
-    Scene(char*, Camera*);
+    Scene(const char *, Camera * = nullptr);
     ~Scene();
-    char* getSceneName() const;
+    const char* getSceneName() const;
 
     void addDrawableObject(DrawableObject * drawableObject);
     void addLight(Light * light);

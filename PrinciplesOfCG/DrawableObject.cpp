@@ -29,6 +29,7 @@ DrawableObject::DrawableObject(int objectId, std::vector<float> vector, unsigned
 }
 
 DrawableObject::DrawableObject(int objectId, std::vector<AssimpVertex> data, std::vector<unsigned int> indices, unsigned int shaderId, unsigned int textureId)
+    : Object(objectId)
 {
     this->objectMatrix = glm::mat4(1.0f);
     this->shaderId = shaderId;
@@ -162,6 +163,21 @@ bool DrawableObject::isSkyBox() const
 void DrawableObject::setNormalTextureId(unsigned int normalTextureId)
 {
     this->normalTextureId = normalTextureId;
+}
+
+void DrawableObject::setObjectMatrix(glm::mat4 objectMatrix)
+{
+    this->objectMatrix = objectMatrix;
+}
+
+void DrawableObject::setObjFile(const char * objFile)
+{
+    this->objFile = objFile;
+}
+
+const char * DrawableObject::getObjFile()
+{
+    return this->objFile;
 }
 
 glm::mat4 DrawableObject::getObjectMatrix() const
