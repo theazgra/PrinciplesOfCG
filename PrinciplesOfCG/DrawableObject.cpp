@@ -175,7 +175,7 @@ void DrawableObject::setObjFile(const char * objFile)
     this->objFile = objFile;
 }
 
-const char * DrawableObject::getObjFile()
+std::string DrawableObject::getObjFile()
 {
     return this->objFile;
 }

@@ -199,14 +199,16 @@ bool XmlScene::saveScene(Scene & scene)
         xml_node objNode = objects.append_child(OBJECT_NODE.c_str());
         
         objNode.append_attribute("SkyBox").set_value(toXmlBool(obj->isSkyBox()));
-        objNode.append_child("ObjFile").set_value(obj->getObjFile());
+        std::string objFile = obj->getObjFile();
+        objNode.append_child("ObjFile").text().set(objFile.c_str());
         objNode.append_child("ShaderId").text().set(obj->getShaderId());
         objNode.append_child("TextureId").text().set(obj->getTextureId());
         
         if (obj->getNormalTextureId() != 0)
             objNode.append_child("NormalTextureId").text().set(obj->getNormalTextureId());
 
-        objNode.append_child("ObjMatrix").text().set(toXmlMat4(obj->getObjectMatrix()));
+        std::string str = toXmlMat4(obj->getObjectMatrix());
+        objNode.append_child("ObjMatrix").text().set(str.c_str());
 
     }
 
@@ -220,6 +222,7 @@ bool XmlScene::saveScene(Scene & scene)
 bool XmlScene::fromXmlBool(const char* value)
 {
     return ((std::string)value) == "True" ? true : false;
+    
 }
 
 const char* XmlScene::toXmlBool(bool value)
@@ -234,7 +237,7 @@ void XmlScene::toXmlVec3(pugi::xml_node node, glm::vec3 value)
     node.append_attribute("z").set_value(value.z);
 }
 
-const char * XmlScene::toXmlMat4(glm::mat4 objMatrix)
+std::string XmlScene::toXmlMat4(glm::mat4 objMatrix)
 {
     std::string strMatrix;
 
@@ -243,11 +246,11 @@ const char * XmlScene::toXmlMat4(glm::mat4 objMatrix)
         for (unsigned int j = 0; j < 4; j++)
         {
             std::string num = std::to_string(objMatrix[i][j]);
-            strMatrix.append( num + ";");
+            strMatrix += num + ';';
+            //strMatrix.append( num + ";");
         }
     }
-
-    return strMatrix.c_str();
+    return (char*)strMatrix.c_str();
 }
 
 glm::vec3 XmlScene::fromXmlVec3(pugi::xml_node node)

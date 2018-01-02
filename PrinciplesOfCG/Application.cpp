@@ -217,7 +217,7 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
         this->currentScene->getActiveCameraRef().resetCamera();
     }
 
-    if (mods == GLFW_MOD_CONTROL && key == GLFW_KEY_S && keyClickCount >= 4) 
+    if (mods == GLFW_MOD_CONTROL && key == GLFW_KEY_S && keyClickCount >= 3) 
     {
         printf("Saving scene...\n");
         

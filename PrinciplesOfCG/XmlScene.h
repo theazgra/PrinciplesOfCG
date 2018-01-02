@@ -29,7 +29,7 @@ private:
     
     const char* toXmlBool(bool value);
     void toXmlVec3(pugi::xml_node node, glm::vec3 value);
-    const char* toXmlMat4(glm::mat4);
+    std::string toXmlMat4(glm::mat4);
 
     unsigned int nextId();
 public:

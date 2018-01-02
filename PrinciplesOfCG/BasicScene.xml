@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<?xml version="1.0"?>
 <Scene Name="My first scene">
 	<Shader_set>
 		<Shader Id="1">
@@ -39,71 +39,56 @@
 	</Texture_set>
 	<Camera_set>
 		<Camera>
-			<WorldPosition  x="10.0" y="12.0" z="-4.0"/>
-			<TargetPosition x="0.0" y="4.0" z="0.0"/>
+			<WorldPosition x="10" y="12" z="-4" />
+			<TargetPosition x="-20" y="-20" z="8" />
 		</Camera>
 		<Camera>
-			<WorldPosition  x="0.0" y="5.0" z="0.0"/>
-			<TargetPosition x="0.0" y="0.0" z="2.0"/>
+			<WorldPosition x="0" y="5" z="0" />
+			<TargetPosition x="0" y="-10" z="2" />
 		</Camera>
 		<Camera>
-			<WorldPosition  x="15.0" y="18.0" z="0.0"/>
-			<TargetPosition x="0.5" y="1.0" z="0.1"/>
+			<WorldPosition x="15.0550013" y="16.2999935" z="16.2250023" />
+			<TargetPosition x="-23.1125908" y="-22.1108437" z="-32.637207" />
 		</Camera>
 	</Camera_set>
 	<Light_set>
-		<!-- <Light Type="P"> -->
-			<!-- <Intensity x="1.0" y="1.0" z="1.0"/> -->
-			<!-- <WorldPosition x="1.0" y="1.0" z="1.0"/> -->
-		<!-- </Light> -->
 		<Light Type="S" Shadow="True">
-			<Intensity x="10.0" y="10.0" z="10.0"/>
-			<WorldPosition x="1.0" y="18.0" z="1.0"/>
-			<Direction x="0.0" y="1.0" z="0.02"/>
+			<Intensity x="10.0" y="10.0" z="10.0" />
+			<WorldPosition x="1.0" y="18.0" z="1.0" />
+			<Direction x="0.0" y="1.0" z="0.02" />
 			<CutOff Inner="12.5" Outer="20.0" />
 		</Light>
 		<Light Type="D">
-			<Intensity x="1.0" y="1.0" z="1.0"/>
-			<Direction x="1.0" y="1.0" z="0.0"/>
+			<Intensity x="1.0" y="1.0" z="1.0" />
+			<Direction x="1.0" y="1.0" z="0.0" />
 		</Light>
 	</Light_set>
 	<Object_set>
 		<Object SkyBox="False">
 			<ObjFile>test.obj</ObjFile>
+			<ShaderId>0</ShaderId>
 			<TextureId>2</TextureId>
 			<NormalTextureId>5</NormalTextureId>
-			<ObjMatrix>1;0;0;0;0;1;0;0;0;0;1;0;0;0;0;1</ObjMatrix>
+			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
 		<Object SkyBox="True">
 			<ObjFile>sky/skybox.obj</ObjFile>
 			<ShaderId>2</ShaderId>
 			<TextureId>7</TextureId>
-			<ObjMatrix>1;0;0;0;0;1;0;0;0;0;1;0;0;0;0;1</ObjMatrix>
+			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;15.055001;16.299994;16.225002;1.000000;</ObjMatrix>
 		</Object>
-		<Object>
+		<Object SkyBox="False">
 			<ObjFile>normal/cylinder.obj</ObjFile>
+			<ShaderId>0</ShaderId>
 			<TextureId>4</TextureId>
 			<NormalTextureId>6</NormalTextureId>
-			<ObjMatrix>1;0;0;0;0;1;0;0;0;0;1;0;0;0;0;1</ObjMatrix>
+			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
-		<Object>
+		<Object SkyBox="False">
 			<ObjFile>Plain</ObjFile>
+			<ShaderId>0</ShaderId>
 			<TextureId>3</TextureId>
-			<ObjMatrix>30;0;0;0;0;30;0;0;0;0;30;0;0;0;0;1</ObjMatrix>
+			<ObjMatrix>30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
 	</Object_set>
 </Scene>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

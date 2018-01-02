@@ -59,7 +59,7 @@ public:
     void setObjectMatrix(glm::mat4 objectMatrix);
     
     void setObjFile(const char* objFile);
-    const char* getObjFile();
+    std::string getObjFile();
 
 };
 
