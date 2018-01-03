@@ -146,8 +146,8 @@ void Renderer::renderScene(Scene & scene)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //Shadows are not working atm.
-        //shadowPass(scene);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        shadowPass(scene);
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         

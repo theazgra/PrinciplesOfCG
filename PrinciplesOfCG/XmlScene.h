@@ -31,6 +31,12 @@ private:
     void toXmlVec3(pugi::xml_node node, glm::vec3 value);
     std::string toXmlMat4(glm::mat4);
 
+    void setAdditionalLightParameters(Light* light, pugi::xml_node powerNode, pugi::xml_node ambientCoeffNode, pugi::xml_node specularCoeffNode);
+    void setPointLightFalloff(PointLight * pointLight, pugi::xml_node constFallOffNode, pugi::xml_node linearFalOffNode, pugi::xml_node quadraticFallOfNode);
+    void setSpotLightFalloff(SpotLight * pointLight, pugi::xml_node constFallOffNode, pugi::xml_node linearFalOffNode, pugi::xml_node quadraticFallOfNode);
+
+    void toXmlLightInfo(LightStruct lightInfo, pugi::xml_node lightNode);
+
     unsigned int nextId();
 public:
     XmlScene();

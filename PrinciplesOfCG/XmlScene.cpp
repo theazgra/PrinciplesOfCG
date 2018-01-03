@@ -129,14 +129,26 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
         bool shadowProducingLight = light.attribute("Shadow").as_bool();
 
         glm::vec3 intensity = fromXmlVec3(light.child("Intensity"));
+        
+        xml_node powerNode = light.child("Power");
+        xml_node ambientCoeffNode = light.child("AmbientCoefficient");
+        xml_node specularCoeffNode = light.child("SpecularCoefficient");
+        xml_node constFallOffNode = light.child("ConstatFallOff");
+        xml_node linearFalOffNode = light.child("LinearFallOff");
+        xml_node quadraticFallOffNode = light.child("QuadraticFallOff");
+        
+            
 
         if ((std::string)type == "P")
         {
-            PointLight * pl = ObjectFactory::createPointLight(nextId(), intensity);
+            PointLight * pointLight = ObjectFactory::createPointLight(nextId(), intensity);
             glm::vec3 worldPos = fromXmlVec3(light.child("WorldPosition"));
-            pl->move(worldPos);
+            pointLight->move(worldPos);
 
-            scene->addLight(pl);
+            setAdditionalLightParameters(pointLight, powerNode, ambientCoeffNode, specularCoeffNode);
+            setPointLightFalloff(pointLight, constFallOffNode, linearFalOffNode, quadraticFallOffNode);
+
+            scene->addLight(pointLight);
         }
         else if ((std::string)type == "S")
         {
@@ -145,23 +157,34 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
             float innerCutOff = light.child("CutOff").attribute("Inner").as_float();
             float outerCutOff = light.child("CutOff").attribute("Outer").as_float();
 
-            SpotLight * sl = ObjectFactory::createSpotLight(nextId(), intensity, innerCutOff, outerCutOff, direction);
-            sl->move(worldPos);
+            SpotLight * spotLight = ObjectFactory::createSpotLight(nextId(), intensity, innerCutOff, outerCutOff, direction);
+            spotLight->move(worldPos);
+            setAdditionalLightParameters(spotLight, powerNode, ambientCoeffNode, specularCoeffNode);
+            setSpotLightFalloff(spotLight, constFallOffNode, linearFalOffNode, quadraticFallOffNode);
+
+            xml_node cutOffNode = light.child("CutOff");
+            xml_node outerCutOffNode = light.child("OuterCutOff");
+            
+            if (!cutOffNode.empty())
+                spotLight->setCutOff(cutOffNode.text().as_float());
+            if (!outerCutOffNode.empty())
+                spotLight->setOuterCutOff(outerCutOffNode.text().as_float());
 
             if (shadowProducingLight)
-                scene->addShadowLight(sl);
+                scene->addShadowLight(spotLight);
             else
-                scene->addLight(sl);
+                scene->addLight(spotLight);
         }
         else if ((std::string)type == "D")
         {
             glm::vec3 direction = fromXmlVec3(light.child("Direction"));
-            DirectionalLight * dl = ObjectFactory::createDirectionalLight(nextId(), intensity, direction);
+            DirectionalLight * dirLight = ObjectFactory::createDirectionalLight(nextId(), intensity, direction);
+            setAdditionalLightParameters(dirLight, powerNode, ambientCoeffNode, specularCoeffNode);
 
             if (shadowProducingLight)
-                scene->addShadowLight(dl);
+                scene->addShadowLight(dirLight);
             else
-                scene->addLight(dl);
+                scene->addLight(dirLight);
         }
     }
 
@@ -209,11 +232,31 @@ bool XmlScene::saveScene(Scene & scene)
 
         std::string str = toXmlMat4(obj->getObjectMatrix());
         objNode.append_child("ObjMatrix").text().set(str.c_str());
-
     }
 
+    //ligts
+    xml_node lights = root.child((LIGHT_NODE + SET_SUFFIX).c_str());
+    while (lights.remove_child(LIGHT_NODE.c_str()));
+
+    for (Light * light : scene.getLights())
+    {
+        LightStruct lightInfo = light->getLightInfo();
+        xml_node lightNode = lights.append_child(LIGHT_NODE.c_str());
+
+        if (scene.getShadowLight()->getObjectId() == light->getObjectId())
+            lightNode.append_attribute("Shadow").set_value(toXmlBool(true));
 
 
+        if (lightInfo.lightType == SPOT_LIGHT)
+            lightNode.append_attribute("Type").set_value("S");
+        else if (lightInfo.lightType == POINT_LIGHT)
+            lightNode.append_attribute("Type").set_value("P");
+        else if (lightInfo.lightType == DIRECTIONAL_LIGHT)
+            lightNode.append_attribute("Type").set_value("D");
+
+        toXmlLightInfo(lightInfo, lightNode);
+       
+    }
 
     result = document.save_file(sceneFile);
     return result;
@@ -251,6 +294,62 @@ std::string XmlScene::toXmlMat4(glm::mat4 objMatrix)
         }
     }
     return (char*)strMatrix.c_str();
+}
+
+void XmlScene::setAdditionalLightParameters(Light * light, pugi::xml_node powerNode, pugi::xml_node ambientCoeffNode, pugi::xml_node specularCoeffNode)
+{
+    if (!powerNode.empty())
+        light->setPower(powerNode.text().as_float());
+    if (!ambientCoeffNode.empty())
+        light->setAmbientStrength(ambientCoeffNode.text().as_float());
+    if (!specularCoeffNode.empty())
+        light->setSpeculatStrength(specularCoeffNode.text().as_float());
+}
+
+void XmlScene::setPointLightFalloff(PointLight * pointLight, pugi::xml_node constFallOffNode, pugi::xml_node linearFalOffNode, pugi::xml_node quadraticFallOfNode)
+{
+    if (!constFallOffNode.empty())
+        pointLight->setConstantFallof(constFallOffNode.text().as_float());
+    if (!linearFalOffNode.empty())
+        pointLight->setLinearFallof(linearFalOffNode.text().as_float());
+    if (!quadraticFallOfNode.empty())
+        pointLight->setQuadraticFallof(quadraticFallOfNode.text().as_float());
+}
+
+void XmlScene::setSpotLightFalloff(SpotLight * spotLight, pugi::xml_node constFallOffNode, pugi::xml_node linearFalOffNode, pugi::xml_node quadraticFallOfNode)
+{
+    if (!constFallOffNode.empty())
+        spotLight->setConstantFallof(constFallOffNode.text().as_float());
+    if (!linearFalOffNode.empty())
+        spotLight->setLinearFallof(linearFalOffNode.text().as_float());
+    if (!quadraticFallOfNode.empty())
+        spotLight->setQuadraticFallof(quadraticFallOfNode.text().as_float());
+}
+
+void XmlScene::toXmlLightInfo(LightStruct lightInfo, pugi::xml_node lightNode)
+{
+    toXmlVec3(lightNode.append_child("Intensity"), lightInfo.lightColor);
+    toXmlVec3(lightNode.append_child("WorldPosition"), lightInfo.position);
+    
+    if (lightInfo.lightType != POINT_LIGHT)
+        toXmlVec3(lightNode.append_child("Direction"), lightInfo.direction);
+
+    lightNode.append_child("Power").text().set(lightInfo.power);
+    lightNode.append_child("AmbientCoefficient").text().set(lightInfo.ambientStrength);
+    lightNode.append_child("SpecularCoefficient").text().set(lightInfo.specularStrength);
+
+    if (lightInfo.lightType != DIRECTIONAL_LIGHT)
+    {
+        lightNode.append_child("ConstatFallOff").text().set(lightInfo.constantFallOff);
+        lightNode.append_child("LinearFallOff").text().set(lightInfo.linearFallOff);
+        lightNode.append_child("QuadraticFallOff").text().set(lightInfo.quadraticFallOff);
+
+        if (lightInfo.lightType == SPOT_LIGHT) 
+        {
+            lightNode.append_child("CutOff").text().set(lightInfo.cutOff);
+            lightNode.append_child("OuterCutOff").text().set(lightInfo.outerCutOff);
+        }
+    }
 }
 
 glm::vec3 XmlScene::fromXmlVec3(pugi::xml_node node)
