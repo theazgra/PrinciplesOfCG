@@ -1,12 +1,17 @@
 #pragma once
 
 #include "Vertex.h"
+#include "BezierCurve.h"
 #include "Object.h"
 
 class DrawableObject : public Object
 {
 
 private:
+    BezierCurve bezierCurve;
+    bool moveOnCurve = false;
+    int drawCounter = 0;
+    
 
 protected:
     const char* objFile;
@@ -32,7 +37,7 @@ public:
     DrawableObject(int objectId, std::vector<AssimpVertex> data, std::vector<unsigned int> indices, unsigned int shaderId, unsigned int textureId);
     ~DrawableObject();
 
-    glm::mat4 getObjectMatrix() const;
+    glm::mat4 getObjectMatrix();
 
     GLuint getVAO() const;
     GLuint getVerticesCount();
@@ -60,6 +65,8 @@ public:
     
     void setObjFile(const char* objFile);
     std::string getObjFile();
+
+    void initializeBezierCurve(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 p4, float t_increment = 0.5);
 
 };
 

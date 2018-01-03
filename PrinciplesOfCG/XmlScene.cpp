@@ -87,11 +87,11 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
     for (xml_node object : objects.children(OBJECT_NODE.c_str()))
     {
         bool skybox = object.attribute("SkyBox").as_bool();
-        glm::mat4 objMatrix = fromXmlMat4(object.child("ObjMatrix"));
+        const char* objFile = object.child_value("ObjFile");
+
         unsigned int shaderId = object.child("ShaderId").text().as_uint(basicShaderId);
         unsigned int textureId = object.child("TextureId").text().as_uint();
         unsigned int normalTextureId = object.child("NormalTextureId").text().as_int(-1);
-        const char* objFile = object.child_value("ObjFile");
 
         DrawableObject * drawableObj;
         if ((std::string)objFile == "Plain")
@@ -100,6 +100,19 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
         }
         else
             drawableObj = ObjectFactory::createAssimpObject(objFile, nextId(), shaderId, textureId);
+
+        xml_node moveOnCurveNode = object.child("MoveOnCurve");
+        if (!moveOnCurveNode.empty())
+        {
+            float t_increment = moveOnCurveNode.attribute("t_increment").as_float(0.05);
+            drawableObj->initializeBezierCurve(
+                fromXmlVec3(moveOnCurveNode.child("P1")),
+                fromXmlVec3(moveOnCurveNode.child("P2")),
+                fromXmlVec3(moveOnCurveNode.child("P3")),
+                fromXmlVec3(moveOnCurveNode.child("P4")),
+                t_increment
+            );
+        }
 
         if (normalTextureId != -1)
             drawableObj->setNormalTextureId(normalTextureId);
@@ -116,7 +129,12 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
                 int basoc = id;
 
             }
-            drawableObj->setObjectMatrix(objMatrix);
+
+            if (!object.child("ObjMatrix").empty())
+            {
+                drawableObj->setObjectMatrix(fromXmlMat4(object.child("ObjMatrix")));
+            }
+            
             scene->addDrawableObject(drawableObj);
         }
     }
@@ -280,22 +298,6 @@ void XmlScene::toXmlVec3(pugi::xml_node node, glm::vec3 value)
     node.append_attribute("z").set_value(value.z);
 }
 
-std::string XmlScene::toXmlMat4(glm::mat4 objMatrix)
-{
-    std::string strMatrix;
-
-    for (unsigned int i = 0; i < 4; i++)
-    {
-        for (unsigned int j = 0; j < 4; j++)
-        {
-            std::string num = std::to_string(objMatrix[i][j]);
-            strMatrix += num + ';';
-            //strMatrix.append( num + ";");
-        }
-    }
-    return (char*)strMatrix.c_str();
-}
-
 void XmlScene::setAdditionalLightParameters(Light * light, pugi::xml_node powerNode, pugi::xml_node ambientCoeffNode, pugi::xml_node specularCoeffNode)
 {
     if (!powerNode.empty())
@@ -379,11 +381,26 @@ glm::mat4 XmlScene::fromXmlMat4(pugi::xml_node node)
     {
         for (unsigned int j = 0; j < 4; j++)
         {
-            matrix[i][j] = values.at(++k);
+            matrix[j][i] = values.at(++k);
         }
     }
 
     return matrix;
+}
+
+std::string XmlScene::toXmlMat4(glm::mat4 objMatrix)
+{
+    std::string strMatrix;
+
+    for (unsigned int i = 0; i < 4; i++)
+    {
+        for (unsigned int j = 0; j < 4; j++)
+        {
+            std::string num = std::to_string(objMatrix[j][i]);
+            strMatrix += num + ';';
+        }
+    }
+    return (char*)strMatrix.c_str();
 }
 
 unsigned int XmlScene::nextId()

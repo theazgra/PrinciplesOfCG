@@ -14,19 +14,19 @@
 	</Shader_set>
 	<Texture_set>
 		<Texture Id="2" CubeMap="False">
-			<Image>test.png</Image>
+			<Image>textury/house.png</Image>
 		</Texture>
 		<Texture Id="3" CubeMap="False">
-			<Image>grass.jpg</Image>
+			<Image>textury/grass.jpg</Image>
 		</Texture>
 		<Texture Id="4" CubeMap="False">
-			<Image>normal/diffuse.bmp</Image>
+			<Image>textury/diffuse.bmp</Image>
 		</Texture>
 		<Texture Id="5" CubeMap="False">
-			<Image>normal/houseNormal.png</Image>
+			<Image>textury/houseNormal.png</Image>
 		</Texture>
 		<Texture Id="6" CubeMap="False">
-			<Image>normal/cylinder_normal.bmp</Image>
+			<Image>textury/cylinder_normal.bmp</Image>
 		</Texture>
 		<Texture Id="7" CubeMap="True">
 			<PosX>sky/cubemap/posx.jpg</PosX>
@@ -36,25 +36,31 @@
 			<PosZ>sky/cubemap/posz.jpg</PosZ>
 			<NegZ>sky/cubemap/negz.jpg</NegZ>
 		</Texture>
+		<Texture Id="8" CubeMap="False">
+			<Image>textury/zombie.png</Image>
+		</Texture>
+		<Texture Id="9" CubeMap="False">
+			<Image>textury/zombie_normal.png</Image>
+		</Texture>
 	</Texture_set>
 	<Camera_set>
 		<Camera>
-			<WorldPosition x="10" y="12" z="-4" />
-			<TargetPosition x="-30" y="-32" z="12" />
+			<WorldPosition x="17.5" y="20.3999996" z="-7" />
+			<TargetPosition x="-50" y="-56" z="20" />
 		</Camera>
 		<Camera>
-			<WorldPosition x="0" y="5" z="0" />
-			<TargetPosition x="0" y="-15" z="2" />
+			<WorldPosition x="-0.351818502" y="5" z="0.101374954" />
+			<TargetPosition x="2.01549911" y="-24.8136635" z="3.03640628" />
 		</Camera>
 		<Camera>
-			<WorldPosition x="19.4500008" y="23.3100014" z="-0.0100000007" />
-			<TargetPosition x="-44.5" y="-53.0999985" z="0.100000001" />
+			<WorldPosition x="16.4735641" y="7.81938744" z="-22.2948647" />
+			<TargetPosition x="-14.3393898" y="-31.6095657" z="125.083282" />
 		</Camera>
 	</Camera_set>
 	<Light_set>
 		<Light Shadow="True" Type="S">
 			<Intensity x="10" y="10" z="10" />
-			<WorldPosition x="1" y="25.8000298" z="8.99999619" />
+			<WorldPosition x="1" y="18" z="1" />
 			<Direction x="0" y="1" z="0.0199999996" />
 			<Power>1</Power>
 			<AmbientCoefficient>0.200000003</AmbientCoefficient>
@@ -66,17 +72,17 @@
 			<OuterCutOff>20</OuterCutOff>
 		</Light>
 		<Light Type="D">
-			<Intensity x="1" y="3" z="1" />
+			<Intensity x="1.1" y="1.1" z="1" />
 			<WorldPosition x="0" y="0" z="0" />
-			<Direction x="1" y="1" z="0" />
-			<Power>0.400000006</Power>
+			<Direction x="0.1" y="0.8" z="0" />
+			<Power>2</Power>
 			<AmbientCoefficient>0.200000003</AmbientCoefficient>
 			<SpecularCoefficient>0.5</SpecularCoefficient>
 		</Light>
 	</Light_set>
 	<Object_set>
 		<Object SkyBox="False">
-			<ObjFile>test.obj</ObjFile>
+			<ObjFile>objekty/test.obj</ObjFile>
 			<ShaderId>0</ShaderId>
 			<TextureId>2</TextureId>
 			<NormalTextureId>5</NormalTextureId>
@@ -86,14 +92,20 @@
 			<ObjFile>sky/skybox.obj</ObjFile>
 			<ShaderId>2</ShaderId>
 			<TextureId>7</TextureId>
-			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;19.450001;23.310001;-0.010000;1.000000;</ObjMatrix>
+			<ObjMatrix>1.000000;0.000000;0.000000;16.473564;0.000000;1.000000;0.000000;7.819387;0.000000;0.000000;1.000000;-22.294865;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
 		<Object SkyBox="False">
-			<ObjFile>normal/cylinder.obj</ObjFile>
+			<ObjFile>objekty/cylinder.obj</ObjFile>
 			<ShaderId>0</ShaderId>
 			<TextureId>4</TextureId>
 			<NormalTextureId>6</NormalTextureId>
-			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
+			<ObjMatrix>1.000000;0.000000;0.000000;8.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
+			<MoveOnCurve t_increment="0.02">
+				<P1 x="8" y="0" z="0"/>
+				<P2 x="12" y="0" z="5"/>
+				<P3 x="16" y="0" z="8"/>
+				<P4 x="20" y="0" z="0"/>
+			</MoveOnCurve>
 		</Object>
 		<Object SkyBox="False">
 			<ObjFile>Plain</ObjFile>
@@ -101,5 +113,18 @@
 			<TextureId>3</TextureId>
 			<ObjMatrix>30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
+		<Object>
+			<ObjFile>objekty/zombie.obj</ObjFile>
+			<ShaderId>0</ShaderId>
+			<TextureId>8</TextureId>
+			<NormalTextureId>9</NormalTextureId>
+			<ObjMatrix>0.60000;0.000000;0.000000;8.000000;0.000000;0.600000;0.000000;5.000000;0.000000;0.000000;0.600000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
+			<MoveOnCurve t_increment="0.02">
+				<P1 x="8" y="0" z="5"/>
+				<P2 x="12" y="0" z="6"/>
+				<P3 x="16" y="0" z="8"/>
+				<P4 x="22" y="0" z="15"/>
+			</MoveOnCurve>
+		</Object>	
 	</Object_set>
 </Scene>

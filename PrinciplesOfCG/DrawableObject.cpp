@@ -180,7 +180,32 @@ std::string DrawableObject::getObjFile()
     return this->objFile;
 }
 
-glm::mat4 DrawableObject::getObjectMatrix() const
+void DrawableObject::initializeBezierCurve(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 p4, float t_increment)
 {
+    bezierCurve.initialize(p1, p2, p3, p4, t_increment);
+    moveOnCurve = true;
+}
+
+glm::mat4 DrawableObject::getObjectMatrix()
+{
+    if (moveOnCurve)
+    {
+        ++drawCounter;
+        if (drawCounter >= 15 && bezierCurve)
+        {
+            drawCounter = 0;
+            glm::vec3 objectPosition(this->objectMatrix[3]);
+            glm::vec3 desiredPosition = bezierCurve.getPointOnCurve();
+
+            glm::vec3 translateVector = desiredPosition - objectPosition;
+
+            this->translate(translateVector);
+        }
+        else if (!bezierCurve)
+        {
+            bezierCurve.reverse();
+        }
+    }
+
     return objectMatrix;
 }
