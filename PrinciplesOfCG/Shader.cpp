@@ -34,22 +34,23 @@ Shader::Shader(const char* vertex_shader_file, const char* fragment_shader_file)
 
     this->normalTexture = glGetUniformLocation(this->shaderProgram, "normalTexture");
     this->hasNormalTexture = glGetUniformLocation(this->shaderProgram, "hasNormalTexture");
+
+    this->heightMapTexture = glGetUniformLocation(this->shaderProgram, "heightMapTexture");
 }
 
 void Shader::useProgram() const 
 {
     glUseProgram(this->shaderProgram);
     glUniform1i(this->shadowTexturePtr, 0);
-//    applyCamera();
-//    applyLight();
+    
+    if (this->heightMapTextureUnit != -1)
+        glUniform1i(this->heightMapTexture, heightMapTextureUnit);
 }
 
 void Shader::modelTransform(DrawableObject & object) const
 {
     glUniformMatrix4fv(this->modelTransformMatrix, 1, GL_FALSE, &object.getObjectMatrix()[0][0]);            
 }
-
-
 
 void Shader::applyCamera() const
 {
@@ -108,6 +109,11 @@ void Shader::applyLight() const
 
         ++i;
     }
+}
+
+void Shader::setHeightMapTextureUnit(unsigned int textureUnit)
+{
+    this->heightMapTexture = textureUnit;
 }
 
 void Shader::applyTexture(unsigned int textureUnit) const

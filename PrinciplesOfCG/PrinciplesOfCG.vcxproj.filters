@@ -222,5 +222,11 @@
     <None Include="VSShadow.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="VSTerrain.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="FSTerrain.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

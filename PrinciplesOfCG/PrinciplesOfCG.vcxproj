@@ -220,10 +220,12 @@
     <None Include="FragmentShader2.glsl" />
     <None Include="FSCubeMap.glsl" />
     <None Include="FSShadow.glsl" />
+    <None Include="FSTerrain.glsl" />
     <None Include="packages.config" />
     <None Include="VertexShader.glsl" />
     <None Include="VSCubeMap.glsl" />
     <None Include="VSShadow.glsl" />
+    <None Include="VSTerrain.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

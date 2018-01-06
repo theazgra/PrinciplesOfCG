@@ -45,7 +45,9 @@ private:
     glm::vec3 lightIntensity;
     glm::vec3 lightAmbient;
 
-    glm::vec2 textureCoord;
+    GLuint heightMapTexture;
+
+    int heightMapTextureUnit = -1;
 
     std::map<GLuint, LightStruct> lights;
     
@@ -69,5 +71,7 @@ public:
 
     void applyCamera() const;
     void applyLight() const;
+
+    void setHeightMapTextureUnit(unsigned int textureUnit);
 };
 

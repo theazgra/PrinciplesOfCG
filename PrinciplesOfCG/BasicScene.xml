@@ -11,6 +11,12 @@
 			<FS>FSCubeMap.glsl</FS>
 			<Shadow>False</Shadow>
 		</Shader>
+		<Shader Id="3">
+			<VS>VSTerrain.glsl</VS>
+			<FS>FSTerrain.glsl</FS>
+			<HeightMapTexture>10</HeightMapTexture>
+			<Shadow>False</Shadow>
+		</Shader>
 	</Shader_set>
 	<Texture_set>
 		<Texture Id="2" CubeMap="False">
@@ -42,6 +48,9 @@
 		<Texture Id="9" CubeMap="False">
 			<Image>textury/zombie_normal.png</Image>
 		</Texture>
+		<Texture Id="10" CubeMap="False">
+			<Image>textury/height_map.jpg</Image>
+		</Texture>
 	</Texture_set>
 	<Camera_set>
 		<Camera>
@@ -72,10 +81,10 @@
 			<OuterCutOff>20</OuterCutOff>
 		</Light>
 		<Light Type="D">
-			<Intensity x="1.1" y="1.1" z="1" />
+			<Intensity x="1.0" y="1.0" z="0.85" />
 			<WorldPosition x="0" y="0" z="0" />
-			<Direction x="0.1" y="0.8" z="0" />
-			<Power>2</Power>
+			<Direction x="0.8" y="-0.8" z="0" />
+			<Power>1</Power>
 			<AmbientCoefficient>0.200000003</AmbientCoefficient>
 			<SpecularCoefficient>0.5</SpecularCoefficient>
 		</Light>
@@ -109,7 +118,7 @@
 		</Object>
 		<Object SkyBox="False">
 			<ObjFile>Plain</ObjFile>
-			<ShaderId>0</ShaderId>
+			<ShaderId>3</ShaderId>
 			<TextureId>3</TextureId>
 			<ObjMatrix>30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>

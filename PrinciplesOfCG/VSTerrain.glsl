@@ -20,10 +20,14 @@ out vec3 outTangent;
 out vec2 texCoord;
 out vec4 ShadowCoord;
 
+uniform sampler2D heightMapTexture;
+
+float calcHeight(vec4 heightMap);
 
 void main () {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(localPosition, 1.0);
 
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(localPosition, 1.0);
+	
     outFragPos = vec3(modelMatrix * vec4(localPosition, 1.0));
     outNormalPos = mat3(transpose(inverse(modelMatrix))) * normalPosition;
     outTangent = tangents;
@@ -33,6 +37,26 @@ void main () {
     ShadowCoord = depthVP * modelMatrix * vec4(localPosition, 1);
 	
     texCoord = vec2(vertexUV.x, 1.0 - vertexUV.y);
+
+	vec4 heightMap = texture(heightMapTexture, vertexUV);
+
+	gl_Position.y += calcHeight(heightMap);
 }
+
+float calcHeight(vec4 heightMap)
+{
+	float height = 0;
+
+	float red = heightMap.r / 255;
+	float green = heightMap.g / 255;
+	float blue = heightMap.b / 255;
+	float part = 0.33;
+
+	height = (part * red) + (part * green) + (part * blue);
+
+	return height;
+}
+
+
 
 

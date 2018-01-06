@@ -33,18 +33,27 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
 
     unsigned int basicShaderId = Application::getInstance()->getBasicShaderId();
 
-    for (xml_node shader : shaders.children(SHADER_NODE.c_str()))
+    for (xml_node shaderNode : shaders.children(SHADER_NODE.c_str()))
     {
         //If id is not found basic shader is used.
-        unsigned int shaderId = shader.attribute("Id").as_uint(basicShaderId);
-        bool shadowShader = fromXmlBool(shader.child_value("Shadow"));
-        const char* vsFile = shader.child_value("VS");
-        const char* fsFile = shader.child_value("FS");
+        unsigned int shaderId = shaderNode.attribute("Id").as_uint(basicShaderId);
+        bool shadowShader = fromXmlBool(shaderNode.child_value("Shadow"));
+        const char* vsFile = shaderNode.child_value("VS");
+        const char* fsFile = shaderNode.child_value("FS");
+
+        Shader * shader = new Shader(vsFile, fsFile);
+
+        xml_node heightMap = shaderNode.child("HeightMapTexture");
+        if (!heightMap.empty())
+        {
+            shader->setHeightMapTextureUnit(heightMap.text().as_int());
+        }
+
 
         if (shadowShader)
-            Application::getInstance()->addShadowShader(new Shader(vsFile, fsFile), shaderId);
+            Application::getInstance()->addShadowShader(shader, shaderId);
         else
-            Application::getInstance()->addShader(new Shader(vsFile, fsFile), shaderId);
+            Application::getInstance()->addShader(shader, shaderId);
     }
 
     //Textures
