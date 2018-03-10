@@ -25,6 +25,7 @@ private:
     Scene * scene = NULL;
     bool fromXmlBool(const char* value);
     glm::vec3 fromXmlVec3(pugi::xml_node node);
+    float fromXmlFloat(pugi::xml_node node, const pugi::char_t* attrName);
     glm::mat4 fromXmlMat4(pugi::xml_node node);
     
     const char* toXmlBool(bool value);

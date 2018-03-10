@@ -92,6 +92,7 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
 
 
     //Objects
+    //TODO: Transformations.
     xml_node objects = root.child((OBJECT_NODE + SET_SUFFIX).c_str());
     for (xml_node object : objects.children(OBJECT_NODE.c_str()))
     {
@@ -101,7 +102,7 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
         unsigned int shaderId = object.child("ShaderId").text().as_uint(basicShaderId);
         unsigned int textureId = object.child("TextureId").text().as_uint();
         unsigned int normalTextureId = object.child("NormalTextureId").text().as_int(-1);
-
+                                                           
         DrawableObject * drawableObj;
         if ((std::string)objFile == "Plain")
         {
@@ -121,6 +122,34 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
                 fromXmlVec3(moveOnCurveNode.child("P4")),
                 t_increment
             );
+        }
+
+        xml_node transformation = object.child("Transformation");                
+        if (!transformation.empty())
+        {
+            xml_node scaling = transformation.child("Scale");
+            if (!scaling.empty())
+            {
+                glm::vec3 scaleVector = fromXmlVec3(scaling);
+                drawableObj->resize(scaleVector);
+            }
+
+            xml_node translation = transformation.child("Translate");
+            if (!translation.empty())
+            {
+                glm::vec3 translateVector = fromXmlVec3(translation);
+                drawableObj->translate(translateVector);
+            }
+
+            xml_node rotation = transformation.child("Rotate");
+            if (!rotation.empty())
+            {
+                glm::vec3 rotateVector = fromXmlVec3(rotation);
+                float angle = fromXmlFloat(rotation, "angle");
+                drawableObj->rotate(angle, rotateVector);
+                //drawableObj->rotate(glm::degrees(90))
+            }
+
         }
 
         if (normalTextureId != -1)
@@ -370,6 +399,11 @@ glm::vec3 XmlScene::fromXmlVec3(pugi::xml_node node)
         node.attribute("y").as_float(),
         node.attribute("z").as_float()
     );
+}
+
+float XmlScene::fromXmlFloat(pugi::xml_node node, const pugi::char_t* attrName)
+{
+    return node.attribute(attrName).as_float();
 }
 
 glm::mat4 XmlScene::fromXmlMat4(pugi::xml_node node)

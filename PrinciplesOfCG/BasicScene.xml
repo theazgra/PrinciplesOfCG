@@ -13,8 +13,7 @@
 		</Shader>
 		<Shader Id="3">
 			<VS>VSTerrain.glsl</VS>
-			<FS>FSTerrain.glsl</FS>
-			<HeightMapTexture>10</HeightMapTexture>
+			<FS>FSTerrain.glsl</FS>			
 			<Shadow>False</Shadow>
 		</Shader>
 	</Shader_set>
@@ -42,15 +41,18 @@
 			<PosZ>sky/cubemap/posz.jpg</PosZ>
 			<NegZ>sky/cubemap/negz.jpg</NegZ>
 		</Texture>
-		<Texture Id="8" CubeMap="False">
-			<Image>textury/zombie.png</Image>
+		<Texture Id="11" CubeMap="False">
+			<Image>textury/Chair.png</Image>
 		</Texture>
-		<Texture Id="9" CubeMap="False">
-			<Image>textury/zombie_normal.png</Image>
-		</Texture>
-		<Texture Id="10" CubeMap="False">
-			<Image>textury/height_map.jpg</Image>
-		</Texture>
+		<!-- <Texture Id="8" CubeMap="False"> -->
+			<!-- <Image>textury/zombie.png</Image> -->
+		<!-- </Texture> -->
+		<!-- <Texture Id="9" CubeMap="False"> -->
+			<!-- <Image>textury/zombie_normal.png</Image> -->
+		<!-- </Texture> -->
+		<!-- <Texture Id="10" CubeMap="False"> -->
+			<!-- <Image>textury/height_map.jpg</Image> -->
+		<!-- </Texture> -->
 	</Texture_set>
 	<Camera_set>
 		<Camera>
@@ -122,18 +124,30 @@
 			<TextureId>3</TextureId>
 			<ObjMatrix>30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
-		<Object>
-			<ObjFile>objekty/zombie.obj</ObjFile>
+		<Object SkyBox="False">
+			<ObjFile>objekty/Chair_triangles.obj</ObjFile>
 			<ShaderId>0</ShaderId>
-			<TextureId>8</TextureId>
-			<NormalTextureId>9</NormalTextureId>
-			<ObjMatrix>0.60000;0.000000;0.000000;8.000000;0.000000;0.600000;0.000000;5.000000;0.000000;0.000000;0.600000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
-			<MoveOnCurve t_increment="0.02">
-				<P1 x="8" y="0" z="5"/>
-				<P2 x="12" y="0" z="6"/>
-				<P3 x="16" y="0" z="8"/>
-				<P4 x="22" y="0" z="15"/>
-			</MoveOnCurve>
-		</Object>	
+			<TextureId>11</TextureId>
+			<Transformation>
+				<Scale x="0.5" y="0.5" z="0.5"/>
+				<!--<Translate x="8" y="0" z="5"/> -->
+				<!-- <!-- angle in degrees -->
+				<Rotate x="1" y="0" z="0" angle="161.8"/>
+			</Transformation>
+			<!-- <ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix> -->
+		</Object>
+		<!-- <Object> -->
+			<!-- <ObjFile>objekty/zombie.obj</ObjFile> -->
+			<!-- <ShaderId>0</ShaderId> -->
+			<!-- <TextureId>8</TextureId> -->
+			<!-- <NormalTextureId>9</NormalTextureId> -->
+			<!-- <ObjMatrix>0.60000;0.000000;0.000000;8.000000;0.000000;0.600000;0.000000;5.000000;0.000000;0.000000;0.600000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix> -->
+			<!-- <MoveOnCurve t_increment="0.02"> -->
+				<!-- <P1 x="8" y="0" z="5"/> -->
+				<!-- <P2 x="12" y="0" z="6"/> -->
+				<!-- <P3 x="16" y="0" z="8"/> -->
+				<!-- <P4 x="22" y="0" z="15"/> -->
+			<!-- </MoveOnCurve> -->
+		<!-- </Object>	 -->
 	</Object_set>
 </Scene>

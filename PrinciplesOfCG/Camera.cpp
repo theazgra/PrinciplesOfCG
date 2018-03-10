@@ -43,7 +43,7 @@ void Camera::setDimensions(int width, int heights)
     forceUpdate();
 }
 
-void Camera::moveCamera(Direction direction)
+void Camera::moveCamera(Direction direction)                                        
 {
     switch (direction)
     {
