@@ -11,22 +11,27 @@
 			<FS>FSCubeMap.glsl</FS>
 			<Shadow>False</Shadow>
 		</Shader>
+		<Shader Id="3">
+			<VS>VSTerrain.glsl</VS>
+			<FS>FSTerrain.glsl</FS>			
+			<Shadow>False</Shadow>
+		</Shader>
 	</Shader_set>
 	<Texture_set>
-		<Texture Id="2" CubeMap="False">
-			<Image>test.png</Image>
-		</Texture>
+		<!-- <Texture Id="2" CubeMap="False"> -->
+			<!-- <Image>textury/house.png</Image> -->
+		<!-- </Texture> -->
 		<Texture Id="3" CubeMap="False">
-			<Image>grass.jpg</Image>
+			<Image>textury/grass.jpg</Image>
 		</Texture>
 		<Texture Id="4" CubeMap="False">
-			<Image>normal/diffuse.bmp</Image>
+			<Image>textury/diffuse.bmp</Image>
 		</Texture>
-		<Texture Id="5" CubeMap="False">
-			<Image>normal/houseNormal.png</Image>
-		</Texture>
+		<!-- <Texture Id="5" CubeMap="False"> -->
+			<!-- <Image>textury/houseNormal.png</Image> -->
+		<!-- </Texture> -->
 		<Texture Id="6" CubeMap="False">
-			<Image>normal/cylinder_normal.bmp</Image>
+			<Image>textury/cylinder_normal.bmp</Image>
 		</Texture>
 		<Texture Id="7" CubeMap="True">
 			<PosX>sky/cubemap/posx.jpg</PosX>
@@ -36,6 +41,21 @@
 			<PosZ>sky/cubemap/posz.jpg</PosZ>
 			<NegZ>sky/cubemap/negz.jpg</NegZ>
 		</Texture>
+		<Texture Id="11" CubeMap="False">
+			<Image>textury/Chair.png</Image>
+		</Texture>
+		<Texture Id="12" CubeMap="False">
+			<Image>textury/chair_normals.tga</Image>
+		</Texture>
+		<!-- <Texture Id="8" CubeMap="False"> -->
+			<!-- <Image>textury/zombie.png</Image> -->
+		<!-- </Texture> -->
+		<!-- <Texture Id="9" CubeMap="False"> -->
+			<!-- <Image>textury/zombie_normal.png</Image> -->
+		<!-- </Texture> -->
+		<!-- <Texture Id="10" CubeMap="False"> -->
+			<!-- <Image>textury/height_map.jpg</Image> -->
+		<!-- </Texture> -->
 	</Texture_set>
 	<Camera_set>
 		<Camera>
@@ -66,22 +86,22 @@
 			<OuterCutOff>20</OuterCutOff>
 		</Light>
 		<Light Type="D">
-			<Intensity x="1" y="3" z="1" />
+			<Intensity x="1.0" y="1.0" z="0.85" />
 			<WorldPosition x="0" y="0" z="0" />
-			<Direction x="1" y="1" z="0" />
-			<Power>0.400000006</Power>
+			<Direction x="0.8" y="-0.8" z="0" />
+			<Power>1</Power>
 			<AmbientCoefficient>0.200000003</AmbientCoefficient>
 			<SpecularCoefficient>0.5</SpecularCoefficient>
 		</Light>
 	</Light_set>
 	<Object_set>
-		<Object SkyBox="False">
-			<ObjFile>test.obj</ObjFile>
-			<ShaderId>0</ShaderId>
-			<TextureId>2</TextureId>
-			<NormalTextureId>5</NormalTextureId>
-			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
-		</Object>
+		<!-- <Object SkyBox="False"> -->
+			<!-- <!-- <ObjFile>objekty/test.obj</ObjFile> --> -->
+			<!-- <!-- <ShaderId>0</ShaderId> --> -->
+			<!-- <!-- <TextureId>2</TextureId> --> -->
+			<!-- <!-- <NormalTextureId>5</NormalTextureId> --> -->
+			<!-- <!-- <ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix> --> -->
+		<!-- </Object> -->
 		<Object SkyBox="True">
 			<ObjFile>sky/skybox.obj</ObjFile>
 			<ShaderId>2</ShaderId>
@@ -89,23 +109,43 @@
 			<ObjMatrix>1.000000;0.000000;0.000000;16.473564;0.000000;1.000000;0.000000;7.819387;0.000000;0.000000;1.000000;-22.294865;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
 		<Object SkyBox="False">
-			<ObjFile>normal/cylinder.obj</ObjFile>
+			<ObjFile>objekty/cylinder.obj</ObjFile>
 			<ShaderId>0</ShaderId>
 			<TextureId>4</TextureId>
 			<NormalTextureId>6</NormalTextureId>
 			<ObjMatrix>1.000000;0.000000;0.000000;8.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
-			<MoveOnCurve>
+			<MoveOnCurve t_increment="0.02">
 				<P1 x="8" y="0" z="0"/>
-				<P2 x="12" y="5" z="0"/>
-				<P3 x="16" y="8" z="0"/>
+				<P2 x="12" y="0" z="5"/>
+				<P3 x="16" y="0" z="8"/>
 				<P4 x="20" y="0" z="0"/>
 			</MoveOnCurve>
 		</Object>
 		<Object SkyBox="False">
 			<ObjFile>Plain</ObjFile>
-			<ShaderId>0</ShaderId>
+			<ShaderId>3</ShaderId>
 			<TextureId>3</TextureId>
 			<ObjMatrix>30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;30.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
+		</Object>
+		<!-- <Object SkyBox="False"> -->
+			<!-- <ObjFile>objekty/Chair_triangles.obj</ObjFile> -->
+			<!-- <ShaderId>0</ShaderId> -->
+			<!-- <TextureId>11</TextureId> -->
+			<!-- <NormalTextureId>12</NormalTextureId> -->
+			<!-- <Transformation> -->
+				<!-- <Scale x="0.5" y="0.5" z="0.5"/> -->
+				<!-- <!--<Translate x="8" y="0" z="5"/> --> -->
+				<!-- <!-- <!-- angle in degrees --> -->
+				<!-- <Rotate x="1" y="0" z="0" angle="161.8"/> -->
+			<!-- </Transformation> -->
+			<!-- <!-- <ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix> --> -->
+		<!-- </Object> -->
+		<Object>
+			<ObjFile>objekty/Pergola.obj</ObjFile>
+			<ShaderId>1</ShaderId>
+			<!-- <TextureId>8</TextureId> -->
+			<!-- <NormalTextureId>9</NormalTextureId> -->
+			<ObjMatrix>0.60000;0.000000;0.000000;8.000000;0.000000;0.600000;0.000000;5.000000;0.000000;0.000000;0.600000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
 	</Object_set>
 </Scene>

@@ -85,7 +85,8 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
     {
         glm::vec3 worldPos = fromXmlVec3(camera.child("WorldPosition"));
         glm::vec3 targetPos = fromXmlVec3(camera.child("TargetPosition"));
-        scene->addCamera(worldPos, targetPos);
+        bool playerCam = camera.attribute("PlayerCamera").as_bool();
+        scene->addCamera(worldPos, targetPos, playerCam);
         scene->setActiveCamera(scene->getCameras().at(scene->getCameras().size() - 1)->getObjectId());
     }
 
@@ -102,6 +103,9 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
         unsigned int shaderId = object.child("ShaderId").text().as_uint(basicShaderId);
         unsigned int textureId = object.child("TextureId").text().as_uint();
         unsigned int normalTextureId = object.child("NormalTextureId").text().as_int(-1);
+        
+        bool destructable = object.attribute("destructable").as_bool();
+        bool crosshair = object.attribute("Crosshair").as_bool();
                                                            
         DrawableObject * drawableObj;
         if ((std::string)objFile == "Plain")
@@ -110,6 +114,11 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
         }
         else
             drawableObj = ObjectFactory::createAssimpObject(objFile, nextId(), shaderId, textureId);
+
+        drawableObj->setDestructable(destructable);
+        drawableObj->setCrosshair(crosshair);
+
+        
 
         xml_node moveOnCurveNode = object.child("MoveOnCurve");
         if (!moveOnCurveNode.empty())
@@ -147,7 +156,6 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
                 glm::vec3 rotateVector = fromXmlVec3(rotation);
                 float angle = fromXmlFloat(rotation, "angle");
                 drawableObj->rotate(angle, rotateVector);
-                //drawableObj->rotate(glm::degrees(90))
             }
 
         }
@@ -161,12 +169,6 @@ Scene * XmlScene::loadScene(const char * xmlSceneFile)
         }
         else
         {
-            if (drawableObj->getTextureId() == 1)
-            {
-                int id = drawableObj->getObjectId();
-                int basoc = id;
-
-            }
 
             if (!object.child("ObjMatrix").empty())
             {
@@ -394,6 +396,12 @@ void XmlScene::toXmlLightInfo(LightStruct lightInfo, pugi::xml_node lightNode)
 
 glm::vec3 XmlScene::fromXmlVec3(pugi::xml_node node)
 {
+    if (!node.attribute("all").empty())
+    {
+        float val = node.attribute("all").as_float();
+        return glm::vec3(val, val, val);
+    }
+
     return glm::vec3(
         node.attribute("x").as_float(),
         node.attribute("y").as_float(),

@@ -123,6 +123,11 @@ void DrawableObject::translate(glm::vec3 translateVector)
     objectMatrix = glm::translate(objectMatrix, translateVector);
 }
 
+void DrawableObject::setDestructable(bool value)
+{
+    this->destructable = value;
+}
+
 void DrawableObject::setPosition(glm::vec3 position)
 {
     this->objectMatrix[0][3] = position.x;
@@ -160,6 +165,19 @@ bool DrawableObject::isSkyBox() const
     return this->skyBox;
 }
 
+bool DrawableObject::isDestructable() const
+{
+    if (this->skyBox)
+        return false;
+    
+    return this->destructable;
+}
+
+bool DrawableObject::isCrosshair() const
+{
+    return this->crosshair;
+}
+
 void DrawableObject::setNormalTextureId(unsigned int normalTextureId)
 {
     this->normalTextureId = normalTextureId;
@@ -173,6 +191,11 @@ void DrawableObject::setObjectMatrix(glm::mat4 objectMatrix)
 void DrawableObject::setObjFile(const char * objFile)
 {
     this->objFile = objFile;
+}
+
+void DrawableObject::setCrosshair(bool value)
+{
+    this->crosshair = value;
 }
 
 std::string DrawableObject::getObjFile()

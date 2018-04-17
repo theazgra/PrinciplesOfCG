@@ -10,8 +10,9 @@ class DrawableObject : public Object
 private:
     BezierCurve bezierCurve;
     bool moveOnCurve = false;
+    bool destructable = false;
+    bool crosshair = false;
     int drawCounter = 0;
-    
 
 protected:
     const char* objFile;
@@ -49,6 +50,7 @@ public:
     void resize(glm::vec3 resizeVector);
     void rotate(float, glm::vec3);
     void translate(glm::vec3);
+    void setDestructable(bool value);
 
     void setPosition(glm::vec3 position);
 
@@ -59,11 +61,14 @@ public:
 
     void setIsSkyBox(bool value);
     bool isSkyBox() const;
-    void setNormalTextureId(unsigned int normalTextureId);
+    bool isDestructable() const;
+    bool isCrosshair() const;
 
+    void setNormalTextureId(unsigned int normalTextureId);
     void setObjectMatrix(glm::mat4 objectMatrix);
-    
     void setObjFile(const char* objFile);
+    void setCrosshair(bool value);
+    
     std::string getObjFile();
 
     void initializeBezierCurve(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 p4, float t_increment = 0.5);

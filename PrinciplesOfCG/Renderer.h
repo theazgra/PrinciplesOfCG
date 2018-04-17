@@ -7,7 +7,7 @@ class Renderer
 {
 private:
     GLFWwindow* window;
-    void renderObject(DrawableObject&);
+    //void renderObject(DrawableObject&);
     void renderDrawableObjects(Scene &);
     void reportRenderTime();
 
@@ -27,6 +27,7 @@ public:
     Renderer(GLFWwindow&);
     ~Renderer();
     void renderScene(Scene &);
+    void renderObject(DrawableObject&);
 
 };
 

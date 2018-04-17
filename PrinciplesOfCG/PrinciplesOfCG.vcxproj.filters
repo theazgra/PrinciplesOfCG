@@ -228,5 +228,11 @@
     <None Include="FSTerrain.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="VSCrosshair.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="FSCrosshair.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

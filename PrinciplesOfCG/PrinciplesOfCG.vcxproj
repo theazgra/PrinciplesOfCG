@@ -218,11 +218,13 @@
   <ItemGroup>
     <None Include="FragmentShader.glsl" />
     <None Include="FragmentShader2.glsl" />
+    <None Include="FSCrosshair.glsl" />
     <None Include="FSCubeMap.glsl" />
     <None Include="FSShadow.glsl" />
     <None Include="FSTerrain.glsl" />
     <None Include="packages.config" />
     <None Include="VertexShader.glsl" />
+    <None Include="VSCrosshair.glsl" />
     <None Include="VSCubeMap.glsl" />
     <None Include="VSShadow.glsl" />
     <None Include="VSTerrain.glsl" />

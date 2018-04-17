@@ -19,6 +19,7 @@ private:
     std::vector<unsigned int> sceneShaderIds;
  
     const char* sceneName;
+    bool playerCamIsActive = false;
 
     Camera* activeCamera = NULL;
 
@@ -41,7 +42,7 @@ public:
     std::vector<DrawableObject*> const& getDrawableObjects() const;
     std::vector<Light*> & getLights();
 
-    Camera& addCamera(glm::vec3 worldPos, glm::vec3 targetPos);
+    Camera& addCamera(glm::vec3 worldPos, glm::vec3 targetPos, bool playerCam = false);
     void setActiveCamera(unsigned int cameraId);
     std::vector<Camera*> const& getCameras() const;
     Camera const& getActiveCamera() const;
@@ -55,6 +56,8 @@ public:
     Light* getShadowLight();
 
     void deleteObject(int id);
+    bool renderCrosshair() const;
+    DrawableObject* getCrosshair();
 };
 
 

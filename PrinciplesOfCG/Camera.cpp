@@ -2,13 +2,14 @@
 #include "Camera.h"
 
 
-Camera::Camera(int id, glm::vec3 worldPosition, glm::vec3 target) : ObjectWithTarget(id, worldPosition, target)
+Camera::Camera(int id, glm::vec3 worldPosition, glm::vec3 target, bool playerCam) : ObjectWithTarget(id, worldPosition, target)
 {
     this->upVector = glm::vec3(0.0f, 1.0f, 0.0f);
     this->fieldOfView = glm::radians(45.0f);
     this->aspectRatio = 4.0f / 3.0f;
     this->zNear = 0.1f;
     this->zFar = 100.0f;
+    this->playerCam = playerCam;
 
     this->backupWorldPosition = this->worldPosition;
     this->backupTargetPosition = this->target;
@@ -29,6 +30,11 @@ glm::mat4 Camera::getProjectionMatrix() const
     return glm::perspective(this->fieldOfView, this->aspectRatio, this->zNear, this->zFar);
 }
 
+glm::vec2 Camera::getOldMousePosition() const
+{
+    return this->oldMousePosition;
+}
+
 void Camera::setPerspective(float degrees, float aspectRatio, float zNear, float zFar)
 {
     this->fieldOfView = glm::radians(degrees);
@@ -43,17 +49,29 @@ void Camera::setDimensions(int width, int heights)
     forceUpdate();
 }
 
-void Camera::moveCamera(Direction direction)                                        
+bool Camera::isPlayerCam() const
+{
+    return this->playerCam;
+}
+
+void Camera::moveCamera(Direction direction)
 {
     switch (direction)
     {
     case Up:
-        this->worldPosition += 2.0f * (CAMERA_SPEED * this->upVector);
+    {
+        if (!this->playerCam)
+            this->worldPosition += 2.0f * (CAMERA_SPEED * this->upVector);
         break;
+    }
+
     case Down:
-        this->worldPosition += 2.0f * (-CAMERA_SPEED * this->upVector);
+    {
+        if (!this->playerCam)
+            this->worldPosition += 2.0f * (-CAMERA_SPEED * this->upVector);
         break;
-    case Left: 
+    }
+    case Left:
     {
         glm::vec3 strafeDirection = glm::cross(this->target, this->upVector);
         this->worldPosition += -CAMERA_SPEED * strafeDirection;
@@ -66,11 +84,32 @@ void Camera::moveCamera(Direction direction)
         break;
     }
     case Forward:
-        this->worldPosition += CAMERA_SPEED * this->target;
+    {
+        if (this->playerCam)
+        {
+            float oldY = this->worldPosition.y;
+            this->worldPosition += CAMERA_SPEED * this->target;
+            this->worldPosition.y = oldY;
+        }
+        else
+            this->worldPosition += CAMERA_SPEED * this->target;
+
         break;
+    }
     case Backward:
-        this->worldPosition += -CAMERA_SPEED * this->target;
+    {
+        if (this->playerCam)
+        {
+            float oldY = this->worldPosition.y;
+            this->worldPosition += -CAMERA_SPEED * this->target;
+            this->worldPosition.y = oldY;
+
+        }
+        else
+            this->worldPosition += -CAMERA_SPEED * this->target;
+
         break;
+    }
     }
 
     //printf("Current camera position: [x: %f; y: %f, z: %f]\n",
@@ -126,15 +165,15 @@ void Camera::moveCamera(Direction direction)
 void Camera::mouseUpdate(const glm::vec2 & mousePosition)
 {
     glm::vec2 mouseDelta = mousePosition - oldMousePosition;
-    
+
     if (glm::length(mouseDelta) > 50.0f)
     {
         oldMousePosition = mousePosition;
-        return;                                                                      
+        return;
     }
 
     glm::vec3 toRotateAround = glm::cross(this->target, this->upVector);
-    glm::mat4 rotator = glm::rotate(mouseDelta.x / 500.0f, this->upVector) * glm::rotate(mouseDelta.y/500.0f, toRotateAround);
+    glm::mat4 rotator = glm::rotate(mouseDelta.x / 500.0f, this->upVector) * glm::rotate(mouseDelta.y / 500.0f, toRotateAround);
     this->target = glm::mat3(rotator) * this->target;
 
 

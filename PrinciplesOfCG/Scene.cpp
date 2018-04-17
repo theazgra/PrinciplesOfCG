@@ -141,9 +141,9 @@ DrawableObject * Scene::getSkybox() const
     return skyBox;
 }
 
-Camera& Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos)
+Camera& Scene::addCamera(glm::vec3 worldPos, glm::vec3 targetPos, bool playerCam)
 {
-    Camera* newCam = new Camera(cameras.size(), worldPos, targetPos);
+    Camera* newCam = new Camera(cameras.size(), worldPos, targetPos, playerCam);
     cameras.push_back(newCam);
     internalSetActiveCamera(newCam);
     return *newCam;
@@ -157,6 +157,11 @@ void Scene::setActiveCamera(unsigned int cameraId)
         if (cameras.at(i)->getObjectId() == cameraId)
         {
             found = true;
+            if (cameras.at(i)->isPlayerCam())
+                this->playerCamIsActive = true;
+            else
+                this->playerCamIsActive = false;
+
             internalSetActiveCamera(cameras.at(i));
             break;
         }
@@ -240,11 +245,30 @@ void Scene::deleteObject(int id)
     {
         if (drawableObjects.at(i)->getObjectId() == id)
         {
-            delete drawableObjects.at(i);
-            drawableObjects.erase(drawableObjects.begin() + i);
+            if (drawableObjects.at(i)->isDestructable())
+            {
+                delete drawableObjects.at(i);
+                drawableObjects.erase(drawableObjects.begin() + i);
+            }
         }
 
     }
+}
+
+bool Scene::renderCrosshair() const
+{
+    return this->playerCamIsActive;
+}
+
+DrawableObject * Scene::getCrosshair()
+{
+    for (size_t i = 0; i < this->drawableObjects.size(); i++)
+    {
+        if (this->drawableObjects.at(i)->isCrosshair())
+            return this->drawableObjects.at(i);
+    }
+
+    return nullptr;
 }
 
 

@@ -45,7 +45,7 @@ Application::Application()
 
     Shader* shader = new Shader("VertexShader.glsl", "FragmentShader.glsl");
 
-    
+
     int index = shaders.size();
     shaders[index] = shader;
     BASIC_SHADER_ID = index;
@@ -94,10 +94,10 @@ Application::~Application()
         printf("Delete texture in unit %i\n", this->textures.at(i));
         glDeleteTextures(1, &this->textures.at(i));
     }
-  
+
 }
 
-void Application::createScene(char* sceneName,  Camera * cam)
+void Application::createScene(char* sceneName, Camera * cam)
 {
     Scene* newScene = new Scene(sceneName, cam);
     scenes.push_back(newScene);
@@ -150,25 +150,38 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     switch (key)
     {
     case GLFW_KEY_TAB:
-        if (keyClickCount > 2) 
+        if (keyClickCount > 2)
         {
             this->moveCamera = !this->moveCamera;
             printf("Switched to %s moving mode.\n", moveCamera ? "camera" : "shadow producing light");
             keyClickCount = 0;
         }
-        
         break;
 
-    case GLFW_KEY_UP:
+    case GLFW_KEY_Q:
+    {
+        glm::vec2 oldPos = this->currentScene->getActiveCameraRef().getOldMousePosition();
+
+        this->currentScene->getActiveCameraRef().mouseUpdate(glm::vec2(oldPos.x + 7, oldPos.y));
+        break;
+    }
+    case GLFW_KEY_E:
+    {
+        glm::vec2 oldPos = this->currentScene->getActiveCameraRef().getOldMousePosition();
+        this->currentScene->getActiveCameraRef().mouseUpdate(glm::vec2(oldPos.x - 7, oldPos.y));
+        break;
+    }
+
+    case GLFW_KEY_W:
         direction = Forward;
         break;
-    case GLFW_KEY_DOWN:
+    case GLFW_KEY_S:
         direction = Backward;
         break;
-    case GLFW_KEY_LEFT:
+    case GLFW_KEY_A:
         direction = Left;
         break;
-    case GLFW_KEY_RIGHT:
+    case GLFW_KEY_D:
         direction = Right;
         break;
     case GLFW_KEY_SPACE:
@@ -217,15 +230,18 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
         this->currentScene->getActiveCameraRef().resetCamera();
     }
 
-    if (mods == GLFW_MOD_CONTROL && key == GLFW_KEY_S && keyClickCount >= 3) 
+    if (mods == GLFW_MOD_CONTROL && key == GLFW_KEY_S && keyClickCount >= 3)
     {
-        printf("Saving scene...\n");
+        //printf("Saving scene...\n");
+        printf("Saving is not supported right now.\n");
         
+
+        /*
         if (xmlScene.saveScene(*currentScene))
             printf("Scene saved.\n");
         else
             printf("Error occured when saving scene.");
-
+         */
         keyClickCount = 0;
     }
 
@@ -246,29 +262,37 @@ void Application::cursor_pos_callback(GLFWwindow* window, double mouseX, double 
 }
 
 void Application::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    
-    double cx, cy;
-    glfwGetCursorPos(window, &cx, &cy);
-
-    GLint x = (GLint)cx;
-    GLint y = (GLint)cy;
 
     int w, h;
     glfwGetWindowSize(window, &w, &h);
 
-    int newy = h - y;
+    GLint x, y;
+    //Get info on mouse position.
+    /*
+    double cx, cy;
+    glfwGetCursorPos(window, &cx, &cy);
+    x = (GLint)cx;
+    y = (GLint)cy;
+    y = h - y;
+    */
+    
+    //Get info from center of the screen.
+    x = w / 2;
+    y = h / 2;
+    
+
     GLbyte color[4];
     GLfloat depth;
     GLuint index;
-    glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
-    glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
-    glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+    glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+    glReadPixels(x, y, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
 
     if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT)
     {
         currentScene->swapCamera();
     }
-    else if (button == GLFW_MOUSE_BUTTON_LEFT)
+    else if (button == GLFW_MOUSE_BUTTON_MIDDLE)        //GLFW_MOUSE_BUTTON_LEFT
     {
         if (action == GLFW_PRESS)
         {
@@ -277,15 +301,14 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
         else if (action == GLFW_RELEASE)
         {
             enableLookingAroud = false;
-            
-
-            printf("Clicked on pixel %d, %d, color % 02hhx % 02hhx % 02hhx % 02hhx, depth %f, stencil index %u\n",
-                        x, y, color[0], color[1], color[2], color[3], depth, index);
         }
-        
+
     }
-    else if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE)
+    else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)     //GLFW_MOUSE_BUTTON_MIDDLE
     {
+        printf("Clicked on pixel %d, %d, color % 02hhx % 02hhx % 02hhx % 02hhx, depth %f, stencil index %u\n",
+            x, y, color[0], color[1], color[2], color[3], depth, index);
+        
         currentScene->deleteObject(index);
     }
 }
@@ -428,7 +451,7 @@ void Application::setUpBasicScene()
     createScene("Basic scene",
         new Camera(0, glm::vec3(10.0f, 12.0f, -4.0f), glm::vec3(0.0f, 4.0f, 0.0f)));
 
-    
+
     currentScene->addCamera(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 2.0f));
 
     addShadowShader(new Shader("VSShadow.glsl", "FSShadow.glsl"));
@@ -467,9 +490,9 @@ void Application::setUpBasicScene()
     //shadowMap->rotate(glm::degrees(45.0f), glm::vec3(1, 0, 0));
     //currentScene->addDrawableObject(shadowMap);
 
-    DrawableObject * house = ObjectFactory::createAssimpObject("test.obj",getNextId(),getBasicShaderId(),houseTexture);
-    
-    house->setNormalTextureId(houseNormal);    
+    DrawableObject * house = ObjectFactory::createAssimpObject("test.obj", getNextId(), getBasicShaderId(), houseTexture);
+
+    house->setNormalTextureId(houseNormal);
     currentScene->addDrawableObject(house);
 
 
@@ -506,7 +529,7 @@ void Application::setUpBasicScene()
     //spot->setPosition(glm::vec3(-27.0f, 12.0f, 0.04f));
     currentScene->addShadowLight(spot);
     currentScene->addCamera(spot->getWorldPosition(), spot->getLightInfo().direction);
-    
+
     currentScene->addCamera(glm::vec3(15.0f, 18.0f, 0.0f), glm::vec3(0.5f, 1.0f, 0.1f));
 
 

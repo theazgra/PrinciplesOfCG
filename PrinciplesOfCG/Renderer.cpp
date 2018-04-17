@@ -90,10 +90,10 @@ void Renderer::shadowPass(Scene & scene)
     //depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
     depthVP = depthProjectionMatrix * depthViewMatrix;
 
-    
+
 
     DrawableObject tmp(0);
-    
+
     Application::getInstance()->getShadowShader()->useProgram();
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
@@ -106,6 +106,7 @@ void Renderer::shadowPass(Scene & scene)
 
             //Application::getInstance()->getShadowShader()->modelTransform(tmp);
             glBindVertexArray(scene.getDrawableObjects().at(i)->getVAO());
+
 
             if (scene.getDrawableObjects().at(i)->hasIndices())
             {
@@ -150,11 +151,15 @@ void Renderer::renderScene(Scene & scene)
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
         renderDrawableObjects(scene);
 
 
         glfwPollEvents();
+
+        if (scene.renderCrosshair())
+            renderObject(*scene.getCrosshair());
+            
         glfwSwapBuffers(this->window);
     }
 }
@@ -163,33 +168,23 @@ void Renderer::renderScene(Scene & scene)
 void Renderer::renderObject(DrawableObject & obj)
 {
     unsigned int objectShaderId = obj.getShaderId();
-
-
     if (objectShaderId != lastShaderId)
     {
         Application::getInstance()->getShader(objectShaderId)->useProgram();
     }
 
-    //glm::mat4 DepthBiasMVP = this->offsetMatrix * depthMVP;
     glm::mat4 DepthBiasMVP = this->offsetMatrix * depthVP;
 
+    Application::getInstance()->getShader(objectShaderId)->modelTransform(obj);
     Application::getInstance()->getShader(objectShaderId)->applyCamera();
     Application::getInstance()->getShader(objectShaderId)->applyLight();
-    //Application::getInstance()->getShader(objectShaderId)->setDepthBiasMVP(DepthBiasMVP);
     Application::getInstance()->getShader(objectShaderId)->setDepthVP(DepthBiasMVP);
-
-
     Application::getInstance()->getShader(objectShaderId)->applyTexture(obj.getTextureId());
     Application::getInstance()->getShader(objectShaderId)->applyNormalTexture(obj.getNormalTextureId());
-
-
-    Application::getInstance()->getShader(objectShaderId)->modelTransform(obj);
 
     this->lastShaderId = objectShaderId;
 
     glBindVertexArray(obj.getVAO());
-
-
     glStencilFunc(GL_ALWAYS, obj.getObjectId(), 0xFF);
 
     if (obj.hasIndices())
@@ -218,18 +213,37 @@ void Renderer::renderDrawableObjects(Scene& scene)
         {
             ignore = i;
             renderObject(*scene.getDrawableObjects().at(i));
-
-            glClear(GL_DEPTH_BUFFER_BIT);
             break;
         }
     }
+    glClear(GL_DEPTH_BUFFER_BIT);
 
+    ////Render crosshair here.
+    //if (scene.renderCrosshair())
+    //{
+    //    for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
+    //    {
+    //        if (scene.getDrawableObjects().at(i)->isCrosshair())
+    //        {
+    //            ignore2 = i;
+    //            renderObject(*scene.getDrawableObjects().at(i));
+    //          
+    //          /*  glClearStencil(2);
+    //            glClear(GL_STENCIL_BUFFER_BIT);
+    //            glStencilMask(~0);*/
+    //            break;
+    //        }
+    //    }
+    //}
 
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
-        if (ignore == i)
+        if (ignore == i || scene.getDrawableObjects().at(i)->isCrosshair())
             continue;
+
 
         renderObject(*scene.getDrawableObjects().at(i));
     }
+
+    
 }
