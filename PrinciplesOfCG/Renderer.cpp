@@ -218,24 +218,6 @@ void Renderer::renderDrawableObjects(Scene& scene)
     }
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    ////Render crosshair here.
-    //if (scene.renderCrosshair())
-    //{
-    //    for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
-    //    {
-    //        if (scene.getDrawableObjects().at(i)->isCrosshair())
-    //        {
-    //            ignore2 = i;
-    //            renderObject(*scene.getDrawableObjects().at(i));
-    //          
-    //          /*  glClearStencil(2);
-    //            glClear(GL_STENCIL_BUFFER_BIT);
-    //            glStencilMask(~0);*/
-    //            break;
-    //        }
-    //    }
-    //}
-
     for (unsigned int i = 0; i < scene.getDrawableObjects().size(); i++)
     {
         if (ignore == i || scene.getDrawableObjects().at(i)->isCrosshair())
