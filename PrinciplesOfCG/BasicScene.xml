@@ -36,7 +36,7 @@
 			<Image>textury/roomtex.png</Image>
 		</Texture>
 		<Texture Id="6" CubeMap="False">
-			<Image>textury/cylinder_normal.bmp</Image>
+			<Image>textury/zombie.png</Image>
 		</Texture>
 		<Texture Id="7" CubeMap="True">
 			<PosX>sky/cubemap/posx.jpg</PosX>
@@ -49,24 +49,26 @@
 		<Texture Id="8" CubeMap="False">
 			<Image>textury/bed.png</Image>
 		</Texture>
-		<Texture Id="9" CubeMap="False" />
+		<Texture Id="9" CubeMap="False">
+			<Image>textury/black.png</Image>
+		</Texture>
 	</Texture_set>
 	<Camera_set>
-		<Camera PlayerCamera="True">
+		<Camera>
 			<WorldPosition x="-25" y="3" z="-25" />
 			<TargetPosition x="0" y="3" z="0" />
 		</Camera>
-		<Camera>
-			<WorldPosition x="-0.351818502" y="5" z="0.101374954" />
-			<TargetPosition x="2.01549911" y="-24.8136635" z="3.03640628" />
+		<Camera PlayerCamera="True">
+			<WorldPosition x="-25" y="3" z="10" />
+			<TargetPosition x="0" y="3" z="0" />
 		</Camera>
 	</Camera_set>
 	<Light_set>
 		<Light Shadow="True" Type="S">
 			<Intensity x="10" y="10" z="10" />
-			<WorldPosition x="1" y="25" z="10" />
+			<WorldPosition x="1" y="50" z="10" />
 			<Direction x="0" y="1" z="0.25" />
-			<Power>3</Power>
+			<Power>10</Power>
 			<AmbientCoefficient>0.200000003</AmbientCoefficient>
 			<SpecularCoefficient>0.5</SpecularCoefficient>
 			<ConstatFallOff>0.5</ConstatFallOff>
@@ -83,13 +85,21 @@
 			<TextureId>7</TextureId>
 			<ObjMatrix>1.000000;0.000000;0.000000;-25.000000;0.000000;1.000000;0.000000;4.980000;0.000000;0.000000;1.000000;-25.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
-		<Object SkyBox="False" destructable="True">
-			<ObjFile>objekty/cylinder.obj</ObjFile>
-			<ShaderId>0</ShaderId>
-			<TextureId>4</TextureId>
-			<NormalTextureId>6</NormalTextureId>
-			<ObjMatrix>1.000000;0.000000;0.000000;16.160000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;4.595713;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
-		</Object>
+		<!-- <Object SkyBox="False" destructable="True"> -->
+			<!-- <ObjFile>objekty/zombie.obj</ObjFile> -->
+			<!-- <ShaderId>0</ShaderId> -->
+			<!-- <TextureId>6</TextureId> -->
+			<!-- <MoveOnCurve t_increment="0.02"> -->
+				<!-- <P1 x="8" y="0" z="0"/> -->
+				<!-- <P2 x="12" y="0" z="5"/> -->
+				<!-- <P3 x="16" y="0" z="8"/> -->
+				<!-- <P4 x="20" y="0" z="0"/> -->
+			<!-- </MoveOnCurve> -->
+			<!-- <!-- <NormalTextureId>6</NormalTextureId> --> -->
+			<!-- <!-- <Transformation> --> -->
+				<!-- <!-- <Translate x="-5" y="5" z="-5" /> --> -->
+			<!-- <!-- </Transformation> -->			 -->
+		<!-- </Object> -->
 		<Object SkyBox="False">
 			<ObjFile>Plain</ObjFile>
 			<ShaderId>3</ShaderId>
@@ -122,11 +132,13 @@
 			<TextureId>5</TextureId>
 			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object>
-		<Object SkyBox="False">
+		<Object SkyBox="False" destructable="True">
 			<ObjFile>objekty/drawer.obj</ObjFile>
 			<ShaderId>0</ShaderId>
 			<TextureId>0</TextureId>
-			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
+			<Transformation>
+				<Translate x="-2.8" y="0.0" z="6.7"/>
+			</Transformation>			
 		</Object>
 		<Object SkyBox="False">
 			<ObjFile>objekty/window.obj</ObjFile>
@@ -134,12 +146,16 @@
 			<TextureId>4</TextureId>
 			<ObjMatrix>1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;0.000000;0.000000;0.000000;0.000000;1.000000;</ObjMatrix>
 		</Object> 
+		<!-- <Object SkyBox="False"> -->
+			<!-- <ObjFile>objekty/bullet.obj</ObjFile> -->
+			<!-- <ShaderId>0</ShaderId> -->
+			<!-- <TextureId>9</TextureId> -->
+		<!-- </Object>  -->
 		<Object SkyBox="False" Crosshair="True">
 			<ObjFile>objekty/crosshair.obj</ObjFile>
 			<ShaderId>4</ShaderId>
 			<Transformation>
 				<Scale x="0.05" y="0.1" z="1.0"/>
-				
 			</Transformation>
 		</Object>  
 	</Object_set>

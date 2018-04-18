@@ -8,11 +8,16 @@ class DrawableObject : public Object
 {
 
 private:
+    glm::vec3 worldPosition;
     BezierCurve bezierCurve;
+    glm::vec3 moveDirection;
     bool moveOnCurve = false;
     bool destructable = false;
     bool crosshair = false;
+    bool _moveInDirection = false;
+    bool deleteObject = false;
     int drawCounter = 0;
+    int drawCountBeforeDelete = 0;
 
 protected:
     const char* objFile;
@@ -63,11 +68,14 @@ public:
     bool isSkyBox() const;
     bool isDestructable() const;
     bool isCrosshair() const;
+    bool shouldBeDeleted() const;
+    glm::vec3 getPosition() const;
 
     void setNormalTextureId(unsigned int normalTextureId);
     void setObjectMatrix(glm::mat4 objectMatrix);
     void setObjFile(const char* objFile);
     void setCrosshair(bool value);
+    void moveInDirection(glm::vec3 direction, int drawCountBeforeDelete);
     
     std::string getObjFile();
 

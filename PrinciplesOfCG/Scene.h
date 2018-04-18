@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "PointLight.h"
 #include "Shader.h"
+#include "Random.h"
 
 class Scene : public CameraObserver, public LightObserver
 {
@@ -27,6 +28,7 @@ private:
     DrawableObject * skyBox = NULL;
     Light * shadowLight = NULL;
     glm::vec3 oldSkyBoxPosition = glm::vec3(0.0f);
+    void spawnDebris(glm::vec3 origin, int count);
 public:
     Scene(const char *, Camera * = nullptr);
     ~Scene();
@@ -55,9 +57,14 @@ public:
     void lightNotify(unsigned int lightId, LightStruct lightInfo) override;
     Light* getShadowLight();
 
-    void deleteObject(int id);
+    void destroyObject(int id);
     bool renderCrosshair() const;
     DrawableObject* getCrosshair();
+
+    void checkObjectToDelete();
+    void shootBullet();
+    void spawnZombies(int count);
+
 };
 
 

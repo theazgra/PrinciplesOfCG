@@ -161,6 +161,8 @@ void Renderer::renderScene(Scene & scene)
             renderObject(*scene.getCrosshair());
             
         glfwSwapBuffers(this->window);
+
+        scene.checkObjectToDelete();
     }
 }
 

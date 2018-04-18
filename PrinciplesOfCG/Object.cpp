@@ -20,4 +20,9 @@ int Object::getObjectId() const
     return objectId;
 }
 
+void Object::changeId(int value)
+{
+    this->objectId = value;
+}
+
 

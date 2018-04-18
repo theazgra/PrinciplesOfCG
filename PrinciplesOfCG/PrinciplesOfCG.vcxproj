@@ -171,6 +171,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectWithTarget.h" />
     <ClInclude Include="PrinciplesOfCG.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectWithTarget.cpp" />
     <ClCompile Include="PrinciplesOfCG.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />

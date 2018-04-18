@@ -16,5 +16,6 @@ public:
     ~Object();
 
     int getObjectId() const;
+    void changeId(int value);
 };
 

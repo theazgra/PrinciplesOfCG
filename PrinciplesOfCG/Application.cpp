@@ -309,7 +309,11 @@ void Application::mouse_button_callback(GLFWwindow* window, int button, int acti
         printf("Clicked on pixel %d, %d, color % 02hhx % 02hhx % 02hhx % 02hhx, depth %f, stencil index %u\n",
             x, y, color[0], color[1], color[2], color[3], depth, index);
         
-        currentScene->deleteObject(index);
+        if (this->currentScene->getActiveCamera().isPlayerCam())
+        {
+            currentScene->shootBullet();
+            currentScene->destroyObject(index);
+        }
     }
 }
 

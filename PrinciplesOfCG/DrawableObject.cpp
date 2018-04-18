@@ -5,6 +5,7 @@
 DrawableObject::DrawableObject(int objectId, std::vector<float> vector, unsigned int shaderId, unsigned int textureId)
     : Object(objectId)
 {
+    this->worldPosition = glm::vec3(0, 0, 0);
     this->textureId = textureId;
     this->shaderId = shaderId;
     this->objectMatrix = glm::mat4(1.0f);
@@ -31,6 +32,7 @@ DrawableObject::DrawableObject(int objectId, std::vector<float> vector, unsigned
 DrawableObject::DrawableObject(int objectId, std::vector<AssimpVertex> data, std::vector<unsigned int> indices, unsigned int shaderId, unsigned int textureId)
     : Object(objectId)
 {
+    this->worldPosition = glm::vec3(0, 0, 0);
     this->objectMatrix = glm::mat4(1.0f);
     this->shaderId = shaderId;
     this->textureId = textureId;
@@ -69,11 +71,13 @@ DrawableObject::DrawableObject(int objectId, std::vector<AssimpVertex> data, std
 
 DrawableObject::DrawableObject(int objectId) : Object(objectId)
 {
+    this->worldPosition = glm::vec3(0, 0, 0);
 }
 
 
 DrawableObject::DrawableObject()
 {
+    this->worldPosition = glm::vec3(0, 0, 0);
 }
 
 
@@ -120,6 +124,7 @@ void DrawableObject::rotate(float angle, glm::vec3 axis)
 
 void DrawableObject::translate(glm::vec3 translateVector)
 {
+    this->worldPosition += translateVector;
     objectMatrix = glm::translate(objectMatrix, translateVector);
 }
 
@@ -133,6 +138,8 @@ void DrawableObject::setPosition(glm::vec3 position)
     this->objectMatrix[0][3] = position.x;
     this->objectMatrix[1][3] = position.y;
     this->objectMatrix[2][3] = position.z;
+
+    printf("spirte");
 }
 
 bool DrawableObject::hasIndices()
@@ -169,13 +176,28 @@ bool DrawableObject::isDestructable() const
 {
     if (this->skyBox)
         return false;
-    
+
     return this->destructable;
 }
 
 bool DrawableObject::isCrosshair() const
 {
     return this->crosshair;
+}
+
+bool DrawableObject::shouldBeDeleted() const
+{
+    return this->deleteObject;
+}
+
+glm::vec3 DrawableObject::getPosition() const
+{
+    return this->worldPosition;
+    /*return glm::vec3(
+        this->objectMatrix[0][3],
+        this->objectMatrix[1][3],
+        this->objectMatrix[2][3]
+    );*/
 }
 
 void DrawableObject::setNormalTextureId(unsigned int normalTextureId)
@@ -196,6 +218,13 @@ void DrawableObject::setObjFile(const char * objFile)
 void DrawableObject::setCrosshair(bool value)
 {
     this->crosshair = value;
+}
+
+void DrawableObject::moveInDirection(glm::vec3 direction, int drawBeforeDelete)
+{
+    this->_moveInDirection = true;
+    this->moveDirection = direction;
+    this->drawCountBeforeDelete = drawBeforeDelete;
 }
 
 std::string DrawableObject::getObjFile()
@@ -222,6 +251,7 @@ glm::mat4 DrawableObject::getObjectMatrix()
 
             glm::vec3 translateVector = desiredPosition - objectPosition;
 
+            this->worldPosition += translateVector;
             this->translate(translateVector);
         }
         else if (!bezierCurve)
@@ -229,6 +259,17 @@ glm::mat4 DrawableObject::getObjectMatrix()
             bezierCurve.reverse();
         }
     }
+    else if (this->_moveInDirection)
+    {
+        ++this->drawCounter;
+        this->worldPosition += this->moveDirection;
+        this->translate(this->moveDirection);
+
+        if (this->drawCounter >= this->drawCountBeforeDelete)
+            this->deleteObject = true;
+    }
+
+
 
     return objectMatrix;
 }

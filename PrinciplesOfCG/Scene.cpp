@@ -4,6 +4,26 @@
 #include "Application.h"
 
 
+void Scene::spawnDebris(glm::vec3 origin, int count)
+{
+    Random random;
+    DrawableObject * debri = ObjectFactory::createAssimpObject("objekty/debris.obj", Application::getInstance()->getNextId(), 0, 9);
+    glm::mat4 identity = glm::mat4(1.0f);
+    identity = glm::translate(identity, origin);
+    identity =  glm::scale(identity, glm::vec3(5.0f));
+    debri->setObjectMatrix(identity);
+
+
+    for (size_t i = 0; i < count; i++)
+    {
+        DrawableObject* d2 = new DrawableObject(*debri);
+        d2->changeId(Application::getInstance()->getNextId());
+
+        d2->moveInDirection(random.normRandVec3() * 0.1f, random.rand(500));
+        this->drawableObjects.push_back(d2);
+    }
+}
+
 Scene::Scene(const char* sceneName, Camera * camera)
 {
     this->sceneName = sceneName;
@@ -239,7 +259,7 @@ Light * Scene::getShadowLight()
     return this->shadowLight;
 }
 
-void Scene::deleteObject(int id)
+void Scene::destroyObject(int id)
 {
     for (int i = 0; i < this->drawableObjects.size(); i++)
     {
@@ -247,11 +267,14 @@ void Scene::deleteObject(int id)
         {
             if (drawableObjects.at(i)->isDestructable())
             {
+                glm::vec3 objPosition = drawableObjects.at(i)->getPosition();
+                spawnDebris(objPosition, 10);
                 delete drawableObjects.at(i);
                 drawableObjects.erase(drawableObjects.begin() + i);
+
+                break;
             }
         }
-
     }
 }
 
@@ -270,6 +293,61 @@ DrawableObject * Scene::getCrosshair()
 
     return nullptr;
 }
+
+void Scene::checkObjectToDelete()
+{
+    for (size_t i = 0; i < this->drawableObjects.size(); i++)
+    {
+        if (this->drawableObjects.at(i)->shouldBeDeleted())
+        {
+            delete drawableObjects.at(i);
+            drawableObjects.erase(drawableObjects.begin() + i);
+            break;
+        }
+    }
+}
+
+void Scene::shootBullet()
+{
+    DrawableObject * bullet = ObjectFactory::createAssimpObject("objekty/bullet.obj", Application::getInstance()->getNextId(), 0, 9);
+    glm::vec3 playerPosition = this->activeCamera->getWorldPosition();
+    glm::vec3 direction = glm::normalize(this->activeCamera->getTarget()) ; //* 2.0f
+    bullet->translate(playerPosition);
+    bullet->moveInDirection(direction, 200);
+    this->drawableObjects.push_back(bullet);
+}
+
+void Scene::spawnZombies(int count)
+{
+    Random random;
+    DrawableObject * zombie = ObjectFactory::createAssimpObject("objekty/zombie.obj", Application::getInstance()->getNextId(), 0, 6);
+    zombie->setDestructable(true);
+
+    for (size_t i = 0; i < count; i++)
+    {
+        DrawableObject* zombieCopy = new DrawableObject(*zombie);
+        zombieCopy->setDestructable(true);
+        zombieCopy->changeId(Application::getInstance()->getNextId());
+
+        float t_increment = 0.005f;
+        zombieCopy->initializeBezierCurve(
+            random.randForCurve(),
+            random.randForCurve(),
+            random.randForCurve(),
+            random.randForCurve(),
+            t_increment);
+        
+
+        this->drawableObjects.push_back(zombieCopy);
+    }
+
+
+   
+
+
+    
+}
+
 
 
 
